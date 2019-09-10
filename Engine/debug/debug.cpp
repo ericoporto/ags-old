@@ -310,6 +310,7 @@ void debug_set_console(bool enable)
 // Prepends message text with current room number and running script info, then logs result
 void debug_script_print(const String &msg, MessageType mt)
 {
+#if 0
     String script_ref;
     ccInstance *curinst = ccInstance::GetCurrentInstance();
     if (curinst != nullptr) {
@@ -350,9 +351,11 @@ void debug_script_log(const char *msg, ...)
 String get_cur_script(int numberOfLinesOfCallStack)
 {
     String callstack;
+#if 0
     ccInstance *sci = ccInstance::GetCurrentInstance();
     if (sci)
         callstack = sci->GetCallStack(numberOfLinesOfCallStack);
+#endif
     if (callstack.IsEmpty())
         callstack = ccErrorCallStack;
     return callstack;
@@ -360,12 +363,14 @@ String get_cur_script(int numberOfLinesOfCallStack)
 
 bool get_script_position(ScriptPosition &script_pos)
 {
+#if 0
     ccInstance *cur_instance = ccInstance::GetCurrentInstance();
     if (cur_instance)
     {
         cur_instance->GetScriptPosition(script_pos);
         return true;
     }
+#endif
     return false;
 }
 
@@ -378,7 +383,7 @@ struct Breakpoint
 std::vector<Breakpoint> breakpoints;
 int numBreakpoints = 0;
 
-bool send_message_to_editor(const char *msg, const char *errorMsg) 
+bool send_message_to_editor(const char *msg, const char *errorMsg)
 {
     String callStack = get_cur_script(25);
     if (callStack.IsEmpty())
@@ -401,12 +406,12 @@ bool send_message_to_editor(const char *msg, const char *errorMsg)
     return true;
 }
 
-bool send_message_to_editor(const char *msg) 
+bool send_message_to_editor(const char *msg)
 {
     return send_message_to_editor(msg, nullptr);
 }
 
-bool init_editor_debugging() 
+bool init_editor_debugging()
 {
 #if AGS_PLATFORM_OS_WINDOWS
     editor_debugger = GetEditorDebugger(editor_debugger_instance_token);
@@ -424,7 +429,7 @@ bool init_editor_debugging()
 
         // Wait for the editor to send the initial breakpoints
         // and then its READY message
-        while (check_for_messages_from_editor() != 2) 
+        while (check_for_messages_from_editor() != 2)
         {
             platform->Delay(10);
         }
@@ -446,7 +451,7 @@ int check_for_messages_from_editor()
             return 0;
         }
 
-        if (strncmp(msg, "<Engine Command=\"", 17) != 0) 
+        if (strncmp(msg, "<Engine Command=\"", 17) != 0)
         {
             //Debug::Printf("Faulty message received from editor:");
             //Debug::Printf(msg);
@@ -487,7 +492,7 @@ int check_for_messages_from_editor()
 
             int lineNumber = atoi(msgPtr);
 
-            if (isDelete) 
+            if (isDelete)
             {
                 for (i = 0; i < numBreakpoints; i++)
                 {
@@ -500,7 +505,7 @@ int check_for_messages_from_editor()
                     }
                 }
             }
-            else 
+            else
             {
                 breakpoints.push_back(Breakpoint());
                 strcpy(breakpoints[numBreakpoints].scriptName, scriptNameBuf);
@@ -508,16 +513,16 @@ int check_for_messages_from_editor()
                 numBreakpoints++;
             }
         }
-        else if (strncmp(msgPtr, "RESUME", 6) == 0) 
+        else if (strncmp(msgPtr, "RESUME", 6) == 0)
         {
             game_paused_in_debugger = 0;
         }
-        else if (strncmp(msgPtr, "STEP", 4) == 0) 
+        else if (strncmp(msgPtr, "STEP", 4) == 0)
         {
             game_paused_in_debugger = 0;
             break_on_next_script_step = 1;
         }
-        else if (strncmp(msgPtr, "EXIT", 4) == 0) 
+        else if (strncmp(msgPtr, "EXIT", 4) == 0)
         {
             want_exit = 1;
             abort_engine = 1;
@@ -554,7 +559,7 @@ bool send_exception_to_editor(const char *qmsg)
 }
 
 
-void break_into_debugger() 
+void break_into_debugger()
 {
 #if AGS_PLATFORM_OS_WINDOWS
 
@@ -564,7 +569,7 @@ void break_into_debugger()
     send_message_to_editor("BREAK");
     game_paused_in_debugger = 1;
 
-    while (game_paused_in_debugger) 
+    while (game_paused_in_debugger)
     {
         update_polled_stuff_if_runtime();
         platform->YieldCPU();
@@ -578,6 +583,7 @@ extern int pluginsWantingDebugHooks;
 
 // allow LShift to single-step,  RShift to pause flow
 void scriptDebugHook (ccInstance *ccinst, int linenum) {
+#if 0
 
     if (pluginsWantingDebugHooks > 0) {
         // a plugin is handling the debugging
@@ -588,13 +594,13 @@ void scriptDebugHook (ccInstance *ccinst, int linenum) {
 
     // no plugin, use built-in debugger
 
-    if (ccinst == nullptr) 
+    if (ccinst == nullptr)
     {
         // come out of script
         return;
     }
 
-    if (break_on_next_script_step) 
+    if (break_on_next_script_step)
     {
         break_on_next_script_step = 0;
         break_into_debugger();
@@ -612,6 +618,7 @@ void scriptDebugHook (ccInstance *ccinst, int linenum) {
             break;
         }
     }
+#endif
 }
 
 int scrlockWasDown = 0;
