@@ -279,7 +279,7 @@ int RunAGSGame(const String &newgame, unsigned int mode, int data) {
 
         if (inside_script) {
             curscript->queue_action(ePSARunAGSGame, mode | RAGMODE_LOADNOW, "RunAGSGame");
-            ccInstance::GetCurrentInstance()->Abort();
+            ccInstanceGetCurrentInstance()->Abort();
         }
         else
             load_new_game = mode | RAGMODE_LOADNOW;
