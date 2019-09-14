@@ -530,6 +530,7 @@ int invscreen() {
     set_cursor_mode(MODE_USE);
     return selt;
 }
+/// GENERATED CODE
 
 //=============================================================================
 //

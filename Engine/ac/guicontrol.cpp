@@ -213,6 +213,7 @@ void GUIControl_SendToBack(GUIObject *guio) {
 void GUIControl_BringToFront(GUIObject *guio) {
   guis[guio->ParentId].BringControlToFront(guio->Id);
 }
+/// GENERATED CODE
 
 //=============================================================================
 //

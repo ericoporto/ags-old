@@ -125,6 +125,7 @@ void generate_light_table()
         color_map = &maincoltable;
     }
 }
+/// GENERATED CODE
 
 //=============================================================================
 //

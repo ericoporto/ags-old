@@ -159,6 +159,7 @@ const char* IAGSEngine::GetEngineVersion () {
     return get_engine_version();
 }
 void IAGSEngine::RegisterScriptFunction (const char*name, void*addy) {
+/// GENERATED CODE EXT
     ccAddExternalPluginFunction (name, addy);
 }
 const char* IAGSEngine::GetGraphicsDriverID()

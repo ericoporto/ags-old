@@ -107,6 +107,7 @@ void Slider_SetHandleOffset(GUISlider *guisl, int newOffset)
         guisl->NotifyParentChanged();
     }
 }
+/// GENERATED CODE
 
 //=============================================================================
 //

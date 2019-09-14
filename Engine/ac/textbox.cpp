@@ -77,6 +77,7 @@ void TextBox_SetShowBorder(GUITextBox *guit, bool on)
         guit->NotifyParentChanged();
     }
 }
+/// GENERATED CODE
 
 //=============================================================================
 //

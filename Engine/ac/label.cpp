@@ -76,6 +76,7 @@ void Label_SetFont(GUILabel *guil, int fontnum) {
         guil->NotifyParentChanged();
     }
 }
+/// GENERATED CODE
 
 //=============================================================================
 //

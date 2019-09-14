@@ -289,6 +289,7 @@ int parse_sentence (const char *src_text, int *numwords, short*wordarray, short*
         return 0;
     return 1;
 }
+/// GENERATED CODE
 
 //=============================================================================
 //

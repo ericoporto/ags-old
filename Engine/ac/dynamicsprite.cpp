@@ -461,6 +461,7 @@ void free_dynamic_sprite (int gotSlot) {
 
   game_sprite_deleted(gotSlot);
 }
+/// GENERATED CODE
 
 //=============================================================================
 //

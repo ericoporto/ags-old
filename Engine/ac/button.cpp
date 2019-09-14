@@ -305,6 +305,7 @@ void Button_SetTextAlignment(GUIButton *butt, int align)
         butt->NotifyParentChanged();
     }
 }
+/// GENERATED CODE
 
 //=============================================================================
 //

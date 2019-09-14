@@ -80,6 +80,7 @@ SkipSpeechStyle internal_skip_speech_to_user(int internal_val)
     }
     return kSkipSpeechNone;
 }
+/// GENERATED CODE
 
 //=============================================================================
 //

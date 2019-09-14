@@ -1113,6 +1113,7 @@ void do_conversation(int dlgnum)
 
 // end dialog manager
 
+/// GENERATED CODE
 
 //=============================================================================
 //

@@ -203,9 +203,9 @@ void Character_Animate(CharacterInfo *chaa, int loop, int delay, int repeat, int
     Character_AnimateFrom(chaa, loop, delay, repeat, blocking, direction, 0);
 }
 
-void Character_ChangeRoomAutoPosition(CharacterInfo *chaa, int room, int newPos) 
+void Character_ChangeRoomAutoPosition(CharacterInfo *chaa, int room, int newPos)
 {
-    if (chaa->index_id != game.playercharacter) 
+    if (chaa->index_id != game.playercharacter)
     {
         quit("!Character.ChangeRoomAutoPosition can only be used with the player character.");
     }
@@ -438,14 +438,14 @@ void Character_FaceLocation(CharacterInfo *char1, int xx, int yy, int blockingSt
 }
 
 void Character_FaceObject(CharacterInfo *char1, ScriptObject *obj, int blockingStyle) {
-    if (obj == nullptr) 
+    if (obj == nullptr)
         quit("!FaceObject: invalid object specified");
 
     FaceLocationXY(char1, objs[obj->id].x, objs[obj->id].y, blockingStyle);
 }
 
 void Character_FaceCharacter(CharacterInfo *char1, CharacterInfo *char2, int blockingStyle) {
-    if (char2 == nullptr) 
+    if (char2 == nullptr)
         quit("!FaceCharacter: invalid character specified");
 
     if (char1->room != char2->room)
@@ -459,7 +459,7 @@ void Character_FollowCharacter(CharacterInfo *chaa, CharacterInfo *tofollow, int
     if ((eagerness < 0) || (eagerness > 250))
         quit("!FollowCharacterEx: invalid eagerness: must be 0-250");
 
-    if ((chaa->index_id == game.playercharacter) && (tofollow != nullptr) && 
+    if ((chaa->index_id == game.playercharacter) && (tofollow != nullptr) &&
         (tofollow->room != chaa->room))
         quit("!FollowCharacterEx: you cannot tell the player character to follow a character in another room");
 
@@ -713,7 +713,7 @@ void Character_LoseInventory(CharacterInfo *chap, ScriptInvItem *invi) {
         run_on_event (GE_LOSE_INV, RuntimeScriptValue().SetInt32(inum));
 }
 
-void Character_PlaceOnWalkableArea(CharacterInfo *chap) 
+void Character_PlaceOnWalkableArea(CharacterInfo *chap)
 {
     if (displayed_room < 0)
         quit("!Character.PlaceOnWalkableArea: no room is currently loaded");
@@ -803,7 +803,7 @@ void Character_SetAsPlayer(CharacterInfo *chaa) {
 
 void Character_SetIdleView(CharacterInfo *chaa, int iview, int itime) {
 
-    if (iview == 1) 
+    if (iview == 1)
         quit("!SetCharacterIdle: view 1 cannot be used as an idle view, sorry.");
 
     // if an idle anim is currently playing, release it
@@ -850,7 +850,7 @@ int Character_GetLightLevel(CharacterInfo *ch)
 void Character_SetLightLevel(CharacterInfo *chaa, int light_level)
 {
     light_level = Math::Clamp(light_level, -100, 100);
-    
+
     charextra[chaa->index_id].tint_light = light_level;
     chaa->flags &= ~CHF_HASTINT;
     chaa->flags |= CHF_HASLIGHT;
@@ -910,7 +910,7 @@ void Character_SetSpeed(CharacterInfo *chaa, int xspeed, int yspeed) {
 
     chaa->walkspeed = xspeed;
 
-    if (yspeed == xspeed) 
+    if (yspeed == xspeed)
         chaa->walkspeed_y = UNIFORM_WALK_SPEED;
     else
         chaa->walkspeed_y = yspeed;
@@ -1000,12 +1000,12 @@ void Character_UnlockViewEx(CharacterInfo *chaa, int stopMoving) {
 }
 
 
-void Character_Walk(CharacterInfo *chaa, int x, int y, int blocking, int direct) 
+void Character_Walk(CharacterInfo *chaa, int x, int y, int blocking, int direct)
 {
     walk_or_move_character(chaa, x, y, blocking, direct, true);
 }
 
-void Character_Move(CharacterInfo *chaa, int x, int y, int blocking, int direct) 
+void Character_Move(CharacterInfo *chaa, int x, int y, int blocking, int direct)
 {
     walk_or_move_character(chaa, x, y, blocking, direct, false);
 }
@@ -1203,7 +1203,7 @@ int Character_GetDiagonalWalking(CharacterInfo *chaa) {
 
     if (chaa->flags & CHF_NODIAGONAL)
         return 0;
-    return 1;  
+    return 1;
 }
 
 void Character_SetDiagonalWalking(CharacterInfo *chaa, int yesorno) {
@@ -1293,7 +1293,7 @@ int Character_GetIgnoreScaling(CharacterInfo *chaa) {
 
     if (chaa->flags & CHF_MANUALSCALING)
         return 1;
-    return 0;  
+    return 0;
 }
 
 void Character_SetIgnoreScaling(CharacterInfo *chaa, int yesorno) {
@@ -1406,7 +1406,7 @@ int Character_GetScaleMoveSpeed(CharacterInfo *chaa) {
 
     if (chaa->flags & CHF_SCALEMOVESPEED)
         return 1;
-    return 0;  
+    return 0;
 }
 
 void Character_SetScaleMoveSpeed(CharacterInfo *chaa, int yesorno) {
@@ -1423,7 +1423,7 @@ int Character_GetScaleVolume(CharacterInfo *chaa) {
 
     if (chaa->flags & CHF_SCALEVOLUME)
         return 1;
-    return 0;  
+    return 0;
 }
 
 void Character_SetScaleVolume(CharacterInfo *chaa, int yesorno) {
@@ -1566,7 +1566,7 @@ int Character_GetTurnBeforeWalking(CharacterInfo *chaa) {
 
     if (chaa->flags & CHF_NOTURNING)
         return 0;
-    return 1;  
+    return 1;
 }
 
 void Character_SetTurnBeforeWalking(CharacterInfo *chaa, int yesorno) {
@@ -1707,7 +1707,7 @@ void walk_character(int chac,int tox,int toy,int ignwal, bool autoWalkAnims) {
         convert_move_path_to_room_resolution(&mls[mslot]);
 
         // cancel any pending waits on current animations
-        // or if they were already moving, keep the current wait - 
+        // or if they were already moving, keep the current wait -
         // this prevents a glitch if MoveCharacter is called when they
         // are already moving
         if (autoWalkAnims)
@@ -1761,7 +1761,7 @@ int hasUpDownLoops(CharacterInfo *char1) {
 }
 
 void start_character_turning (CharacterInfo *chinf, int useloop, int no_diagonal) {
-    // work out how far round they have to turn 
+    // work out how far round they have to turn
     int fromidx = find_looporder_index (chinf->loop);
     int toidx = find_looporder_index (useloop);
     //Display("Curloop: %d, needloop: %d",chinf->loop, useloop);
@@ -1846,7 +1846,7 @@ int has_hit_another_character(int sourceChar) {
 
         if (is_char_on_another (sourceChar, ww, nullptr, nullptr)) {
             // we are now overlapping character 'ww'
-            if ((game.chars[ww].walking) && 
+            if ((game.chars[ww].walking) &&
                 ((game.chars[ww].flags & CHF_AWAITINGMOVE) == 0))
                 return ww;
         }
@@ -1861,7 +1861,7 @@ int has_hit_another_character(int sourceChar) {
 int doNextCharMoveStep (CharacterInfo *chi, int &char_index, CharacterExtras *chex) {
     int ntf=0, xwas = chi->x, ywas = chi->y;
 
-    if (do_movelist_move(&chi->walking,&chi->x,&chi->y) == 2) 
+    if (do_movelist_move(&chi->walking,&chi->x,&chi->y) == 2)
     {
         if ((chi->flags & CHF_MOVENOTWALK) == 0)
             fix_player_sprite(&mls[chi->walking], chi);
@@ -1909,7 +1909,7 @@ int find_nearest_walkable_area_within(int *xx, int *yy, int range, int step)
     int leftEdge = room_to_mask_coord(thisroom.Edges.Left);
     int topEdge = room_to_mask_coord(thisroom.Edges.Top);
     int bottomEdge = room_to_mask_coord(thisroom.Edges.Bottom);
-	
+
     // tweak because people forget to move the edges sometimes
     // if the player is already over the edge, ignore it
     if (xmask >= rightEdge) rightEdge = roomWidthLowRes;
@@ -1917,7 +1917,7 @@ int find_nearest_walkable_area_within(int *xx, int *yy, int range, int step)
     if (ymask >= bottomEdge) bottomEdge = roomHeightLowRes;
     if (ymask <= topEdge) topEdge = 0;
 
-    if (range > 0) 
+    if (range > 0)
     {
         startx = xmask - range;
         starty = ymask - range;
@@ -1942,7 +1942,7 @@ int find_nearest_walkable_area_within(int *xx, int *yy, int range, int step)
             if (thisis<nearest) { nearest=thisis; nearx=ex; neary=ey; }
         }
     }
-    if (nearest < 90000) 
+    if (nearest < 90000)
     {
         xx[0] = mask_to_room_coord(nearx);
         yy[0] = mask_to_room_coord(neary);
@@ -1975,9 +1975,9 @@ void FindReasonableLoopForCharacter(CharacterInfo *chap) {
         quitprintf("!View %d does not have any loops", chap->view + 1);
 
     // if the current loop has no frames, find one that does
-    if (views[chap->view].loops[chap->loop].numFrames < 1) 
+    if (views[chap->view].loops[chap->loop].numFrames < 1)
     {
-        for (int i = 0; i < views[chap->view].numLoops; i++) 
+        for (int i = 0; i < views[chap->view].numLoops; i++)
         {
             if (views[chap->view].loops[i].numFrames > 0) {
                 chap->loop = i;
@@ -2151,11 +2151,11 @@ void CheckViewFrameForCharacter(CharacterInfo *chi) {
     CheckViewFrame(chi->view, chi->loop, chi->frame, soundVolume);
 }
 
-Bitmap *GetCharacterImage(int charid, int *isFlipped) 
+Bitmap *GetCharacterImage(int charid, int *isFlipped)
 {
     if (!gfxDriver->HasAcceleratedTransform())
     {
-        if (actsps[charid + MAX_ROOM_OBJECTS] != nullptr) 
+        if (actsps[charid + MAX_ROOM_OBJECTS] != nullptr)
         {
             // the actsps image is pre-flipped, so no longer register the image as such
             if (isFlipped)
@@ -2194,7 +2194,7 @@ int is_pos_on_character(int xx,int yy) {
         if (game.chars[cc].view < 0) continue;
         CharacterInfo*chin=&game.chars[cc];
 
-        if ((chin->view < 0) || 
+        if ((chin->view < 0) ||
             (chin->loop >= views[chin->view].numLoops) ||
             (chin->frame >= views[chin->view].loops[chin->loop].numFrames))
         {
@@ -2467,7 +2467,7 @@ void _displayspeech(const char*texx, int aschar, int xx, int yy, int widd, int i
 
         // save the frame we need to go back to
         // if they were moving, this will be 0 (because we just called
-        // StopMoving); otherwise, it might be a specific animation 
+        // StopMoving); otherwise, it might be a specific animation
         // frame which we should return to
         if (viewWasLocked)
             charFrameWas = speakingChar->frame;
@@ -2476,7 +2476,7 @@ void _displayspeech(const char*texx, int aschar, int xx, int yy, int widd, int i
         if (speakingChar->loop >= views[speakingChar->view].numLoops)
             speakingChar->loop = 0;
 
-        if ((speakingChar->view < 0) || 
+        if ((speakingChar->view < 0) ||
             (speakingChar->loop >= views[speakingChar->view].numLoops) ||
             (views[speakingChar->view].loops[speakingChar->loop].numFrames < 1))
         {
@@ -2569,7 +2569,7 @@ void _displayspeech(const char*texx, int aschar, int xx, int yy, int widd, int i
             // Determine whether to display the portrait on the left or right
             int portrait_on_right = 0;
 
-            if (game.options[OPT_SPEECHTYPE] == 3) 
+            if (game.options[OPT_SPEECHTYPE] == 3)
             { }  // always on left with QFG-style speech
             else if ((play.swap_portrait_side == 1) ||
                 (play.swap_portrait_side == -1) ||
@@ -2579,7 +2579,7 @@ void _displayspeech(const char*texx, int aschar, int xx, int yy, int widd, int i
 
             int bigx=0,bigy=0,kk;
             ViewStruct*viptr=&views[useview];
-            for (kk = 0; kk < viptr->loops[0].numFrames; kk++) 
+            for (kk = 0; kk < viptr->loops[0].numFrames; kk++)
             {
                 int tw = game.SpriteInfos[viptr->loops[0].frames[kk].pic].Width;
                 if (tw > bigx) bigx=tw;
@@ -2680,7 +2680,7 @@ void _displayspeech(const char*texx, int aschar, int xx, int yy, int widd, int i
                     if (play.speech_portrait_placement)
                     {
                         overlay_x = (ui_view.GetWidth() - bigx) - play.speech_portrait_x;
-                        int maxWidth = overlay_x - tdxp - 9 - 
+                        int maxWidth = overlay_x - tdxp - 9 -
                             get_textwindow_border_width (play.speech_textwindow_gui) / 2;
                         if (bwidth > maxWidth)
                             bwidth = maxWidth;
@@ -2746,7 +2746,7 @@ void _displayspeech(const char*texx, int aschar, int xx, int yy, int widd, int i
             }
 
             // set up the speed of the first frame
-            speakingChar->wait = GetCharacterSpeechAnimationDelay(speakingChar) + 
+            speakingChar->wait = GetCharacterSpeechAnimationDelay(speakingChar) +
                 views[speakingChar->view].loops[speakingChar->loop].frames[0].speed;
 
             if (widd < 0) {
@@ -2877,6 +2877,7 @@ int update_lip_sync(int talkview, int talkloop, int *talkframeptr) {
     talkframeptr[0] = talkframe;
     return talkwait;
 }
+/// GENERATED CODE
 
 Rect GetCharacterRoomBBox(int charid, bool use_frame_0)
 {
@@ -3119,13 +3120,13 @@ RuntimeScriptValue Sc_Character_LoseInventory(void *self, const RuntimeScriptVal
     API_OBJCALL_VOID_POBJ(CharacterInfo, Character_LoseInventory, ScriptInvItem);
 }
 
-// void (CharacterInfo *chaa, int x, int y, int blocking, int direct) 
+// void (CharacterInfo *chaa, int x, int y, int blocking, int direct)
 RuntimeScriptValue Sc_Character_Move(void *self, const RuntimeScriptValue *params, int32_t param_count)
 {
     API_OBJCALL_VOID_PINT4(CharacterInfo, Character_Move);
 }
 
-// void (CharacterInfo *chap) 
+// void (CharacterInfo *chap)
 RuntimeScriptValue Sc_Character_PlaceOnWalkableArea(void *self, const RuntimeScriptValue *params, int32_t param_count)
 {
     API_OBJCALL_VOID(CharacterInfo, Character_PlaceOnWalkableArea);

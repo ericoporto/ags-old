@@ -159,6 +159,7 @@ void DrawViewFrame(Bitmap *ds, const ViewFrame *vframe, int x, int y, bool alpha
             ds->Blit(spriteset[vframe->pic], x, y, Common::kBitmap_Transparency);
     }
 }
+/// GENERATED CODE
 
 //=============================================================================
 //

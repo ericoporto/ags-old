@@ -382,6 +382,7 @@ void recreate_overlay_ddbs()
             over.bmp = nullptr;
     }
 }
+/// GENERATED CODE
 
 //=============================================================================
 //

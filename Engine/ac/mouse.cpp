@@ -433,6 +433,7 @@ int find_previous_enabled_cursor(int startwith) {
     return testing;
 }
 
+/// GENERATED CODE
 
 //=============================================================================
 //

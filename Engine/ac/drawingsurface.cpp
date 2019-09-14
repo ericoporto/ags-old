@@ -390,6 +390,7 @@ int DrawingSurface_GetPixel(ScriptDrawingSurface *sds, int x, int y) {
 
     return rawPixel;
 }
+/// GENERATED CODE
 
 //=============================================================================
 //

@@ -325,6 +325,7 @@ GUIListBox* is_valid_listbox (int guin, int objn) {
     quit("!ListBox: specified control is not a list box");
   return (GUIListBox*)guis[guin].GetControl(objn);
 }
+/// GENERATED CODE
 
 //=============================================================================
 //
