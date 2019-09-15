@@ -516,25 +516,17 @@ void unload_game_file()
     free(actspswbbmp);
     free(actspswbcache);
 
-    if ((gameinst != nullptr) && (gameinst->IsBeingRun()))
+    if (coreExecutor.IsBeingRun())
     {
         quit("Error: unload_game called while script still running");
     }
-    else
-    {
-        delete gameinstFork;
-        delete gameinst;
-        gameinstFork = nullptr;
-        gameinst = nullptr;
-    }
+
+    delete gameinst;
+    gameinst = nullptr;
 
     gamescript.reset();
 
-    if ((dialogScriptsInst != nullptr) && (dialogScriptsInst->IsBeingRun()))
-    {
-        quit("Error: unload_game called while dialog script still running");
-    }
-    else if (dialogScriptsInst != nullptr)
+    if (dialogScriptsInst != nullptr)
     {
         delete dialogScriptsInst;
         dialogScriptsInst = nullptr;
@@ -544,11 +536,9 @@ void unload_game_file()
 
     for (int i = 0; i < numScriptModules; ++i)
     {
-        delete moduleInstFork[i];
         delete moduleInst[i];
         scriptModules[i].reset();
     }
-    moduleInstFork.resize(0);
     moduleInst.resize(0);
     scriptModules.resize(0);
     repExecAlways.moduleHasFunction.resize(0);
