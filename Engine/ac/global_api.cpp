@@ -848,7 +848,7 @@ RuntimeScriptValue Sc_GetDrawingSurfaceForWalkbehind(const RuntimeScriptValue *p
     return RuntimeScriptValue().SetDynamicObject(ret_obj, ret_obj);
 }
 
-// void (int amnt) 
+// void (int amnt)
 RuntimeScriptValue Sc_GiveScore(const RuntimeScriptValue *params, int32_t param_count)
 {
     API_SCALL_VOID_PINT(GiveScore);
@@ -860,7 +860,7 @@ RuntimeScriptValue Sc_HasPlayerBeenInRoom(const RuntimeScriptValue *params, int3
     API_SCALL_INT_PINT(HasPlayerBeenInRoom);
 }
 
-// void  () 
+// void  ()
 RuntimeScriptValue Sc_HideMouseCursor(const RuntimeScriptValue *params, int32_t param_count)
 {
     API_SCALL_VOID(HideMouseCursor);
@@ -884,7 +884,7 @@ RuntimeScriptValue Sc_InterfaceOn(const RuntimeScriptValue *params, int32_t para
     API_SCALL_VOID_PINT(InterfaceOn);
 }
 
-// FLOAT_RETURN_TYPE (int value) 
+// FLOAT_RETURN_TYPE (int value)
 RuntimeScriptValue Sc_IntToFloat(const RuntimeScriptValue *params, int32_t param_count)
 {
     API_SCALL_FLOAT_PINT(IntToFloat);
@@ -1866,7 +1866,7 @@ RuntimeScriptValue Sc_SetObjectFrame(const RuntimeScriptValue *params, int32_t p
     API_SCALL_VOID_PINT4(SetObjectFrame);
 }
 
-// void (int obn,int slott) 
+// void (int obn,int slott)
 RuntimeScriptValue Sc_SetObjectGraphic(const RuntimeScriptValue *params, int32_t param_count)
 {
     API_SCALL_VOID_PINT2(SetObjectGraphic);
@@ -2070,7 +2070,7 @@ RuntimeScriptValue Sc_StopAmbientSound(const RuntimeScriptValue *params, int32_t
     API_SCALL_VOID_PINT(StopAmbientSound);
 }
 
-// void  (int chid) 
+// void  (int chid)
 RuntimeScriptValue Sc_stop_and_destroy_channel(const RuntimeScriptValue *params, int32_t param_count)
 {
     API_SCALL_VOID_PINT(stop_and_destroy_channel);
@@ -2114,14 +2114,12 @@ RuntimeScriptValue Sc_sc_strcat(const RuntimeScriptValue *params, int32_t param_
 // [DEPRECATED]
 RuntimeScriptValue Sc_stricmp(const RuntimeScriptValue *params, int32_t param_count)
 {
-    // Calling C stdlib function ags_stricmp
     API_SCALL_INT_POBJ2(ags_stricmp, const char, const char);
 }
 
 // [DEPRECATED]
 RuntimeScriptValue Sc_strcmp(const RuntimeScriptValue *params, int32_t param_count)
 {
-    // Calling C stdlib function strcmp
     API_SCALL_INT_POBJ2(strcmp, const char, const char);
 }
 
@@ -2159,9 +2157,9 @@ RuntimeScriptValue Sc_StringToInt(const RuntimeScriptValue *params, int32_t para
     API_SCALL_INT_POBJ(StringToInt, const char);
 }
 
+// Calling C stdlib function strlen
 RuntimeScriptValue Sc_strlen(const RuntimeScriptValue *params, int32_t param_count)
 {
-    // Calling C stdlib function strlen
     API_SCALL_INT_POBJ(strlen, const char);
 }
 
