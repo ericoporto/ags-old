@@ -32,6 +32,7 @@ const char *ScriptVSprintf__(char *buffer, size_t buf_length, const char *format
 
 void Test_ScriptSprintf()
 {
+    #if 0
     const int argi = 123;
     const float argf = 0.456F;
     const char *argcc = "string literal";
@@ -45,7 +46,7 @@ void Test_ScriptSprintf()
     // Called-from-script variant
     //
     // Correct format, extra placeholder
-    const char *result = 
+    const char *result =
         ScriptSprintf(ScSfBuffer, STD_BUFFER_SIZE,
                       "testing ScriptSprintf:\nThis is int: %10d\nThis is float: %.4f\nThis is string: '%s'\nThis placeholder will be ignored: %d",
                       params, 3);
@@ -85,7 +86,7 @@ void Test_ScriptSprintf()
     // always be equal or higher than number of placeholders in buffer string.
     //
     // Correct format, matching number of arguments
-    result = 
+    result =
         ScriptVSprintf__(ScSfBuffer, STD_BUFFER_SIZE,
         "testing ScriptVSprintf:\nThis is int: %10d\nThis is float: %.4f\nThis is string: '%s'\n",
         argi, argf, argcc);
