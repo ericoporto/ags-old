@@ -915,6 +915,7 @@ void check_new_room() {
 void compile_room_script() {
     ccError = 0;
 
+    printf("SCRIPT: loading room\n");
     roominst = coreExecutor.LoadScript(thisroom.CompiledScript);
 
     if ((ccError!=0) || (roominst==nullptr)) {
