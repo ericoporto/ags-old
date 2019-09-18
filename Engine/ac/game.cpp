@@ -2089,3 +2089,4 @@ void RegisterStaticObjects()
     ccAddExternalStaticObject("gs_globals", &play.globalvars[0], &GlobalStaticManager);
 	ccAddExternalStaticObject("savegameindex",&play.filenumbers[0], &GlobalStaticManager);
 }
+#endif

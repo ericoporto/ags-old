@@ -291,6 +291,8 @@ int parse_sentence (const char *src_text, int *numwords, short*wordarray, short*
 }
 /// GENERATED CODE
 
+#ifndef IGNORE_GENERATED
+
 //=============================================================================
 //
 // Script API Functions
@@ -344,3 +346,4 @@ void RegisterParserAPI()
     ccAddExternalFunctionForPlugin("Parser::SaidUnknownWord^0",(void*)Parser_SaidUnknownWord);
     ccAddExternalFunctionForPlugin("Parser::Said^1",           (void*)Said);
 }
+#endif

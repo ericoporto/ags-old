@@ -215,6 +215,9 @@ void GUIControl_BringToFront(GUIObject *guio) {
 }
 /// GENERATED CODE
 
+#ifndef IGNORE_GENERATED
+
+
 //=============================================================================
 //
 // Script API Functions
@@ -461,3 +464,4 @@ void RegisterGUIControlAPI()
     ccAddExternalFunctionForPlugin("GUIControl::get_Y",            (void*)GUIControl_GetY);
     ccAddExternalFunctionForPlugin("GUIControl::set_Y",            (void*)GUIControl_SetY);
 }
+#endif

@@ -4107,3 +4107,4 @@ void RegisterCharacterAPI(ScriptAPIVersion base_api, ScriptAPIVersion compat_api
     ccAddExternalFunctionForPlugin("Character::get_z",                     (void*)Character_GetZ);
     ccAddExternalFunctionForPlugin("Character::set_z",                     (void*)Character_SetZ);
 }
+#endif

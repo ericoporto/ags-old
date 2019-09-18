@@ -1115,6 +1115,9 @@ void do_conversation(int dlgnum)
 
 /// GENERATED CODE
 
+#ifndef IGNORE_GENERATED
+
+
 //=============================================================================
 //
 // Script API Functions
@@ -1212,3 +1215,4 @@ void RegisterDialogAPI()
     ccAddExternalFunctionForPlugin("Dialog::SetOptionState^2",     (void*)Dialog_SetOptionState);
     ccAddExternalFunctionForPlugin("Dialog::Start^0",              (void*)Dialog_Start);
 }
+#endif

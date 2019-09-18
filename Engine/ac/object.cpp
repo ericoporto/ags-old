@@ -563,6 +563,9 @@ int check_click_on_object(int roomx, int roomy, int mood)
 }
 /// GENERATED CODE
 
+#ifndef IGNORE_GENERATED
+
+
 //=============================================================================
 //
 // Script API Functions
@@ -1084,3 +1087,4 @@ void RegisterObjectAPI()
     ccAddExternalFunctionForPlugin("Object::get_Y",                    (void*)Object_GetY);
     ccAddExternalFunctionForPlugin("Object::set_Y",                    (void*)Object_SetY);
 }
+#endif

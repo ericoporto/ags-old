@@ -435,6 +435,9 @@ int find_previous_enabled_cursor(int startwith) {
 
 /// GENERATED CODE
 
+#ifndef IGNORE_GENERATED
+
+
 //=============================================================================
 //
 // Script API Functions
@@ -645,3 +648,4 @@ void RegisterMouseAPI()
     ccAddExternalFunctionForPlugin("Mouse::get_Visible",               (void*)Mouse_GetVisible);
     ccAddExternalFunctionForPlugin("Mouse::set_Visible",               (void*)Mouse_SetVisible);
 }
+#endif
