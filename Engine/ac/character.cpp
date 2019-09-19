@@ -762,6 +762,17 @@ ScriptOverlay* Character_SayBackground(CharacterInfo *chaa, const char *texx) {
     scOver->borderHeight = 0;
     scOver->borderWidth = 0;
     scOver->isBackgroundSpeech = 1;
+
+    ManagedObjectInfo objinfo;
+    objinfo.obj_type = kScValDynamicObject;
+    objinfo.object_manager = scOver;
+    objinfo.address = scOver;
+    objinfo.buffer = scOver;
+    objinfo.buffer_size = sizeof(ScriptOverlay);
+    int handl = ccRegisterManagedObject2(objinfo);
+
+    screenover[ovri].associatedOverlayHandle = handl;
+
     return scOver;
 }
 
@@ -2091,7 +2102,10 @@ int wantMoveNow (CharacterInfo *chi, CharacterExtras *chex) {
 void setup_player_character(int charid) {
     game.playercharacter = charid;
     playerchar = &game.chars[charid];
-    _sc_PlayerCharPtr = ccGetObjectHandleFromAddress((char*)playerchar);
+    ManagedObjectInfo objinfo;
+    auto err = ccGetObjectInfoFromAddress(objinfo, playerchar);
+    assert(err == 0);
+    _sc_PlayerCharPtr = objinfo.handle;
 }
 
 void animate_character(CharacterInfo *chap, int loopn,int sppd,int rept, int noidleoverride, int direction, int sframe) {

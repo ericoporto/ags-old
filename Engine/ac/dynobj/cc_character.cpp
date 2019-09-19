@@ -38,7 +38,15 @@ int CCCharacter::Serialize(const char *address, char *buffer, int bufsize) {
 void CCCharacter::Unserialize(int index, const char *serializedData, int dataSize) {
     StartUnserialize(serializedData, dataSize);
     int num = UnserializeInt();
-    ccRegisterUnserializedObject(index, &game.chars[num], this);
+
+    ManagedObjectInfo objinfo;
+    objinfo.handle = index;
+    objinfo.obj_type = kScValDynamicObject;
+    objinfo.object_manager = this;
+    objinfo.address = &game.chars[num];
+    objinfo.buffer = &game.chars[num];
+    objinfo.buffer_size = sizeof(CharacterInfo);
+    ccRegisterUnserializedObject2(objinfo);
 }
 
 uint8_t CCCharacter::ReadInt8(const char *address, intptr_t offset)
