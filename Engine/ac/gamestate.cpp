@@ -275,9 +275,9 @@ ScriptViewport *GameState::RegisterRoomViewport(int index, int32_t handle)
         objinfo.obj_type = kScValDynamicObject;
         objinfo.object_manager = scobj.first;
         objinfo.address = scobj.first;
-        objinfo.buffer = scobj.first;
-        objinfo.buffer_size = sizeof(ScriptViewport);
-        handle = ccRegisterManagedObject2(objinfo);
+        objinfo.buffer = nullptr;
+        objinfo.buffer_size = 0;
+        handle = ccRegisterManagedObject2(objinfo); // NO DATA
 
         ccAddObjectReference(handle); // one reference for the GameState
     }
@@ -288,9 +288,9 @@ ScriptViewport *GameState::RegisterRoomViewport(int index, int32_t handle)
         objinfo.obj_type = kScValDynamicObject;
         objinfo.object_manager =  scobj.first;
         objinfo.address =  scobj.first;
-        objinfo.buffer =  scobj.first;
-        objinfo.buffer_size = sizeof(ScriptViewport);
-        ccRegisterUnserializedObject2(objinfo);
+        objinfo.buffer =  nullptr;
+        objinfo.buffer_size = 0;
+        ccRegisterUnserializedObject2(objinfo); // NO DATA
     }
     scobj.second = handle;
     return scobj.first;
@@ -354,9 +354,9 @@ ScriptCamera *GameState::RegisterRoomCamera(int index, int32_t handle)
         objinfo.obj_type = kScValDynamicObject;
         objinfo.object_manager = scobj.first;
         objinfo.address = scobj.first;
-        objinfo.buffer = scobj.first;
-        objinfo.buffer_size = sizeof(ScriptCamera);
-        handle = ccRegisterManagedObject2(objinfo);
+        objinfo.buffer = nullptr;
+        objinfo.buffer_size = 0;
+        handle = ccRegisterManagedObject2(objinfo); // NO DATA
         
         ccAddObjectReference(handle); // one reference for the GameState
     }
@@ -367,9 +367,9 @@ ScriptCamera *GameState::RegisterRoomCamera(int index, int32_t handle)
         objinfo.obj_type = kScValDynamicObject;
         objinfo.object_manager =  scobj.first;
         objinfo.address =  scobj.first;
-        objinfo.buffer =  scobj.first;
-        objinfo.buffer_size = sizeof(ScriptCamera);
-        ccRegisterUnserializedObject2(objinfo);
+        objinfo.buffer =  nullptr;
+        objinfo.buffer_size = 0;
+        ccRegisterUnserializedObject2(objinfo); // NO DATA
     }
     scobj.second = handle;
     return scobj.first;
