@@ -94,7 +94,7 @@ extern NonBlockingScriptFunction runDialogOptionMouseClickHandlerFunc;
 extern NonBlockingScriptFunction runDialogOptionKeyPressHandlerFunc;
 extern NonBlockingScriptFunction runDialogOptionRepExecFunc;
 
-extern ScriptSystem scsystem;
+extern ScriptSystem &scsystem;
 
 extern std::vector<PScript> scriptModules;
 extern std::vector<ccInstance *> moduleInst;

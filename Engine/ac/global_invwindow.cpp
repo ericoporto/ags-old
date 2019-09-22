@@ -23,7 +23,7 @@
 using namespace AGS::Common;
 
 extern ExecutingScript*curscript;
-extern GameState play;
+extern GameState &play;
 
 //CLNUP this file can be removed
 

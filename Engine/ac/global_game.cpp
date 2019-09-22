@@ -84,7 +84,7 @@ extern RGB palette[256];
 extern int psp_gfx_renderer;
 #endif
 
-void GiveScore(int amnt) 
+void GiveScore(int amnt)
 {
     GUI::MarkSpecialLabelsForUpdate(kLabelMacro_AllScore);
     play.score += amnt;
@@ -321,7 +321,7 @@ int RunAGSGame(const String &newgame, unsigned int mode, int data) {
     if ((mode & RAGMODE_PRESERVEGLOBALINT) == 0) {
         // reset GlobalInts
         for (ee = 0; ee < MAXGSVALUES; ee++)
-            play.globalscriptvars[ee] = 0;  
+            play.globalscriptvars[ee] = 0;
     }
 
     engine_init_game_settings();
@@ -721,7 +721,7 @@ void RoomProcessClick(int xx,int yy,int mood) {
     else if (loctype == LOCTYPE_OBJ) {
         if (check_click_on_object(xx,yy,mood)) return;
     }
-    else if (loctype == LOCTYPE_HOTSPOT) 
+    else if (loctype == LOCTYPE_HOTSPOT)
         RunHotspotInteraction (getloctype_index, mood);
 }
 

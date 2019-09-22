@@ -68,7 +68,7 @@ int    global_argc = 0;
 
 
 extern GameSetup usetup;
-extern GameState play;
+extern GameState &play;
 extern int our_eip;
 extern int convert_16bit_bgr; // CLNUP most likely remove
 extern int editor_debugging_enabled;

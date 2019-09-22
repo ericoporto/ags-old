@@ -237,7 +237,7 @@ void process_event(EventHappened*evp) {
         {
             my_fade_in(palette,5);
         }
-        else if (theTransition == FADE_BOXOUT) 
+        else if (theTransition == FADE_BOXOUT)
         {
             if (!gfxDriver->UsesMemoryBackBuffer())
             {
@@ -270,7 +270,7 @@ void process_event(EventHappened*evp) {
                     int lxp = viewport.GetWidth() / 2 - boxwid / 2;
                     int lyp = viewport.GetHeight() / 2 - boxhit / 2;
                     gfxDriver->Vsync();
-                    temp_scr->Blit(saved_backbuf, lxp, lyp, lxp, lyp, 
+                    temp_scr->Blit(saved_backbuf, lxp, lyp, lxp, lyp,
                         boxwid, boxhit);
                     render_to_screen();
                     WaitForNextFrame();
@@ -279,7 +279,7 @@ void process_event(EventHappened*evp) {
             }
             play.screen_is_faded_out = 0;
         }
-        else if (theTransition == FADE_CROSSFADE) 
+        else if (theTransition == FADE_CROSSFADE)
         {
             if (game.color_depth == 1)
                 quit("!Cannot use crossfade screen transition in 256-colour games");
@@ -320,7 +320,7 @@ void process_event(EventHappened*evp) {
             IDriverDependantBitmap *ddb = prepare_screen_for_transition_in();
             for (aa=0;aa<16;aa++) {
                 // merge the palette while dithering
-                if (game.color_depth == 1) 
+                if (game.color_depth == 1)
                 {
                     fade_interpolate(old_palette,palette,interpal,aa*4,0,255);
                     set_palette_range(interpal, 0, 255, 0);

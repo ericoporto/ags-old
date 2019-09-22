@@ -64,6 +64,6 @@ void UpdatePalette() {
     if (game.color_depth > 1)
         invalidate_screen();
 
-    if (!play.fast_forward)  
+    if (!play.fast_forward)
         setpal();
 }

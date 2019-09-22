@@ -99,7 +99,7 @@ SkipSpeechStyle internal_skip_speech_to_user(int internal_val)
 #include "script/script_runtime.h"
 
 extern GameSetupStruct game;
-extern GameState play;
+extern GameState &play;
 
 ScriptOverlay* Speech_GetTextOverlay()
 {

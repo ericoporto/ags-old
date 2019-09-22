@@ -93,7 +93,16 @@ extern RGB palette[256];
 extern IGraphicsDriver *gfxDriver;
 
 //=============================================================================
-GameState play;
+
+
+GameState *ConstructGameState() {
+    auto p = (GameState*)calloc(1, sizeof(GameState));
+    new (p) GameState();
+    return p;
+}
+
+GameState *play_ptr = ConstructGameState();
+GameState &play = *play_ptr;
 GameSetup usetup;
 GameSetupStruct game;
 RoomStatus troom;    // used for non-saveable rooms, eg. intro

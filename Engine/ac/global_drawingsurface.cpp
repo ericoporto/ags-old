@@ -231,7 +231,7 @@ void RawDrawImageTransparent(int xx, int yy, int slot, int legacy_transparency) 
     // 0      => alpha 255
     // 100    => alpha 0
     // 1 - 99 => alpha 1 - 244
-    // 
+    //
     RawDrawImageTrans(xx, yy, slot, GfxDef::LegacyTrans100ToAlpha255(legacy_transparency));
 
     update_polled_stuff_if_runtime();  // this operation can be slow so stop music skipping

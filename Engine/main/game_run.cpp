@@ -138,7 +138,7 @@ static void game_loop_check_new_room()
         // Run the room and game script repeatedly_execute
         run_function_on_non_blocking_thread(&repExecAlways);
         setevent(EV_TEXTSCRIPT,TS_REPEAT);
-        setevent(EV_RUNEVBLOCK,EVB_ROOM,0,6);  
+        setevent(EV_RUNEVBLOCK,EVB_ROOM,0,6);
     }
     // run this immediately to make sure it gets done before fade-in
     // (player enters screen)
@@ -222,7 +222,7 @@ static void toggle_mouse_lock()
 static void check_mouse_controls()
 {
     int mongu=-1;
-    
+
     mongu = gui_on_mouse_move();
 
     mouse_on_iface=mongu;
@@ -265,7 +265,7 @@ static void check_mouse_controls()
         else if (mongu>=0) {
             if (wasbutdown==0) {
                 gui_on_mouse_down(mongu, mbut+1);
-            }            
+            }
             wasongui=mongu;
             wasbutdown=mbut+1;
         }
@@ -314,7 +314,7 @@ bool run_service_key_controls(int &out_key)
 
     // First, check mods
     const int cur_mod = make_merged_mod(SDL_GetModState());
-    
+
     // If shifts combination have already triggered an action, then do nothing
     // until new shifts are empty, in which case reset saved shifts
     if (old_key_mod & KEY_MODS_FIRED)
@@ -469,8 +469,8 @@ static void check_keyboard_controls()
     }
     // Then, check cutscene skip
     check_skip_cutscene_keypress(kgn);
-    if (play.fast_forward) { 
-        return; 
+    if (play.fast_forward) {
+        return;
     }
     if (play.IsIgnoringInput()) {
         return;
@@ -633,7 +633,7 @@ static void game_loop_update_animated_buttons()
         if (UpdateAnimatingButton(aa)) {
             StopButtonAnimation(aa);
             aa--;
-        } 
+        }
     }
 }
 
@@ -662,13 +662,13 @@ static void game_loop_do_render_and_check_mouse(IDriverDependantBitmap *extraBit
         int offsety = cam->GetRect().Top;
 
         if (((mwasatx!=mousex) || (mwasaty!=mousey) ||
-            (offsetxWas != offsetx) || (offsetyWas != offsety))) 
+            (offsetxWas != offsetx) || (offsetyWas != offsety)))
         {
             // mouse moves over hotspot
             if (__GetLocationType(mousex, mousey, 1) == LOCTYPE_HOTSPOT) {
                 int onhs = getloctype_index;
 
-                setevent(EV_RUNEVBLOCK,EVB_HOTSPOT,onhs,6); 
+                setevent(EV_RUNEVBLOCK,EVB_HOTSPOT,onhs,6);
             }
         }
 
@@ -914,7 +914,7 @@ static int UpdateWaitMode()
         GUI::MarkAllGUIForUpdate();
     }
     play.disabled_user_interface--;
-    user_disabled_for = 0; 
+    user_disabled_for = 0;
 
     switch (was_disabled_for) {
         // case FOR_ANIMATION:
@@ -945,7 +945,7 @@ static int GameTick()
     our_eip=76;
 
     int res = UpdateWaitMode();
-    if (res == RETURN_CONTINUE) { return 0; } // continue looping 
+    if (res == RETURN_CONTINUE) { return 0; } // continue looping
     return res;
 }
 
@@ -989,42 +989,42 @@ static void GameLoopUntilEvent(int untilwhat,const void* daaa) {
   user_disabled_for = cached_user_disabled_for;
 }
 
-void GameLoopUntilValueIsZero(const char *value) 
+void GameLoopUntilValueIsZero(const char *value)
 {
     GameLoopUntilEvent(UNTIL_CHARIS0, value);
 }
 
-void GameLoopUntilValueIsZero(const short *value) 
+void GameLoopUntilValueIsZero(const short *value)
 {
     GameLoopUntilEvent(UNTIL_SHORTIS0, value);
 }
 
-void GameLoopUntilValueIsZero(const int *value) 
+void GameLoopUntilValueIsZero(const int *value)
 {
     GameLoopUntilEvent(UNTIL_INTIS0, value);
 }
 
-void GameLoopUntilValueIsZeroOrLess(const short *value) 
+void GameLoopUntilValueIsZeroOrLess(const short *value)
 {
     GameLoopUntilEvent(UNTIL_MOVEEND, value);
 }
 
-void GameLoopUntilValueIsNegative(const short *value) 
+void GameLoopUntilValueIsNegative(const short *value)
 {
     GameLoopUntilEvent(UNTIL_NEGATIVE, value);
 }
 
-void GameLoopUntilValueIsNegative(const int *value) 
+void GameLoopUntilValueIsNegative(const int *value)
 {
     GameLoopUntilEvent(UNTIL_INTISNEG, value);
 }
 
-void GameLoopUntilNotMoving(const short *move) 
+void GameLoopUntilNotMoving(const short *move)
 {
     GameLoopUntilEvent(UNTIL_MOVEEND, move);
 }
 
-void GameLoopUntilNoOverlay() 
+void GameLoopUntilNoOverlay()
 {
     GameLoopUntilEvent(UNTIL_NOOVERLAY, 0);
 }
