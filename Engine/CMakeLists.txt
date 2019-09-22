@@ -496,10 +496,12 @@ target_sources(engine
     platform/windows/win_ex_handling.h
     platform/windows/minidump.cpp
     platform/windows/winapi_exclusive.h
+
 )
 
+
 if(MACOS)
-    target_sources(engine PRIVATE 
+    target_sources(engine PRIVATE
         platform/osx/alplmac.mm
     )
 endif()
@@ -507,7 +509,7 @@ endif()
 if (AGS_BUILTIN_PLUGINS)
     target_compile_definitions(engine PRIVATE BUILTIN_PLUGINS)
 
-    target_sources(engine PRIVATE 
+    target_sources(engine PRIVATE
         ../Plugins/agsblend/AGSBlend.cpp
         ../Plugins/agsblend/agsblend.h
 
@@ -544,7 +546,7 @@ if (AGS_BUILTIN_PLUGINS)
     )
 endif()
 
-target_compile_definitions(engine PRIVATE 
+target_compile_definitions(engine PRIVATE
     $<$<CONFIG:DEBUG>:SOUND_CACHE_DEBUG>
     $<$<CONFIG:DEBUG>:DEBUG_MANAGED_OBJECTS>
 )
@@ -554,15 +556,16 @@ if (AGS_BUILD_STR)
 endif()
 
 
-target_link_libraries(engine PUBLIC 
-    AGS::Common 
-    ${CMAKE_DL_LIBS} 
-    Threads::Threads 
+target_link_libraries(engine PUBLIC
+    AGS::Common
+    ${CMAKE_DL_LIBS}
+    Threads::Threads
     Allegro::Allegro
     glm::glm
     External::OpenAL
     SDL2::SDL2
     SDL2_sound::SDL2_sound
+    TinyAlloc::TinyAlloc
 )
 
 if (AGS_OPENGLES2)
@@ -632,6 +635,8 @@ endif ()
 set_target_properties(ags PROPERTIES
     CXX_STANDARD 11
     CXX_EXTENSIONS NO
+    C_STANDARD 11
+    C_EXTENSIONS NO
 )
 
 target_include_directories(ags PRIVATE .)
@@ -670,6 +675,8 @@ if (MACOS)
     set_target_properties(ags-app PROPERTIES
         CXX_STANDARD 11
         CXX_EXTENSIONS NO
+        C_STANDARD 11
+        C_EXTENSIONS NO
     )
 
     target_include_directories(ags-app PRIVATE .)

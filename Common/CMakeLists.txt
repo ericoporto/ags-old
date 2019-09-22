@@ -13,7 +13,7 @@ set_property(TARGET common PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 target_include_directories(common PUBLIC .)
 
-target_sources(common 
+target_sources(common
     PRIVATE
     ac/audiocliptype.cpp
     ac/audiocliptype.h
