@@ -315,11 +315,11 @@ void AGSWin32::update_game_explorer(bool add)
   CoInitialize(NULL);
   // Create an instance of the Game Explorer Interface
   HRESULT hr = CoCreateInstance( __uuidof(GameExplorer), NULL, CLSCTX_INPROC_SERVER, __uuidof(IGameExplorer), (void**)&pFwGameExplorer);
-  if( FAILED(hr) || pFwGameExplorer == NULL ) 
+  if( FAILED(hr) || pFwGameExplorer == NULL )
   {
     Debug::Printf(kDbgMsg_Warn, "Game Explorer not found to register game, Windows Vista required");
   }
-  else 
+  else
   {
     ags_strupr(game.guid);
     WCHAR wstrTemp[MAX_PATH] = {0};
@@ -421,7 +421,7 @@ void AGSWin32::register_file_extension(const char *exePath)
   SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, NULL, NULL);
 }
 
-void AGSWin32::RegisterGameWithGameExplorer() 
+void AGSWin32::RegisterGameWithGameExplorer()
 {
   update_game_explorer(true);
 
@@ -434,7 +434,7 @@ void AGSWin32::RegisterGameWithGameExplorer()
   }
 }
 
-void AGSWin32::UnRegisterGameWithGameExplorer() 
+void AGSWin32::UnRegisterGameWithGameExplorer()
 {
   update_game_explorer(false);
 
@@ -444,7 +444,7 @@ void AGSWin32::UnRegisterGameWithGameExplorer()
   }
 }
 
-void AGSWin32::PostBackendInit() 
+void AGSWin32::PostBackendInit()
 {
   // Set the Windows timer resolution to 1 ms so that calls to
   // Sleep() don't take more time than specified
@@ -453,8 +453,8 @@ void AGSWin32::PostBackendInit()
     Debug::Printf(kDbgMsg_Error, "Failed to set the timer resolution to %d ms", win32TimerPeriod);
 }
 
-typedef UINT (CALLBACK* Dynamic_SHGetKnownFolderPathType) (GUID& rfid, DWORD dwFlags, HANDLE hToken, PWSTR *ppszPath); 
-GUID FOLDERID_SAVEDGAMES = {0x4C5C32FF, 0xBB9D, 0x43b0, {0xB5, 0xB4, 0x2D, 0x72, 0xE5, 0x4E, 0xAA, 0xA4}}; 
+typedef UINT (CALLBACK* Dynamic_SHGetKnownFolderPathType) (GUID& rfid, DWORD dwFlags, HANDLE hToken, PWSTR *ppszPath);
+GUID FOLDERID_SAVEDGAMES = {0x4C5C32FF, 0xBB9D, 0x43b0, {0xB5, 0xB4, 0x2D, 0x72, 0xE5, 0x4E, 0xAA, 0xA4}};
 #define _WIN32_WINNT_VISTA              0x0600
 #define VER_MINORVERSION                0x0000001
 #define VER_MAJORVERSION                0x0000002
@@ -485,7 +485,7 @@ bool IsWindowsVistaOrGreater() {
 
 void determine_app_data_folder()
 {
-  if (win32AppDataDirectory[0] != 0) 
+  if (win32AppDataDirectory[0] != 0)
   {
     // already discovered
     return;
@@ -583,7 +583,7 @@ void DetermineAppOutputDirectory()
   }
 }
 
-const char* AGSWin32::GetAllUsersDataDirectory() 
+const char* AGSWin32::GetAllUsersDataDirectory()
 {
   determine_app_data_folder();
   return &win32AppDataDirectory[0];
@@ -721,7 +721,7 @@ eScriptSystemOSID AGSWin32::GetSystemOSID() {
   return eOS_Win;
 }
 
-void AGSWin32::AboutToQuitGame() 
+void AGSWin32::AboutToQuitGame()
 {
 }
 
@@ -813,7 +813,7 @@ LPDIRECTDRAW2 IAGSEngine::GetDirectDraw2 () {
   quit("!IAGSEngine::GetDirectDraw2() is deprecated and not supported anymore.");
   return nullptr;
 }
-LPDIRECTDRAWSURFACE2 IAGSEngine::GetBitmapSurface (BITMAP *bmp) 
+LPDIRECTDRAWSURFACE2 IAGSEngine::GetBitmapSurface (BITMAP *bmp)
 {
   quit("!IAGSEngine::GetBitmapSurface() is deprecated and not supported anymore.");
   return nullptr;

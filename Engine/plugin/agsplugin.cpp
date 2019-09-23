@@ -170,7 +170,7 @@ const char* IAGSEngine::GetGraphicsDriverID()
     return gfxDriver->GetDriverID();
 }
 
-BITMAP *IAGSEngine::GetScreen () 
+BITMAP *IAGSEngine::GetScreen ()
 {
     // TODO: we could actually return stage buffer here, will that make a difference?
     if (!gfxDriver->UsesMemoryBackBuffer())
@@ -180,14 +180,14 @@ BITMAP *IAGSEngine::GetScreen ()
     return buffer ? (BITMAP*)buffer->GetAllegroBitmap() : nullptr;
 }
 
-BITMAP *IAGSEngine::GetVirtualScreen () 
+BITMAP *IAGSEngine::GetVirtualScreen ()
 {
     Bitmap *stage = gfxDriver->GetStageBackBuffer(true);
     return stage ? (BITMAP*)stage->GetAllegroBitmap() : nullptr;
 }
 
 void IAGSEngine::RequestEventHook (int32 event) {
-    if (event >= AGSE_TOOHIGH) 
+    if (event >= AGSE_TOOHIGH)
         quit("!IAGSEngine::RequestEventHook: invalid event requested");
 
     if (plugins[this->pluginId].onEvent == nullptr)
@@ -208,7 +208,7 @@ void IAGSEngine::RequestEventHook (int32 event) {
 }
 
 void IAGSEngine::UnrequestEventHook(int32 event) {
-    if (event >= AGSE_TOOHIGH) 
+    if (event >= AGSE_TOOHIGH)
         quit("!IAGSEngine::UnrequestEventHook: invalid event requested");
 
     if ((event & AGSE_SCRIPTDEBUG) &&
@@ -233,7 +233,7 @@ int IAGSEngine::GetSavedData (char *buffer, int32 bufsize) {
     return savedatasize;
 }
 
-void IAGSEngine::DrawText (int32 x, int32 y, int32 font, int32 color, char *text) 
+void IAGSEngine::DrawText (int32 x, int32 y, int32 font, int32 color, char *text)
 {
     Bitmap *ds = gfxDriver->GetStageBackBuffer(true);
     if (!ds)
@@ -566,7 +566,7 @@ void IAGSEngine::PlaySoundChannel (int32 channel, int32 soundType, int32 volume,
 
     SOUNDCLIP *newcha = nullptr;
 
-    if (((soundType == PSND_MP3STREAM) || (soundType == PSND_OGGSTREAM)) 
+    if (((soundType == PSND_MP3STREAM) || (soundType == PSND_OGGSTREAM))
         && (loop != 0))
         quit("IAGSEngine::PlaySoundChannel: streamed samples cannot loop");
 
@@ -724,7 +724,7 @@ int IAGSEngine::RegisterManagedObject(const void *object, IAGSScriptManagedObjec
 }
 
 void IAGSEngine::AddManagedObjectReader(const char *typeName, IAGSManagedObjectReader *reader) {
-    if (numPluginReaders >= MAX_PLUGIN_OBJECT_READERS) 
+    if (numPluginReaders >= MAX_PLUGIN_OBJECT_READERS)
         quit("Plugin error: IAGSEngine::AddObjectReader: Too many object readers added");
 
     if ((typeName == nullptr) || (typeName[0] == 0))
@@ -752,7 +752,7 @@ void IAGSEngine::RegisterUnserializedObject(int key, const void *object, IAGSScr
     ccRegisterUnserializedObject2(objinfo);
 }
 
-int IAGSEngine::GetManagedObjectKeyByAddress(const char *address) 
+int IAGSEngine::GetManagedObjectKeyByAddress(const char *address)
 {
     ManagedObjectInfo info;
     auto err = ccGetObjectInfoFromAddress(info, (void*)address);
@@ -760,7 +760,7 @@ int IAGSEngine::GetManagedObjectKeyByAddress(const char *address)
     return info.handle;
 }
 
-void* IAGSEngine::GetManagedObjectAddressByKey(int key) 
+void* IAGSEngine::GetManagedObjectAddressByKey(int key)
 {
     ManagedObjectInfo info;
     auto err = ccGetObjectInfoFromHandle(info, key);
@@ -905,7 +905,7 @@ int pl_run_plugin_debug_hooks (const char *scriptfile, int linenum) {
 }
 
 void pl_run_plugin_init_gfx_hooks (const char *driverName, void *data) {
-    for (int i = 0; i < numPlugins; i++) 
+    for (int i = 0; i < numPlugins; i++)
     {
         if (plugins[i].initGfxHook != nullptr)
         {

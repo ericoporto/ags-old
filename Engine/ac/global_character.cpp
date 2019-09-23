@@ -45,13 +45,12 @@ extern ViewStruct*views;
 extern RoomObject*objs;
 extern RoomStruct thisroom;
 extern GameState &play;
-extern ScriptObject scrObj[MAX_ROOM_OBJECTS];
-extern ScriptInvItem scrInv[MAX_INV];
+extern ScriptObject *scrObj;
+extern ScriptInvItem *scrInv;
 
 // defined in character unit
 extern CharacterExtras *charextra;
 extern CharacterInfo*playerchar;
-extern int32_t _sc_PlayerCharPtr;
 extern CharacterInfo*playerchar;
 
 
@@ -88,7 +87,7 @@ void FaceLocation(int cha, int xx, int yy) {
 void FaceCharacter(int cha,int toface) {
     if (!is_valid_character(cha))
         quit("!FaceCharacter: Invalid character specified");
-    if (!is_valid_character(toface)) 
+    if (!is_valid_character(toface))
         quit("!FaceCharacter: invalid character specified");
 
     Character_FaceCharacter(&game.chars[cha], &game.chars[toface], BLOCKING);
@@ -119,7 +118,7 @@ int GetCharacterWidth(int ww) {
 
         return game.SpriteInfos[views[char1->view].loops[char1->loop].frames[char1->frame].pic].Width;
     }
-    else 
+    else
         return charextra[ww].width;
 }
 

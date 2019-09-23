@@ -110,7 +110,7 @@ bool AssertFormatTag(Stream *in, const String &tag, bool open = true)
 
 bool AssertFormatTagStrict(HSaveError &err, Stream *in, const String &tag, bool open = true)
 {
-    
+
     String read_tag;
     if (!ReadFormatTag(in, read_tag, open) || read_tag.Compare(tag) != 0)
     {
@@ -425,7 +425,7 @@ HSaveError ReadAudio(Stream *in, int32_t cmp_ver, const PreservedParams &pp, Res
     crossFadeVolumeAtStart = in->ReadInt32();
     // preserve legacy music type setting
     current_music_type = in->ReadInt32();
-    
+
     // Ambient sound
     for (int i = 0; i < MAX_SOUND_CHANNELS; ++i)
         ambient[i].ReadFromFile(in);

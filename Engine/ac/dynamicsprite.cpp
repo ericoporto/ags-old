@@ -45,7 +45,7 @@ extern RoomStatus*croom;
 extern CharacterCache *charcache;
 extern ObjectCache objcache[MAX_ROOM_OBJECTS];
 
-extern RGB palette[256];
+extern RGB *palette;
 extern AGS::Engine::IGraphicsDriver *gfxDriver;
 
 char check_dynamic_sprites_at_exit = 1;
@@ -178,7 +178,7 @@ void DynamicSprite_CopyTransparencyMask(ScriptDynamicSprite *sds, int sourceSpri
     game_sprite_updated(sds->slot);
 }
 
-void DynamicSprite_ChangeCanvasSize(ScriptDynamicSprite *sds, int width, int height, int x, int y) 
+void DynamicSprite_ChangeCanvasSize(ScriptDynamicSprite *sds, int width, int height, int x, int y)
 {
     if (sds->slot == 0)
         quit("!DynamicSprite.ChangeCanvasSize: sprite has been deleted");
@@ -256,7 +256,7 @@ void DynamicSprite_Rotate(ScriptDynamicSprite *sds, int angle, int width, int he
     game_sprite_updated(sds->slot);
 }
 
-void DynamicSprite_Tint(ScriptDynamicSprite *sds, int red, int green, int blue, int saturation, int luminance) 
+void DynamicSprite_Tint(ScriptDynamicSprite *sds, int red, int green, int blue, int saturation, int luminance)
 {
     Bitmap *source = spriteset[sds->slot];
     Bitmap *newPic = BitmapHelper::CreateBitmap(source->GetWidth(), source->GetHeight(), source->GetColorDepth());
@@ -349,7 +349,7 @@ ScriptDynamicSprite* DynamicSprite_CreateFromExistingSprite(int slot, int preser
     return new_spr;
 }
 
-ScriptDynamicSprite* DynamicSprite_CreateFromDrawingSurface(ScriptDrawingSurface *sds, int x, int y, int width, int height) 
+ScriptDynamicSprite* DynamicSprite_CreateFromDrawingSurface(ScriptDrawingSurface *sds, int x, int y, int width, int height)
 {
     int gotSlot = spriteset.GetFreeIndex();
     if (gotSlot <= 0)
@@ -375,7 +375,7 @@ ScriptDynamicSprite* DynamicSprite_CreateFromDrawingSurface(ScriptDrawingSurface
     return new_spr;
 }
 
-ScriptDynamicSprite* DynamicSprite_Create(int width, int height, int alphaChannel) 
+ScriptDynamicSprite* DynamicSprite_Create(int width, int height, int alphaChannel)
 {
     int gotSlot = spriteset.GetFreeIndex();
     if (gotSlot <= 0)
@@ -393,7 +393,7 @@ ScriptDynamicSprite* DynamicSprite_Create(int width, int height, int alphaChanne
     return new_spr;
 }
 
-ScriptDynamicSprite* DynamicSprite_CreateFromExistingSprite_Old(int slot) 
+ScriptDynamicSprite* DynamicSprite_CreateFromExistingSprite_Old(int slot)
 {
     return DynamicSprite_CreateFromExistingSprite(slot, 0);
 }

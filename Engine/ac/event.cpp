@@ -42,7 +42,7 @@ extern RoomStruct thisroom;
 extern RoomStatus*croom;
 extern int displayed_room;
 extern GameState play;
-extern RGB palette[256];
+extern RGB *palette;
 extern IGraphicsDriver *gfxDriver;
 extern AGSPlatformDriver *platform;
 extern RGB old_palette[256];

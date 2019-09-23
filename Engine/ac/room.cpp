@@ -88,10 +88,10 @@ extern CharacterExtras *charextra;
 extern int done_es_error;
 extern int our_eip;
 extern Bitmap *walkareabackup, *walkable_areas_temp;
-extern ScriptObject scrObj[MAX_ROOM_OBJECTS];
+extern ScriptObject *scrObj;;
 extern SpriteCache spriteset;
 extern int in_new_room, new_room_was;  // 1 in new room, 2 first time in new room, 3 loading saved game
-extern ScriptHotspot scrHotspot[MAX_ROOM_HOTSPOTS];
+extern ScriptHotspot *scrHotspot;;
 extern int in_leaves_screen;
 extern CharacterInfo*playerchar;
 extern int starting_room;
@@ -233,7 +233,7 @@ bool Room_Exists(int room)
 
 void save_room_data_segment () {
     croom->FreeScriptData();
-    
+
     const char *globaldata;
     int globaldatasize;
     roominst->GetGlobalData(globaldata, globaldatasize);
@@ -502,7 +502,7 @@ void load_new_room(int newnum, CharacterInfo*forchar) {
     // setup objects
     if (forchar != nullptr) {
         // if not restoring a game, always reset this room
-        troom.beenhere=0;  
+        troom.beenhere=0;
         troom.FreeScriptData();
         troom.FreeProperties();
         memset(&troom.hotspot_enabled[0],1,MAX_ROOM_HOTSPOTS);

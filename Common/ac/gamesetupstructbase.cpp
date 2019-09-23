@@ -18,6 +18,7 @@
 #include "ac/wordsdictionary.h"
 #include "script/cc_script.h"
 #include "util/stream.h"
+#include "script/tinyheap.h"
 
 using AGS::Common::Stream;
 
@@ -75,9 +76,10 @@ void GameSetupStructBase::Free()
     dict = nullptr;
     delete globalscript;
     globalscript = nullptr;
-    delete CompiledScript;
-    CompiledScript = nullptr;
-    delete[] chars;
+    delete compiled_script;
+    compiled_script = nullptr;
+    // delete[] chars;
+    tiny_free(chars);
     chars = nullptr;
 }
 

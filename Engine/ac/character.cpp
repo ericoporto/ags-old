@@ -60,6 +60,7 @@
 #include "gfx/gfx_def.h"
 #include "media/audio/audio_system.h"
 #include "ac/movelist.h"
+#include "script/tinyheap.h"
 
 using namespace AGS::Common;
 
@@ -69,7 +70,7 @@ extern RoomStruct thisroom;
 extern MoveList *mls;
 extern ViewStruct*views;
 extern RoomObject*objs;
-extern ScriptInvItem scrInv[MAX_INV];
+extern ScriptInvItem *scrInv;
 extern SpriteCache spriteset;
 extern Bitmap *walkable_areas_temp;
 extern IGraphicsDriver *gfxDriver;
@@ -85,7 +86,7 @@ extern CCInventory ccDynamicInv;
 
 CharacterExtras *charextra;
 CharacterInfo*playerchar;
-int32_t _sc_PlayerCharPtr = 0;
+int32_t *_sc_PlayerCharHandlePtr = (int32_t *)tiny_alloc(sizeof(int32_t));
 int char_lowest_yp;
 
 // Sierra-style speech settings
@@ -2105,7 +2106,7 @@ void setup_player_character(int charid) {
     ManagedObjectInfo objinfo;
     auto err = ccGetObjectInfoFromAddress(objinfo, playerchar);
     assert(err == 0);
-    _sc_PlayerCharPtr = objinfo.handle;
+    *_sc_PlayerCharHandlePtr = objinfo.handle;
 }
 
 void animate_character(CharacterInfo *chap, int loopn,int sppd,int rept, int noidleoverride, int direction, int sframe) {

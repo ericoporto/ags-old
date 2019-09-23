@@ -40,11 +40,11 @@ void set_rgb_mask_using_alpha_channel(Bitmap *image)
 {
     int x, y;
 
-    for (y=0; y < image->GetHeight(); y++) 
+    for (y=0; y < image->GetHeight(); y++)
     {
         unsigned int*psrc = (unsigned int *)image->GetScanLine(y);
 
-        for (x=0; x < image->GetWidth(); x++) 
+        for (x=0; x < image->GetWidth(); x++)
         {
             if ((psrc[x] & 0xff000000) == 0x00000000)
                 psrc[x] = MASK_COLOR_32;

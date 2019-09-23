@@ -87,7 +87,7 @@ extern int proper_exit;
 extern char pexbuf[STD_BUFFER_SIZE];
 extern SpriteCache spriteset;
 extern ObjectCache objcache[MAX_ROOM_OBJECTS];
-extern ScriptObject scrObj[MAX_ROOM_OBJECTS];
+extern ScriptObject *scrObj;;
 extern ViewStruct*views;
 extern int displayed_room;
 extern int eip_guinum;
@@ -121,7 +121,7 @@ bool engine_init_backend()
             user_hint);
         return false;
     }
-    
+
     // Initialize stripped allegro library
     set_uformat(U_ASCII);
     if (install_allegro(SYSTEM_NONE, &errno, atexit))
@@ -521,14 +521,14 @@ int engine_load_game_data()
 
 int engine_check_register_game()
 {
-    if (justRegisterGame) 
+    if (justRegisterGame)
     {
         platform->RegisterGameWithGameExplorer();
         proper_exit = 1;
         return EXIT_NORMAL;
     }
 
-    if (justUnRegisterGame) 
+    if (justUnRegisterGame)
     {
         platform->UnRegisterGameWithGameExplorer();
         proper_exit = 1;
@@ -617,7 +617,7 @@ int engine_check_disk_space()
     if (check_write_access()==0) {
         platform->DisplayAlert("Unable to write in the savegame directory.\n%s", platform->GetDiskWriteAccessTroubleshootingText());
         proper_exit = 1;
-        return EXIT_ERROR; 
+        return EXIT_ERROR;
     }
 
     return 0;
@@ -674,7 +674,7 @@ int engine_init_sprites()
     Debug::Printf(kDbgMsg_Info, "Initialize sprites");
 
     HError err = spriteset.InitFile(SpriteCache::DefaultSpriteFileName, SpriteCache::DefaultSpriteIndexName);
-    if (!err) 
+    if (!err)
     {
         sys_main_shutdown();
         allegro_exit();
@@ -703,7 +703,7 @@ void engine_init_game_settings()
             palette[ee]=game.defpal[ee];
     }
 
-    for (ee = 0; ee < game.numcursors; ee++) 
+    for (ee = 0; ee < game.numcursors; ee++)
     {
         // The cursor graphics are assigned to mousecurs[] and so cannot
         // be removed from memory
@@ -914,7 +914,7 @@ void engine_init_game_settings()
     strcpy(play.game_name, game.gamename);
     play.lastParserEntry[0] = 0;
     play.follow_change_room_timer = 150;
-    for (ee = 0; ee < MAX_ROOM_BGFRAMES; ee++) 
+    for (ee = 0; ee < MAX_ROOM_BGFRAMES; ee++)
         play.raw_modified[ee] = 0;
     play.game_speed_modifier = 0;
     if (debug_flags & DBG_DEBUGMODE)
@@ -928,7 +928,7 @@ void engine_init_game_settings()
 
     // CLNUP check this
     // reset graphical script vars (they're still used by some games)
-    for (ee = 0; ee < MAXGLOBALVARS; ee++) 
+    for (ee = 0; ee < MAXGLOBALVARS; ee++)
         play.globalvars[ee] = 0;
 
     for (ee = 0; ee < MAXGLOBALSTRINGS; ee++)
@@ -946,7 +946,7 @@ void engine_init_game_settings()
 
     // We use same variable to read config and be used at runtime for now,
     // so update it here with regards to game design option
-    usetup.RenderAtScreenRes = 
+    usetup.RenderAtScreenRes =
         (game.options[OPT_RENDERATSCREENRES] == kRenderAtScreenRes_UserDefined && usetup.RenderAtScreenRes) ||
          game.options[OPT_RENDERATSCREENRES] == kRenderAtScreenRes_Enabled;
 }
@@ -1343,7 +1343,7 @@ int initialize_engine(const ConfigTree &startup_opts)
     int res = engine_load_game_data();
     if (res != 0)
         return res;
-    
+
     res = engine_check_register_game();
     if (res != 0)
         return res;
@@ -1423,7 +1423,7 @@ bool engine_try_switch_windowed_gfxmode()
     ActiveDisplaySetting setting = graphics_mode_get_last_setting(switch_to_windowed);
     DisplayMode last_opposite_mode = setting.Dm;
     GameFrameSetup use_frame_setup = setting.FrameSetup;
-    
+
     // If there are saved parameters for given mode (fullscreen/windowed)
     // then use them, if there are not, get default setup for the new mode.
     bool res;
@@ -1443,7 +1443,7 @@ bool engine_try_switch_windowed_gfxmode()
     // Apply corresponding frame render method
     if (res)
         res = graphics_mode_set_render_frame(use_frame_setup);
-    
+
     if (!res)
     {
         // If failed, try switching back to previous gfx mode

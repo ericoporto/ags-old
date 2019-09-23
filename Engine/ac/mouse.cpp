@@ -34,6 +34,7 @@
 #include "gfx/graphicsdriver.h"
 #include "gfx/gfxfilter.h"
 #include "platform/base/agsplatformdriver.h"
+#include "script/tinyheap.h"
 
 using namespace AGS::Common;
 using namespace AGS::Engine;
@@ -48,8 +49,9 @@ extern IGraphicsDriver *gfxDriver;
 
 extern void ags_domouse(int str);
 
+
 ScriptMouse *ConstructScriptMouse() {
-    auto p = (ScriptMouse*)calloc(1, sizeof(ScriptMouse));
+    auto p = (ScriptMouse*)tiny_alloc(sizeof(ScriptMouse));
     new (p) ScriptMouse();
     return p;
 }
@@ -364,7 +366,7 @@ void update_inv_cursor(int invnum) {
     }
 }
 
-void update_cached_mouse_cursor() 
+void update_cached_mouse_cursor()
 {
     if (mouseCursor != nullptr)
         gfxDriver->DestroyDDB(mouseCursor);
@@ -433,7 +435,7 @@ int find_previous_enabled_cursor(int startwith) {
         testing--;
         if (testing < 0) testing = game.numcursors - 1;
     } while (testing != startwith);
-    
+
     if (testing != startwith)
         set_cursor_mode(testing);
 

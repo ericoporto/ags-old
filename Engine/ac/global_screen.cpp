@@ -95,7 +95,7 @@ void ShakeScreen(int severe) {
 }
 
 void ShakeScreenBackground (int delay, int amount, int length) {
-    if (delay < 2) 
+    if (delay < 2)
         quit("!ShakeScreenBackground: invalid delay parameter");
 
     if (amount < play.shakesc_amount)

@@ -26,7 +26,7 @@
 
 using namespace AGS::Common;
 
-extern ScriptRegion scrRegion[MAX_ROOM_REGIONS];
+extern ScriptRegion *scrRegion;
 extern RoomStruct thisroom;
 extern RoomStatus*croom;
 extern GameSetupStruct game;
