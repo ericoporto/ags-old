@@ -71,12 +71,12 @@ void current_fade_out_effect () {
     {
         my_fade_out(5);
     }
-    else if (theTransition == FADE_BOXOUT) 
+    else if (theTransition == FADE_BOXOUT)
     {
         gfxDriver->BoxOutEffect(true, 16, 1000 / GetGameSpeed());
         play.screen_is_faded_out = 1;
     }
-    else 
+    else
     {
         get_palette(old_palette);
         const Rect &viewport = play.GetMainViewport();
@@ -150,7 +150,7 @@ ScriptViewport* Screen_GetAnyViewport(int index)
     return play.GetScriptViewport(index);
 }
 
-ScriptUserObject* Screen_ScreenToRoomPoint(int scrx, int scry)
+void* Screen_ScreenToRoomPoint(int scrx, int scry)
 {
     VpPoint vpt = play.ScreenToRoom(scrx, scry);
     if (vpt.second < 0)
@@ -158,7 +158,7 @@ ScriptUserObject* Screen_ScreenToRoomPoint(int scrx, int scry)
     return ScriptStructHelpers::CreatePoint(vpt.first.X, vpt.first.Y);
 }
 
-ScriptUserObject *Screen_RoomToScreenPoint(int roomx, int roomy)
+void *Screen_RoomToScreenPoint(int roomx, int roomy)
 {
     Point pt = play.RoomToScreen(roomx, roomy);
     return ScriptStructHelpers::CreatePoint(pt.X, pt.Y);
@@ -203,14 +203,16 @@ RuntimeScriptValue Sc_Screen_GetAnyViewport(const RuntimeScriptValue *params, in
     API_SCALL_OBJAUTO_PINT(ScriptViewport, Screen_GetAnyViewport);
 }
 
+static ScriptUserObject dummyUserObjectManager;
+
 RuntimeScriptValue Sc_Screen_ScreenToRoomPoint(const RuntimeScriptValue *params, int32_t param_count)
 {
-    API_SCALL_OBJAUTO_PINT2(ScriptUserObject, Screen_ScreenToRoomPoint);
+    API_SCALL_OBJ_PINT2(ScriptUserObject, dummyUserObjectManager, Screen_ScreenToRoomPoint);
 }
 
 RuntimeScriptValue Sc_Screen_RoomToScreenPoint(const RuntimeScriptValue *params, int32_t param_count)
 {
-    API_SCALL_OBJAUTO_PINT2(ScriptUserObject, Screen_RoomToScreenPoint);
+    API_SCALL_OBJ_PINT2(ScriptUserObject, dummyUserObjectManager, Screen_RoomToScreenPoint);
 }
 
 void RegisterScreenAPI()
