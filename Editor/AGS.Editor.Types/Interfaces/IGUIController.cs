@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 
-namespace AGS.Types
+namespace AGS.Editor.Types
 {
 	public interface IGUIController
 	{
