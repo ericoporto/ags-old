@@ -84,6 +84,7 @@ namespace AGS.Editor
             scintilla.ConstructContextMenu -= new ScintillaWrapper.ConstructContextMenuHandler(scintilla_ConstructContextMenu);
             scintilla.ActivateContextMenu -= new ScintillaWrapper.ActivateContextMenuHandler(scintilla_ActivateContextMenu);
             scintilla.ToggleBreakpoint -= new EventHandler<Scintilla.MarginClickEventArgs>(scintilla_ToggleBreakpoint);
+            scintilla.DoubleClick -= new EventHandler(scintilla_DoubleClickGoToDefinition);
         }
 
         public void Init(Script scriptToEdit)
@@ -160,6 +161,7 @@ namespace AGS.Editor
             scintilla.ConstructContextMenu += new ScintillaWrapper.ConstructContextMenuHandler(scintilla_ConstructContextMenu);
             scintilla.ActivateContextMenu += new ScintillaWrapper.ActivateContextMenuHandler(scintilla_ActivateContextMenu);
             scintilla.ToggleBreakpoint += new EventHandler<Scintilla.MarginClickEventArgs>(scintilla_ToggleBreakpoint);
+            scintilla.DoubleClick += new EventHandler(scintilla_DoubleClickGoToDefinition);
 
             if (!this.Script.IsHeader)
             {
@@ -1079,6 +1081,34 @@ namespace AGS.Editor
             menuStrip.Items.Add(new ToolStripMenuItem("Toggle Breakpoint", Factory.GUIController.ImageList.Images["ToggleBreakpointMenuIcon"], onClick, CONTEXT_MENU_TOGGLE_BREAKPOINT));
         }
 
+        private void scintilla_DoubleClickGoToDefinition(object sender, EventArgs eventArgs)
+        {
+            if(sender == scintilla && ModifierKeys == Keys.Control)
+            {
+                if (scintilla.InsideStringOrComment(false, scintilla.CurrentPos))
+                {
+                    return;
+                }
+                float unusedFloat;
+                int unusedInt;
+                string clickedOnType = scintilla.GetFullTypeNameAtPosition(scintilla.CurrentPos);
+                // if on nothing, or a number, ignore
+                if (clickedOnType.Length == 0 || int.TryParse(clickedOnType, out unusedInt) || float.TryParse(clickedOnType, out unusedFloat))
+                {
+                    return;
+                }
+
+                string[] structAndMember = clickedOnType.Split('.');
+                string structName = null;
+                string memberName = structAndMember[0];
+                if (structAndMember.Length > 1)
+                {
+                    structName = structAndMember[0];
+                    memberName = structAndMember[1];
+                }
+                GoToDefinition(structName, memberName);
+            }
+        }
         private void LoadColorTheme(ColorTheme t)
         {
             panel1.BackColor = t.GetColor("script-editor/background");
