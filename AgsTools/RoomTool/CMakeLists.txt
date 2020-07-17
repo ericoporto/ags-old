@@ -13,9 +13,11 @@ target_sources(roomlib
         PRIVATE
         roomlib.cpp
         roomlib.h
+        cstretch.cpp
+        cstrech.h
         )
 
-target_link_libraries(compiler PUBLIC AGS::Common)
+target_link_libraries(roomlib PUBLIC AGS::Common)
 
 get_target_property(COMMON_SOURCES roomlib SOURCES)
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} PREFIX "Source Files" FILES ${COMMON_SOURCES})
