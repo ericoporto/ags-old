@@ -47,8 +47,8 @@ void parse(int argc, char* argv[])
 
         if (result.count("room"))
         {
-            _room = result["output"].as<std::string>();
-            std::cout << "Output = " << _room << std::endl;
+            _room = result["room"].as<std::string>();
+            std::cout << "room = " << _room << std::endl;
         }
         else
         {
