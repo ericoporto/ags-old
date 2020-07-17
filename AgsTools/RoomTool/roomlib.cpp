@@ -608,6 +608,7 @@ void save_room_file(const char *path)
 }
 
 void ModifyRoomScript(const char * room_path, const char * script_path) {
+    AGS::Common::AssetManager::CreateInstance();
     AGSString roomFileName = AGSString(room_path);
 
     const char *errorMsg = load_room_file(roomFileName);
