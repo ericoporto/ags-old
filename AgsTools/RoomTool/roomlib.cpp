@@ -1,6 +1,7 @@
 #include <core/assetmanager.h>
 #include <ac/gamesetupstruct.h>
 #include <ac/spritecache.h>
+#include <util/filestream.h>
 #include "game/room_file.h"
 #include "game/roomstruct.h"
 #include "gfx/bitmap.h"
@@ -20,13 +21,14 @@ const char *old_editor_main_game_file = "ac2game.dta";
 const char *ROOM_TEMPLATE_ID_FILE = "rtemplate.dat";
 const int ROOM_TEMPLATE_ID_FILE_SIGNATURE = 0x74673812;
 
-RoomStruct thisroom;
+RoomStruct this_room;
 typedef AGS::Common::Bitmap AGSBitmap;
 typedef AGS::Common::PBitmap PBitmap;
+typedef AGS::Common::String AGSString;
 const int MAX_PATH = 260;
-color*palette = NULL;
+color* room_palette = NULL;
 GameSetupStruct thisgame;
-SpriteCache spriteset(thisgame.SpriteInfos);
+SpriteCache this_spriteset(thisgame.SpriteInfos);
 bool enable_greyed_out_masks = true;
 typedef int HDC;
 
@@ -39,9 +41,9 @@ inline void Cstretch_sprite(Common::Bitmap *dst, Common::Bitmap *src, int x, int
     Cstretch_sprite(dst->GetAllegroBitmap(), src->GetAllegroBitmap(), x, y, w, h);
 }
 
-void quit(const char * message)
+void quit_with_error(const char * message)
 {
-   // ThrowManagedException((const char*)message);
+    // ThrowManagedException((const char*)message);
 }
 
 struct NativeRoomTools
@@ -331,7 +333,7 @@ void setup_greyed_out_palette(int selCol)
     if (selCol > 0) {
         // if a bright colour, use it
         if ((selCol < 15) && (selCol != 7) && (selCol != 8))
-            thisColourOnlyPal[selCol] = palette[selCol];
+            thisColourOnlyPal[selCol] = room_palette[selCol];
         else {
             // else, draw in red
             thisColourOnlyPal[selCol].r = 60;
@@ -399,7 +401,7 @@ void draw_area_mask(RoomStruct *roomptr, Common::Bitmap *ds, RoomAreaMask maskTy
             ds->Blit(sourceSprite, 0, 0, Common::kBitmap_Transparency);
         }
 
-        set_palette(palette);
+        set_palette(room_palette);
     }
     else
     {
@@ -409,10 +411,10 @@ void draw_area_mask(RoomStruct *roomptr, Common::Bitmap *ds, RoomAreaMask maskTy
 
 void drawBlockScaledAt (int hdc, Common::Bitmap *todraw ,int x, int y, float scaleFactor) {
     //if (todraw->GetColorDepth () == 8)
-//        set_palette_to_hdc ((HDC)hdc, palette);
+//        set_palette_to_hdc ((HDC)hdc, room_palette);
 
     // FIXME later
-  //  stretch_blit_to_hdc (todraw->GetAllegroBitmap(), (HDC)hdc, 0,0,todraw->GetWidth(),todraw->GetHeight(),
+    //  stretch_blit_to_hdc (todraw->GetAllegroBitmap(), (HDC)hdc, 0,0,todraw->GetWidth(),todraw->GetHeight(),
     //                     x,y,todraw->GetWidth() * scaleFactor, todraw->GetHeight() * scaleFactor);
 }
 
@@ -496,7 +498,7 @@ void shutdown_native()
 {
     RoomTools.reset();
     // We must dispose all native bitmaps before shutting down the library
-    thisroom.Free();
+    this_room.Free();
     allegro_exit();
     Common::AssetManager::DestroyInstance();
 }
@@ -504,7 +506,7 @@ void shutdown_native()
 void validate_mask(Common::Bitmap *toValidate, const char *name, int maxColour) {
     if ((toValidate == NULL) || (toValidate->GetColorDepth() != 8) ||
         (!toValidate->IsMemoryBitmap())) {
-        quit("Invalid mask passed to validate_mask");
+        quit_with_error("Invalid mask passed to validate_mask");
         return;
     }
 
@@ -533,31 +535,31 @@ void validate_mask(Common::Bitmap *toValidate, const char *name, int maxColour) 
 }
 
 const char* load_room_file(const char*rtlo) {
-    load_room(rtlo, &thisroom, thisgame.IsLegacyHiRes(), thisgame.SpriteInfos);
+    load_room(rtlo, &this_room, thisgame.IsLegacyHiRes(), thisgame.SpriteInfos);
 
     // Allocate enough memory to add extra variables
-    thisroom.LocalVariables.resize(MAX_GLOBAL_VARIABLES);
+    this_room.LocalVariables.resize(MAX_GLOBAL_VARIABLES);
 
-    for (size_t i = 0; i < thisroom.ObjectCount; ++i) {
+    for (size_t i = 0; i < this_room.ObjectCount; ++i) {
         // change invalid objects to blue cup
         // TODO: should this be done in the common native lib?
-        if (spriteset[thisroom.Objects[i].Sprite] == NULL)
-            thisroom.Objects[i].Sprite = 0;
+        if (this_spriteset[this_room.Objects[i].Sprite] == NULL)
+            this_room.Objects[i].Sprite = 0;
     }
 
-    set_palette_range(palette, 0, 255, 0);
+    set_palette_range(room_palette, 0, 255, 0);
 
-    if ((thisroom.BgFrames[0].Graphic->GetColorDepth () > 8) &&
+    if ((this_room.BgFrames[0].Graphic->GetColorDepth () > 8) &&
         (thisgame.color_depth == 1))
         printf("WARNING: This room is hi-color, but your game is currently 256-colour. You will not be able to use this room in this game. Also, the room background will not look right in the editor.");
 
     RoomTools->roomModified = false;
 
-    validate_mask(thisroom.HotspotMask.get(), "hotspot", MAX_ROOM_HOTSPOTS);
-    validate_mask(thisroom.WalkBehindMask.get(), "walk-behind", MAX_WALK_AREAS + 1);
-    validate_mask(thisroom.WalkAreaMask.get(), "walkable area", MAX_WALK_AREAS + 1);
-    validate_mask(thisroom.RegionMask.get(), "regions", MAX_ROOM_REGIONS);
-    return NULL;
+    validate_mask(this_room.HotspotMask.get(), "hotspot", MAX_ROOM_HOTSPOTS);
+    validate_mask(this_room.WalkBehindMask.get(), "walk-behind", MAX_WALK_AREAS + 1);
+    validate_mask(this_room.WalkAreaMask.get(), "walkable area", MAX_WALK_AREAS + 1);
+    validate_mask(this_room.RegionMask.get(), "regions", MAX_ROOM_REGIONS);
+    return nullptr;
 }
 
 
@@ -565,400 +567,62 @@ void calculate_walkable_areas () {
     int ww, thispix;
 
     for (ww = 0; ww <= MAX_WALK_AREAS; ww++) {
-        thisroom.WalkAreas[ww].Top = thisroom.Height;
-        thisroom.WalkAreas[ww].Bottom = 0;
+        this_room.WalkAreas[ww].Top = this_room.Height;
+        this_room.WalkAreas[ww].Bottom = 0;
     }
-    for (ww = 0; ww < thisroom.WalkAreaMask->GetWidth(); ww++) {
-        for (int qq = 0; qq < thisroom.WalkAreaMask->GetHeight(); qq++) {
-            thispix = thisroom.WalkAreaMask->GetPixel (ww, qq);
+    for (ww = 0; ww < this_room.WalkAreaMask->GetWidth(); ww++) {
+        for (int qq = 0; qq < this_room.WalkAreaMask->GetHeight(); qq++) {
+            thispix = this_room.WalkAreaMask->GetPixel (ww, qq);
             if (thispix > MAX_WALK_AREAS)
                 continue;
-            if (thisroom.WalkAreas[thispix].Top > qq)
-                thisroom.WalkAreas[thispix].Top = qq;
-            if (thisroom.WalkAreas[thispix].Bottom < qq)
-                thisroom.WalkAreas[thispix].Bottom= qq;
+            if (this_room.WalkAreas[thispix].Top > qq)
+                this_room.WalkAreas[thispix].Top = qq;
+            if (this_room.WalkAreas[thispix].Bottom < qq)
+                this_room.WalkAreas[thispix].Bottom= qq;
         }
     }
 
 }
-
-/*
-AGS::Types::Room^ load_crm_file(UnloadedRoom ^roomToLoad)
-{
-    AGSString roomFileName = ConvertFileNameToNativeString(roomToLoad->FileName);
-
-    const char *errorMsg = load_room_file(roomFileName);
-    if (errorMsg != NULL)
-    {
-        throw gcnew AGSEditorException(gcnew String(errorMsg));
-    }
-
-    RoomTools->loaded_room_number = roomToLoad->Number;
-
-    Room ^room = gcnew Room(roomToLoad->Number);
-    room->Description = roomToLoad->Description;
-    room->Script = roomToLoad->Script;
-    room->BottomEdgeY = thisroom.Edges.Bottom;
-    room->LeftEdgeX = thisroom.Edges.Left;
-    room->MusicVolumeAdjustment = (AGS::Types::RoomVolumeAdjustment)thisroom.Options.StartupMusic;
-    room->PlayerCharacterView = thisroom.Options.PlayerView;
-    room->PlayMusicOnRoomLoad = thisroom.Options.StartupMusic;
-    room->RightEdgeX = thisroom.Edges.Right;
-    room->SaveLoadEnabled = (thisroom.Options.SaveLoadDisabled == 0);
-    room->ShowPlayerCharacter = (thisroom.Options.PlayerCharOff == 0);
-    room->TopEdgeY = thisroom.Edges.Top;
-    room->Width = thisroom.Width;
-    room->Height = thisroom.Height;
-    room->ColorDepth = thisroom.BgFrames[0].Graphic->GetColorDepth();
-    room->BackgroundAnimationDelay = thisroom.BgAnimSpeed;
-    room->BackgroundCount = thisroom.BgFrameCount;
-    room->Resolution = (AGS::Types::RoomResolution)thisroom.GetResolutionType();
-    room->MaskResolution = thisroom.MaskResolution;
-
-    for (size_t i = 0; i < thisroom.LocalVariables.size(); ++i)
-    {
-        OldInteractionVariable ^intVar;
-        intVar = gcnew OldInteractionVariable(gcnew String(thisroom.LocalVariables[i].Name), thisroom.LocalVariables[i].Value);
-        room->OldInteractionVariables->Add(intVar);
-    }
-
-    for (size_t i = 0; i < thisroom.MessageCount; ++i)
-    {
-        RoomMessage ^newMessage = gcnew RoomMessage(i);
-        newMessage->Text = gcnew String(thisroom.Messages[i]);
-        newMessage->ShowAsSpeech = (thisroom.MessageInfos[i].DisplayAs > 0);
-        newMessage->CharacterID = (thisroom.MessageInfos[i].DisplayAs - 1);
-        newMessage->DisplayNextMessageAfter = ((thisroom.MessageInfos[i].Flags & MSG_DISPLAYNEXT) != 0);
-        newMessage->AutoRemoveAfterTime = ((thisroom.MessageInfos[i].Flags & MSG_TIMELIMIT) != 0);
-        room->Messages->Add(newMessage);
-    }
-
-    for (size_t i = 0; i < thisroom.ObjectCount; ++i)
-    {
-        RoomObject ^obj = gcnew RoomObject(room);
-        obj->ID = i;
-        obj->Image = thisroom.Objects[i].Sprite;
-        obj->StartX = thisroom.Objects[i].X;
-        obj->StartY = thisroom.Objects[i].Y;
-        obj->Visible = (thisroom.Objects[i].IsOn != 0);
-        obj->Clickable = ((thisroom.Objects[i].Flags & OBJF_NOINTERACT) == 0);
-        obj->Baseline = thisroom.Objects[i].Baseline;
-        obj->Name = gcnew String(thisroom.Objects[i].ScriptName);
-        obj->Description = gcnew String(thisroom.Objects[i].Name);
-        obj->UseRoomAreaScaling = ((thisroom.Objects[i].Flags & OBJF_USEROOMSCALING) != 0);
-        obj->UseRoomAreaLighting = ((thisroom.Objects[i].Flags & OBJF_USEREGIONTINTS) != 0);
-        ConvertCustomProperties(obj->Properties, &thisroom.Objects[i].Properties);
-
-        if (thisroom.DataVersion < kRoomVersion_300a)
-        {
-            char scriptFuncPrefix[100];
-            sprintf(scriptFuncPrefix, "object%d_", i);
-            ConvertInteractions(obj->Interactions, thisroom.Objects[i].Interaction.get(), gcnew String(scriptFuncPrefix), nullptr, 2);
-        }
-        else
-        {
-            CopyInteractions(obj->Interactions, thisroom.Objects[i].EventHandlers.get());
-        }
-
-        room->Objects->Add(obj);
-    }
-
-    for (size_t i = 0; i < thisroom.HotspotCount; ++i)
-    {
-        RoomHotspot ^hotspot = room->Hotspots[i];
-        hotspot->ID = i;
-        hotspot->Description = gcnew String(thisroom.Hotspots[i].Name);
-        hotspot->Name = (gcnew String(thisroom.Hotspots[i].ScriptName))->Trim();
-        hotspot->WalkToPoint = System::Drawing::Point(thisroom.Hotspots[i].WalkTo.X, thisroom.Hotspots[i].WalkTo.Y);
-        ConvertCustomProperties(hotspot->Properties, &thisroom.Hotspots[i].Properties);
-
-        if (thisroom.DataVersion < kRoomVersion_300a)
-        {
-            char scriptFuncPrefix[100];
-            sprintf(scriptFuncPrefix, "hotspot%d_", i);
-            ConvertInteractions(hotspot->Interactions, thisroom.Hotspots[i].Interaction.get(), gcnew String(scriptFuncPrefix), nullptr, 1);
-        }
-        else
-        {
-            CopyInteractions(hotspot->Interactions, thisroom.Hotspots[i].EventHandlers.get());
-        }
-    }
-
-    for (size_t i = 0; i <= MAX_WALK_AREAS; ++i)
-    {
-        RoomWalkableArea ^area = room->WalkableAreas[i];
-        area->ID = i;
-        area->AreaSpecificView = thisroom.WalkAreas[i].Light;
-        area->UseContinuousScaling = !(thisroom.WalkAreas[i].ScalingNear == NOT_VECTOR_SCALED);
-        area->ScalingLevel = thisroom.WalkAreas[i].ScalingFar + 100;
-        area->MinScalingLevel = thisroom.WalkAreas[i].ScalingFar + 100;
-        if (area->UseContinuousScaling)
-        {
-            area->MaxScalingLevel = thisroom.WalkAreas[i].ScalingNear + 100;
-        }
-        else
-        {
-            area->MaxScalingLevel = area->MinScalingLevel;
-        }
-    }
-
-    for (size_t i = 0; i < MAX_WALK_BEHINDS; ++i)
-    {
-        RoomWalkBehind ^area = room->WalkBehinds[i];
-        area->ID = i;
-        area->Baseline = thisroom.WalkBehinds[i].Baseline;
-    }
-
-    for (size_t i = 0; i < MAX_ROOM_REGIONS; ++i)
-    {
-        RoomRegion ^area = room->Regions[i];
-        area->ID = i;
-        // NOTE: Region's light level value exposed in editor is always 100 units higher,
-        // for compatibility with older versions of the editor.
-        // TODO: probably we could remove this behavior? Need to consider possible compat mode
-        area->LightLevel = thisroom.GetRegionLightLevel(i) + 100;
-        area->UseColourTint = thisroom.HasRegionTint(i);
-        area->BlueTint = (thisroom.Regions[i].Tint >> 16) & 0x00ff;
-        area->GreenTint = (thisroom.Regions[i].Tint >> 8) & 0x00ff;
-        area->RedTint = thisroom.Regions[i].Tint & 0x00ff;
-        // Set saturation's and luminance's default values in the editor if it is disabled in room data
-        int saturation = (thisroom.Regions[i].Tint >> 24) & 0xFF;
-        area->TintSaturation = (saturation > 0 && area->UseColourTint) ? saturation :
-                               Utilities::GetDefaultValue(area->GetType(), "TintSaturation", 0);
-        int luminance = thisroom.GetRegionTintLuminance(i);
-        area->TintLuminance = area->UseColourTint ? luminance :
-                              Utilities::GetDefaultValue(area->GetType(), "TintLuminance", 0);
-
-        if (thisroom.DataVersion < kRoomVersion_300a)
-        {
-            char scriptFuncPrefix[100];
-            sprintf(scriptFuncPrefix, "region%d_", i);
-            ConvertInteractions(area->Interactions, thisroom.Regions[i].Interaction.get(), gcnew String(scriptFuncPrefix), nullptr, 0);
-        }
-        else
-        {
-            CopyInteractions(area->Interactions, thisroom.Regions[i].EventHandlers.get());
-        }
-    }
-
-    room->_roomStructPtr = (IntPtr)&thisroom;
-
-    ConvertCustomProperties(room->Properties, &thisroom.Properties);
-
-    if (thisroom.DataVersion < kRoomVersion_300a)
-    {
-        ConvertInteractions(room->Interactions, thisroom.Interaction.get(), "room_", nullptr, 0);
-    }
-    else
-    {
-        CopyInteractions(room->Interactions, thisroom.EventHandlers.get());
-    }
-
-    room->GameID = thisroom.GameID;
-    clear_undo_buffer();
-
-    return room;
-}
-
-void save_crm_file(Room ^room)
-{
-    thisroom.FreeMessages();
-    thisroom.FreeScripts();
-
-    //
-    // Convert managed Room object into the native roomstruct that is going
-    // to be saved using native procedure.
-    //
-    thisroom.SetResolution((AGS::Common::RoomResolutionType)room->Resolution);
-    thisroom.MaskResolution = room->MaskResolution;
-
-    thisroom.GameID = room->GameID;
-    thisroom.Edges.Bottom = room->BottomEdgeY;
-    thisroom.Edges.Left = room->LeftEdgeX;
-    thisroom.Options.StartupMusic = (int)room->MusicVolumeAdjustment;
-    thisroom.Options.PlayerView = room->PlayerCharacterView;
-    thisroom.Options.StartupMusic = room->PlayMusicOnRoomLoad;
-    thisroom.Edges.Right = room->RightEdgeX;
-    thisroom.Options.SaveLoadDisabled = room->SaveLoadEnabled ? 0 : 1;
-    thisroom.Options.PlayerCharOff = room->ShowPlayerCharacter ? 0 : 1;
-    thisroom.Edges.Top = room->TopEdgeY;
-    thisroom.Width = room->Width;
-    thisroom.Height = room->Height;
-    thisroom.BgAnimSpeed = room->BackgroundAnimationDelay;
-    thisroom.BgFrameCount = room->BackgroundCount;
-
-    thisroom.MessageCount = room->Messages->Count;
-    for (size_t i = 0; i < thisroom.MessageCount; ++i)
-    {
-        RoomMessage ^newMessage = room->Messages[i];
-        thisroom.Messages[i] = ConvertStringToNativeString(newMessage->Text);
-        if (newMessage->ShowAsSpeech)
-        {
-            thisroom.MessageInfos[i].DisplayAs = newMessage->CharacterID + 1;
-        }
-        else
-        {
-            thisroom.MessageInfos[i].DisplayAs = 0;
-        }
-        thisroom.MessageInfos[i].Flags = 0;
-        if (newMessage->DisplayNextMessageAfter) thisroom.MessageInfos[i].Flags |= MSG_DISPLAYNEXT;
-        if (newMessage->AutoRemoveAfterTime) thisroom.MessageInfos[i].Flags |= MSG_TIMELIMIT;
-    }
-
-    thisroom.ObjectCount = room->Objects->Count;
-    for (size_t i = 0; i < thisroom.ObjectCount; ++i)
-    {
-        RoomObject ^obj = room->Objects[i];
-        thisroom.Objects[i].ScriptName = ConvertStringToNativeString(obj->Name);
-
-        thisroom.Objects[i].Sprite = obj->Image;
-        thisroom.Objects[i].X = obj->StartX;
-        thisroom.Objects[i].Y = obj->StartY;
-        thisroom.Objects[i].IsOn = obj->Visible;
-        thisroom.Objects[i].Baseline = obj->Baseline;
-        thisroom.Objects[i].Name = ConvertStringToNativeString(obj->Description);
-        thisroom.Objects[i].Flags = 0;
-        if (obj->UseRoomAreaScaling) thisroom.Objects[i].Flags |= OBJF_USEROOMSCALING;
-        if (obj->UseRoomAreaLighting) thisroom.Objects[i].Flags |= OBJF_USEREGIONTINTS;
-        if (!obj->Clickable) thisroom.Objects[i].Flags |= OBJF_NOINTERACT;
-        CompileCustomProperties(obj->Properties, &thisroom.Objects[i].Properties);
-    }
-
-    thisroom.HotspotCount = room->Hotspots->Count;
-    for (size_t i = 0; i < thisroom.HotspotCount; ++i)
-    {
-        RoomHotspot ^hotspot = room->Hotspots[i];
-        thisroom.Hotspots[i].Name = ConvertStringToNativeString(hotspot->Description);
-        thisroom.Hotspots[i].ScriptName = ConvertStringToNativeString(hotspot->Name);
-        thisroom.Hotspots[i].WalkTo.X = hotspot->WalkToPoint.X;
-        thisroom.Hotspots[i].WalkTo.Y = hotspot->WalkToPoint.Y;
-        CompileCustomProperties(hotspot->Properties, &thisroom.Hotspots[i].Properties);
-    }
-
-    for (size_t i = 0; i <= MAX_WALK_AREAS; ++i)
-    {
-        RoomWalkableArea ^area = room->WalkableAreas[i];
-        thisroom.WalkAreas[i].Light = area->AreaSpecificView;
-
-        if (area->UseContinuousScaling)
-        {
-            thisroom.WalkAreas[i].ScalingFar = area->MinScalingLevel - 100;
-            thisroom.WalkAreas[i].ScalingNear = area->MaxScalingLevel - 100;
-        }
-        else
-        {
-            thisroom.WalkAreas[i].ScalingFar = area->ScalingLevel - 100;
-            thisroom.WalkAreas[i].ScalingNear = NOT_VECTOR_SCALED;
-        }
-    }
-
-    for (size_t i = 0; i < MAX_WALK_BEHINDS; ++i)
-    {
-        RoomWalkBehind ^area = room->WalkBehinds[i];
-        thisroom.WalkBehinds[i].Baseline = area->Baseline;
-    }
-
-    for (size_t i = 0; i < MAX_ROOM_REGIONS; ++i)
-    {
-        RoomRegion ^area = room->Regions[i];
-        thisroom.Regions[i].Tint = 0;
-        if (area->UseColourTint)
-        {
-            thisroom.Regions[i].Tint  = area->RedTint | (area->GreenTint << 8) | (area->BlueTint << 16) | (area->TintSaturation << 24);
-            thisroom.Regions[i].Light = (area->TintLuminance * 25) / 10;
-        }
-        else
-        {
-            thisroom.Regions[i].Tint = 0;
-            // NOTE: Region's light level value exposed in editor is always 100 units higher,
-            // for compatibility with older versions of the editor.
-            thisroom.Regions[i].Light = area->LightLevel - 100;
-        }
-    }
-
-    CompileCustomProperties(room->Properties, &thisroom.Properties);
-
-    thisroom.CompiledScript = ((AGS::Native::CompiledScript^)room->Script->CompiledData)->Data;
-
-    AGSString roomFileName = ConvertFileNameToNativeString(room->FileName);
-
-    TempDataStorage::RoomBeingSaved = room;
-
-    save_room_file(roomFileName);
-
-    TempDataStorage::RoomBeingSaved = nullptr;
-
-    for (size_t i = 0; i < thisroom.HotspotCount; ++i)
-    {
-        thisroom.Hotspots[i].Name.Free(); // TODO: not sure if makes sense here
-    }
-}
-
-PInteractionScripts convert_interaction_scripts(Interactions ^interactions)
-{
-    AGS::Common::InteractionScripts *native_scripts = new AGS::Common::InteractionScripts();
-    for each (String^ funcName in interactions->ScriptFunctionNames)
-    {
-        native_scripts->ScriptFuncNames.push_back(ConvertStringToNativeString(funcName));
-    }
-    return PInteractionScripts(native_scripts);
-}
-
-void convert_room_interactions_to_native()
-{
-    Room ^roomBeingSaved = TempDataStorage::RoomBeingSaved;
-    thisroom.EventHandlers = convert_interaction_scripts(roomBeingSaved->Interactions);
-    for (int i = 0; i < roomBeingSaved->Hotspots->Count; ++i)
-    {
-        thisroom.Hotspots[i].EventHandlers = convert_interaction_scripts(roomBeingSaved->Hotspots[i]->Interactions);
-    }
-    for (int i = 0; i < roomBeingSaved->Objects->Count; ++i)
-    {
-        thisroom.Objects[i].EventHandlers = convert_interaction_scripts(roomBeingSaved->Objects[i]->Interactions);
-    }
-    for (int i = 0; i < roomBeingSaved->Regions->Count; ++i)
-    {
-        thisroom.Regions[i].EventHandlers = convert_interaction_scripts(roomBeingSaved->Regions[i]->Interactions);
-    }
-}
-
-
-
-#pragma unmanaged
-
 
 void save_room_file(const char *path)
 {
-    thisroom.DataVersion = kRoomVersion_Current;
-    copy_room_palette_to_global_palette();
+    this_room.DataVersion = kRoomVersion_Current;
 
     calculate_walkable_areas();
 
-    thisroom.BackgroundBPP = thisroom.BgFrames[0].Graphic->GetBPP();
-    // Fix hi-color screens
-    // TODO: find out why this is needed; may be related to the Allegro internal 16-bit bitmaps format
-    for (size_t i = 0; i < (size_t)thisroom.BgFrameCount; ++i)
-        fix_block(thisroom.BgFrames[i].Graphic.get());
+    this_room.BackgroundBPP = this_room.BgFrames[0].Graphic->GetBPP();
 
-    thisroom.WalkBehindCount = MAX_WALK_BEHINDS; // TODO: why we need to do this here?
+    this_room.WalkBehindCount = MAX_WALK_BEHINDS; // TODO: why we need to do this here?
 
     // Prepare script links
-    convert_room_interactions_to_native();
+    //convert_room_interactions_to_native();
 
     Stream *out = AGS::Common::File::CreateFile(path);
     if (out == NULL)
-        quit("save_room: unable to open room file for writing.");
+        quit_with_error("save_room: unable to open room file for writing.");
 
-    AGS::Common::HRoomFileError err = AGS::Common::WriteRoomData(&thisroom, out, kRoomVersion_Current);
+    AGS::Common::HRoomFileError err = AGS::Common::WriteRoomData(&this_room, out, kRoomVersion_Current);
     delete out;
     if (!err)
-        quit(AGSString::FromFormat("save_room: unable to write room data, error was:\r\n%s", err->FullMessage()));
-
-    // Fix hi-color screens back again
-    // TODO: find out why this is needed; may be related to the Allegro internal 16-bit bitmaps format
-    for (size_t i = 0; i < thisroom.BgFrameCount; ++i)
-        fix_block(thisroom.BgFrames[i].Graphic.get());
+        quit_with_error(AGSString::FromFormat("save_room: unable to write room data, error was:\r\n%s", err->FullMessage().GetCStr()));
 }
 
+void ModifyRoomScript(const char * room_path, const char * script_path) {
+    AGSString roomFileName = AGSString(room_path);
 
-*/
+    const char *errorMsg = load_room_file(roomFileName);
+    if (errorMsg != nullptr)
+    {
+        throw std::runtime_error(errorMsg);
+    }
+
+    PScript scriptObject;
+    AGS::Common::FileStream* script_file_stream = (AGS::Common::FileStream*) AGS::Common::File::OpenFileRead(script_path);
+    scriptObject->Read(script_file_stream);
+    script_file_stream->Close();
+
+    this_room.CompiledScript = scriptObject;
+
+    save_room_file(room_path);
+}
+
