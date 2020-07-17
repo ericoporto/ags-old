@@ -37,7 +37,7 @@ using AGS::Common::String;
 // Replace the default Allegro icon. The original defintion is in the
 // Allegro 4.4 source under "src/x/xwin.c".
 #include "icon.xpm"
-void* allegro_icon = icon_xpm;
+//void* allegro_icon = icon_xpm;
 String CommonDataDirectory;
 String UserDataDirectory;
 
