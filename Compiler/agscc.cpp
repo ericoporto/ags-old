@@ -57,10 +57,12 @@ void parse(int argc, char* argv[])
             exit(1);
         }
 
+        std::string output_filename = "output.o";
         if (result.count("output"))
         {
             _output = result["output"].as<std::string>();
             std::cout << "Output = " << _output << std::endl;
+            output_filename = _output;
         }
         if (result.count("Headers"))
         {
@@ -88,9 +90,10 @@ void parse(int argc, char* argv[])
 
         // need to figure out what the proper way to read and write files using what is already in AGS Common
         ccRemoveDefaultHeaders();
+        std::string content;
         for(const auto& header: _headers)
         {
-            std::string content = readFileToString(header);
+            content = readFileToString(header);
             ccAddDefaultHeader((char*) content.c_str(), (char*) header.c_str());
         }
 
@@ -106,7 +109,6 @@ void parse(int argc, char* argv[])
             exit(1);
         }
 
-        std::string output_filename = "output.o";
         if(!AGS::Common::File::TestCreateFile(output_filename.c_str()))
         {
             std::cout << "ERROR: could not create output file " << output_filename << " ." << std::endl;
