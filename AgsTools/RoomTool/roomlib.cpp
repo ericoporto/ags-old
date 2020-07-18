@@ -8,6 +8,7 @@
 #include "font/fonts.h"
 #include "roomlib.h"
 #include "cstrech.h"
+#include <stdexcept>
 using AGS::Common::Stream;
 
 using AGS::Common::RoomStruct;
