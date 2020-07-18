@@ -208,7 +208,11 @@ void ccScript::Write(Stream *out) {
     }
     out->WriteInt32(numimports);
     for (n=0;n<numimports;n++)
-        out->WriteArray(imports[n],strlen(imports[n])+1,1);
+        if(imports[n]== nullptr){
+            out->WriteArray("\0", 1, 1);
+        } else {
+            out->WriteArray(imports[n], strlen(imports[n]) + 1, 1);
+        }
     out->WriteInt32(numexports);
     for (n=0;n<numexports;n++) {
         out->WriteArray(exports[n],strlen(exports[n])+1,1);
