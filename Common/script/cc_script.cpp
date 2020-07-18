@@ -48,9 +48,9 @@ void freadstring(char **strptr, Stream *in)
 void fwritestring(const char *strptr, Stream *out)
 {
     if(strptr == nullptr){
-        out->WriteArray("\0", 1, 1);
+        out->WriteByte(0);
     } else {
-        out->WriteArray(strptr, strlen(strptr) + 1, 1);
+        out->Write(strptr, strlen(strptr) + 1);
     }
 }
 
