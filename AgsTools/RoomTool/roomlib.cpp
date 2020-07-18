@@ -5,6 +5,7 @@
 #include "game/room_file.h"
 #include "game/roomstruct.h"
 #include "gfx/bitmap.h"
+#include "font/fonts.h"
 #include "roomlib.h"
 #include "cstrech.h"
 using AGS::Common::Stream;
@@ -31,6 +32,10 @@ GameSetupStruct thisgame;
 SpriteCache this_spriteset(thisgame.SpriteInfos);
 bool enable_greyed_out_masks = true;
 typedef int HDC;
+
+// A reference color depth, for correct color selection;
+// originally was defined by 'abuf' bitmap.
+int BaseColorDepth = 0;
 
 inline void Cstretch_blit(Common::Bitmap *src, Common::Bitmap *dst, int sx, int sy, int sw, int sh, int dx, int dy, int dw, int dh)
 {
@@ -483,14 +488,41 @@ void draw_room_background(void *roomvoidptr, int hdc, int x, int y, int bgnum, f
 
 }
 
+void new_font () {
+    FontInfo fi;
+    wloadfont_size(thisgame.numfonts, fi);
+    thisgame.fonts.push_back(FontInfo());
+    thisgame.numfonts++;
+}
+
+
 bool initialize_native()
 {
     Common::AssetManager::CreateInstance();
 
     set_uformat(U_ASCII);  // required to stop ALFONT screwing up text
     install_allegro(SYSTEM_NONE, &errno, atexit);
+    //set_gdi_color_format();
+    room_palette = &thisgame.defpal[0];
+    thisgame.color_depth = 2;
+    //abuf = Common::BitmapHelper::CreateBitmap(10, 10, 32);
+    BaseColorDepth = 32;
+    thisgame.numfonts = 0;
+    new_font();
+
+    spriteset.Reset();
 
     RoomTools.reset(new NativeRoomTools());
+
+    init_font_renderer();
+
+    HAGSError err = spriteset.InitFile(sprsetname, sprindexname);
+    if (!err) {
+        printf("!no spriteset detected.\n");
+        return false;
+    }
+
+    spriteset.SetMaxCacheSize(100 * 1024 * 1024);  // 100 mb cache // TODO: set this up in preferences?
     return true;
 }
 
@@ -499,6 +531,8 @@ void shutdown_native()
     RoomTools.reset();
     // We must dispose all native bitmaps before shutting down the library
     this_room.Free();
+    shutdown_font_renderer();
+    spriteset.Reset();
     allegro_exit();
     Common::AssetManager::DestroyInstance();
 }
@@ -608,8 +642,10 @@ void save_room_file(const char *path)
 }
 
 void ModifyRoomScript(const char * room_path, const char * script_path) {
-    AGS::Common::AssetManager::CreateInstance();
+    initialize_native();
+
     AGSString roomFileName = AGSString(room_path);
+    AGSString scriptFileName = AGSString(script_path);
 
     const char *errorMsg = load_room_file(roomFileName);
     if (errorMsg != nullptr)
@@ -618,12 +654,21 @@ void ModifyRoomScript(const char * room_path, const char * script_path) {
     }
 
     PScript scriptObject;
-    AGS::Common::FileStream* script_file_stream = (AGS::Common::FileStream*) AGS::Common::File::OpenFileRead(script_path);
-    scriptObject->Read(script_file_stream);
+    if(!AGS::Common::File::TestReadFile(scriptFileName))
+    {
+        AGSString errorString;
+        errorString.Format("Can't read file %s", scriptFileName.GetCStr());
+        throw std::runtime_error(errorString.GetCStr());
+    }
+
+    AGS::Common::FileStream* script_file_stream = (AGS::Common::FileStream*) AGS::Common::File::OpenFileRead(scriptFileName);
+    scriptObject.reset(ccScript::CreateFromStream(script_file_stream));
     script_file_stream->Close();
 
     this_room.CompiledScript = scriptObject;
 
     save_room_file(room_path);
+
+    shutdown_native();
 }
 
