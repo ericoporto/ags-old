@@ -275,7 +275,7 @@ bool ccScript::Read(Stream *in)
     strings = (char *)malloc(stringssize);
     // MACPORT FIX: swap
     in->Read(strings, stringssize);
-  } 
+  }
   else
     strings = nullptr;
 
