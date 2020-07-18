@@ -90,11 +90,11 @@ void parse(int argc, char* argv[])
 
         // need to figure out what the proper way to read and write files using what is already in AGS Common
         ccRemoveDefaultHeaders();
-        std::string content;
+        std::vector<std::string> heads;
         for(const auto& header: _headers)
         {
-            content = readFileToString(header);
-            ccAddDefaultHeader((char*) content.c_str(), (char*) header.c_str());
+            heads.push_back(readFileToString(header));
+            ccAddDefaultHeader((char*) heads.back().c_str(), (char*) header.c_str());
         }
 
         std::string input_content;
