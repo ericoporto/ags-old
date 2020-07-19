@@ -397,7 +397,11 @@ enum SortStyle
 };
 #endif
 
+<<<<<<< HEAD
 #ifdef SCRIPT_API_v399
+=======
+#ifdef SCRIPT_API_v360
+>>>>>>> 0c226592c (ScriptAPI: implemented System.Log())
 enum LogLevel
 {
 	eLogAlert = 1,
@@ -409,6 +413,7 @@ enum LogLevel
 };
 #endif
 
+<<<<<<< HEAD
 #ifdef SCRIPT_API_v399
 enum BlendMode {
     eBlendNormal = 0,
@@ -423,6 +428,8 @@ enum BlendMode {
     eBlendDodge
 };
 #endif
+=======
+>>>>>>> 0c226592c (ScriptAPI: implemented System.Log())
 
 internalstring autoptr builtin managed struct String {
   /// Creates a formatted string using the supplied parameters.
@@ -1698,7 +1705,7 @@ builtin struct System {
   /// Saves current runtime settings into configuration file
   import static void SaveConfigToFile();
 #endif
-#ifdef SCRIPT_API_v399
+#ifdef SCRIPT_API_v360
   /// Prints message
   import static void Log(LogLevel level, const string format, ...);    // $AUTOCOMPLETESTATICONLY$
 #endif
