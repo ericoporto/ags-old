@@ -1004,6 +1004,7 @@ namespace AGS.Editor
                 Factory.AGSEditor.CurrentGame.PlayerCharacter.StartY = psy;
                 _characterLayer.UpdateCharactersRoom(Factory.AGSEditor.CurrentGame.PlayerCharacter, oldroom);
                 RefreshLayersTree();
+                bufferedPanel1.Invalidate();
             }            
         }
 
