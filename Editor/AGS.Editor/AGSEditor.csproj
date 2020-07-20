@@ -201,6 +201,13 @@
     <Compile Include="Panes\FreePanControl.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Panes\Room\SetPlayerStartingPosition.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    </Compile>
+        <Compile Include="Panes\Room\SetPlayerStartingPosition.Designer.cs">
+        <DependentUpon>SetPlayerStartingPosition.cs</DependentUpon>
+    </Compile>
     <Compile Include="Plugins\IAGSEditor.cs" />
     <Compile Include="Plugins\NativePlugin.cs" />
     <Compile Include="Panes\BufferedPanel.cs">
@@ -359,6 +366,9 @@
     <EmbeddedResource Include="Panes\GUIEditor.resx">
       <SubType>Designer</SubType>
       <DependentUpon>GUIEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panes\Room\SetPlayerStartingPosition.resx">
+      <DependentUpon>SetPlayerStartingPosition.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -1140,7 +1150,7 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

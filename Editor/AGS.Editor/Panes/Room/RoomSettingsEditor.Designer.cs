@@ -44,7 +44,12 @@ namespace AGS.Editor
             this.btnChangeImage = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.cmbBackgrounds = new System.Windows.Forms.ComboBox();
+<<<<<<< HEAD
             this.bufferedPanel1 = new AGS.Editor.FreePanControl();
+=======
+            this.bufferedPanel1 = new AGS.Editor.BufferedPanel();
+            this.btn_player_start = new System.Windows.Forms.Button();
+>>>>>>> Adds Player Begins Here button on the Room Editor
             this.mainFrame.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sldTransparency)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sldZoomLevel)).BeginInit();
@@ -55,6 +60,7 @@ namespace AGS.Editor
             this.mainFrame.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.mainFrame.Controls.Add(this.btn_player_start);
             this.mainFrame.Controls.Add(this.lblMouse);
             this.mainFrame.Controls.Add(this.sldTransparency);
             this.mainFrame.Controls.Add(this.lblTransparency);
@@ -254,6 +260,16 @@ namespace AGS.Editor
             this.bufferedPanel1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.bufferedPanel1_MouseMove);
             this.bufferedPanel1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.bufferedPanel1_MouseUp);
             // 
+            // btn_player_start
+            // 
+            this.btn_player_start.Location = new System.Drawing.Point(623, 78);
+            this.btn_player_start.Name = "btn_player_start";
+            this.btn_player_start.Size = new System.Drawing.Size(130, 23);
+            this.btn_player_start.TabIndex = 21;
+            this.btn_player_start.Text = "Player Begins Here";
+            this.btn_player_start.UseVisualStyleBackColor = true;
+            this.btn_player_start.Click += new System.EventHandler(this.btn_player_start_Click);
+            // 
             // RoomSettingsEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -289,5 +305,6 @@ namespace AGS.Editor
         private AddressBarExt.Controls.AddressBarExt _editAddressBar;
         private System.Windows.Forms.Label lblZoomInfo;
         private System.Windows.Forms.Label lblMouse;
+        private System.Windows.Forms.Button btn_player_start;
     }
 }

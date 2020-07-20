@@ -990,6 +990,23 @@ namespace AGS.Editor
             _state.DragFromCenter = chkCharacterOffset.Checked;
         }
 
+        private void btn_player_start_Click(object sender, EventArgs e)
+        {
+            SetPlayerStartingPosition startingForm = new SetPlayerStartingPosition(_room);
+            DialogResult res = startingForm.ShowDialog();
+            if(res == DialogResult.OK)
+            {
+                int psx = startingForm.PlayerStartingXPos;
+                int psy = startingForm.PlayerStartingYPos;
+                int oldroom = _room.Number;
+                Factory.AGSEditor.CurrentGame.PlayerCharacter.StartingRoom = _room.Number;
+                Factory.AGSEditor.CurrentGame.PlayerCharacter.StartX = psx;
+                Factory.AGSEditor.CurrentGame.PlayerCharacter.StartY = psy;
+                _characterLayer.UpdateCharactersRoom(Factory.AGSEditor.CurrentGame.PlayerCharacter, oldroom);
+                RefreshLayersTree();
+            }            
+        }
+
         private void LoadColorTheme(ColorTheme t)
         {
             BackColor = t.GetColor("room-editor/background");
