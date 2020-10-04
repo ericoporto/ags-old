@@ -1,5 +1,6 @@
 using AGS.Types;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -1022,6 +1023,99 @@ namespace AGS.Editor
             cmbBackgrounds.SelectedIndexChanged += cmbBackgrounds_SelectedIndexChanged;
             mainFrame.Controls.Add(cmbBackgrounds);
         }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (
+                keyData.HasFlag(Keys.Shift) ||
+                keyData.HasFlag(Keys.Alt) ||
+                !(keyData.HasFlag(Keys.Up) || keyData.HasFlag(Keys.Down) || keyData.HasFlag(Keys.Left) || keyData.HasFlag(Keys.Right)) &&
+                !keyData.HasFlag(Keys.Control)
+               )
+            {
+                return base.ProcessCmdKey(ref msg, keyData);
+            }
+
+
+            RoomEditNode layerNode = _editAddressBar.RootNode.GetChild(GetLayerItemUniqueID(_layer, null), true) as RoomEditNode;
+            int layer_index = Array.FindIndex(_layers.ToArray(), i => i == _layer);
+            int child_index = Array.FindIndex(layerNode.Children, i => i == _editAddressBar.CurrentNode);
+            RoomEditNode node = _editAddressBar.CurrentNode as RoomEditNode;
+
+            if(keyData.HasFlag(Keys.Up))
+            {
+                if (child_index == -1) 
+                {
+                    // go up in layer list
+                    if (layer_index > 0) layer_index--;
+                }
+                else
+                {
+                    // go up in layer's child list
+                    if (child_index > 0) child_index--;
+                }
+            }
+
+            if (keyData.HasFlag(Keys.Down))
+            {
+                if (child_index == -1)
+                {
+                    // go down in layer list
+                    if (layer_index < _layers.Count) layer_index++;
+                }
+                else
+                {
+                    // go down in layer's child list
+                    if (child_index < layerNode.Children.Length) child_index++;
+                }
+            }
+
+            if (keyData.HasFlag(Keys.Left))
+            {
+                if (child_index != -1)
+                {
+                    child_index = -1;
+                }
+            }
+
+            if (keyData.HasFlag(Keys.Right))
+            {
+                // go to layers children if not there
+                if(child_index == -1 && layerNode.Children.Length > 0)
+                {
+                    child_index = 0;
+                }
+            }
+
+            if (child_index == -1)
+            {
+                if (layer_index > -1 && layer_index < _layers.Count)
+                {
+                    layerNode = _editAddressBar.RootNode.GetChild(GetLayerItemUniqueID(_layers[layer_index], null), true) as RoomEditNode;
+                    _editAddressBar.CurrentNode = layerNode;
+                }
+            }
+            else
+            {
+                _editAddressBar.CurrentNode = layerNode.Children[child_index];
+            }
+
+            RoomEditNode cnode = _editAddressBar.CurrentNode as RoomEditNode;
+            if (cnode == null) { SelectLayer(null); return true; }
+
+            while (layerNode != null && layerNode.Layer == null)
+            {
+                layerNode = layerNode.Parent as RoomEditNode;
+            }
+            if (layerNode == null) { SelectLayer(null); return true; }
+
+            layerNode.IsVisible = true;
+            SelectLayer(layerNode.Layer);
+            layerNode.Layer.SelectItem(cnode == layerNode ? null : cnode.RoomItemID);
+            return true;
+        }
+
+
     }
 
     // TODO: refactor this to make code shared with the GUI Editor
