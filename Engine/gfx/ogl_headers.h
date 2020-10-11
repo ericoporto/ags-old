@@ -30,7 +30,7 @@
 #elif AGS_PLATFORM_OS_LINUX
 #include "SDL.h"
 #include <allegro.h>
-#include <xalleg.h>
+//#include <xalleg.h>
 #include <X11/Xatom.h>
 
 #include "glad/glad.h"

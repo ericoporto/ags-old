@@ -217,6 +217,8 @@ static void toggle_mouse_lock()
     }
 }
 
+extern int misbuttondown (int but);
+
 // Runs default mouse button handling
 static void check_mouse_controls()
 {
@@ -231,10 +233,10 @@ static void check_mouse_controls()
     // check mouse clicks on GUIs
     static int wasbutdown=0,wasongui=0;
 
-    if ((wasbutdown>0) && (ags_misbuttondown(wasbutdown-1))) {
+    if ((wasbutdown>0) && (misbuttondown(wasbutdown-1))) {
         gui_on_mouse_hold(wasongui, wasbutdown);
     }
-    else if ((wasbutdown>0) && (!ags_misbuttondown(wasbutdown-1))) {
+    else if ((wasbutdown>0) && (!misbuttondown(wasbutdown-1))) {
         gui_on_mouse_up(wasongui, wasbutdown);
         wasbutdown=0;
     }
@@ -278,24 +280,6 @@ static void check_mouse_controls()
         setevent (EV_TEXTSCRIPT, TS_MCLICK, 8);  // eMouseWheelNorth
 }
 
-// Returns current key modifiers;
-// NOTE: annoyingly enough, on Windows (not sure about other platforms)
-// Allegro API's 'key_shifts' variable seem to be always one step behind real
-// situation: if first modifier gets pressed, 'key_shifts' will be zero,
-// when second modifier gets pressed it will only contain first one, and so on.
-static int get_active_shifts()
-{
-    int shifts = 0;
-    if (key[KEY_LSHIFT] || key[KEY_RSHIFT])
-        shifts |= KB_SHIFT_FLAG;
-    if (key[KEY_LCONTROL] || key[KEY_RCONTROL])
-        shifts |= KB_CTRL_FLAG;
-    if (key[KEY_ALT] || key[KEY_ALTGR])
-        shifts |= KB_ALT_FLAG;
-    return shifts;
-}
-
-
 static int isScancode(SDL_Event event, int scancode) {
     return ((event.type == SDL_KEYDOWN) && (event.key.keysym.scancode == scancode));
 }
@@ -335,18 +319,6 @@ bool run_service_key_controls(SDL_Event kgn)
     return true;
 }
 
-bool run_service_mb_controls(int &mbut, int &mwheelz)
-{
-    int mb = ags_mgetbutton();
-    int mz = ags_check_mouse_wheel();
-    if (mb == NONE && mz == 0)
-        return false;
-    lock_mouse_on_click(); // do not claim
-    mbut = mb;
-    mwheelz = mz;
-    return true;
-}
-
 // Runs default keyboard handling
 static void check_keyboard_controls()
 {
@@ -357,7 +329,7 @@ static void check_keyboard_controls()
     if (!keyAvailable) { return; }
 
     // Then, check cutscene skip
-    check_skip_cutscene_keypress(asciiFromEvent(kgn)));
+    check_skip_cutscene_keypress(asciiFromEvent(kgn));
     if (play.fast_forward) { 
         return; 
     }
@@ -396,12 +368,12 @@ static void check_keyboard_controls()
     if ((play.wait_counter > 0) && (play.key_skip_wait & SKIP_KEYPRESS) != 0) {
         play.wait_counter = 0;
         play.wait_skipped_by = SKIP_KEYPRESS;
-        play.wait_skipped_by_data = kgn;
+        play.wait_skipped_by_data = asciiOrAgsKeyCodeFromEvent(kgn);
         debug_script_log("Keypress code %d ignored - in Wait", kgn);
         return;
     }
 
-    if ((isCtrlSymCombo(kgn, SDLK_e) && (display_fps == kFPS_Forced)) {
+    if ((isCtrlSymCombo(kgn, SDLK_e) && (display_fps == kFPS_Forced))) {
         // if --fps paramter is used, Ctrl+E will max out frame rate
         setTimerFps( isTimerFpsMaxed() ? frames_per_second : 1000 );
         return;

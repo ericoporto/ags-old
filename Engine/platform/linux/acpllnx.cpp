@@ -20,7 +20,8 @@
 
 #include <stdio.h>
 #include <allegro.h>
-#include <xalleg.h>
+#include "SDL.h"
+//#include <xalleg.h>
 #include "ac/runtime_defines.h"
 #include "gfx/gfxdefines.h"
 #include "platform/base/agsplatformdriver.h"
@@ -186,26 +187,17 @@ AGSPlatformDriver* AGSPlatformDriver::GetDriver() {
 
 bool AGSLinux::LockMouseToWindow()
 {
-    return XGrabPointer(_xwin.display, _xwin.window, False,
-        PointerMotionMask | ButtonPressMask | ButtonReleaseMask,
-        GrabModeAsync, GrabModeAsync, _xwin.window, None, CurrentTime) == GrabSuccess;
+    return SDL_SetRelativeMouseMode(SDL_TRUE) == 0;
+//    return XGrabPointer(_xwin.display, _xwin.window, False,
+  //      PointerMotionMask | ButtonPressMask | ButtonReleaseMask,
+//        GrabModeAsync, GrabModeAsync, _xwin.window, None, CurrentTime) == GrabSuccess;
 }
 
 void AGSLinux::UnlockMouse()
 {
-    XUngrabPointer(_xwin.display, CurrentTime);
+    SDL_SetRelativeMouseMode(SDL_FALSE);
+  //  XUngrabPointer(_xwin.display, CurrentTime);
 }
 
-void AGSLinux::GetSystemDisplayModes(std::vector<Engine::DisplayMode> &dms)
-{
-    dms.clear();
-    GFX_MODE_LIST *gmlist = get_gfx_mode_list(GFX_XWINDOWS_FULLSCREEN);
-    for (int i = 0; i < gmlist->num_modes; ++i)
-    {
-        const GFX_MODE &m = gmlist->mode[i];
-        dms.push_back(Engine::DisplayMode(Engine::GraphicResolution(m.width, m.height, m.bpp)));
-    }
-    destroy_gfx_mode_list(gmlist);
-}
 
 #endif

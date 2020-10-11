@@ -4,7 +4,7 @@
 add_library(engine)
 
 set_target_properties(engine PROPERTIES
-    CXX_STANDARD 11
+    CXX_STANDARD 14
     CXX_EXTENSIONS NO
 )
 
@@ -307,11 +307,11 @@ target_sources(engine
     game/savegame_internal.h
     game/viewport.cpp
     game/viewport.h
+    gfx/ali3d_sdl_renderer.cpp
+    gfx/ali3d_sdl_renderer.h
     gfx/ali3dexception.h
     gfx/ali3dogl.cpp
     gfx/ali3dogl.h
-    gfx/ali3dsw.cpp
-    gfx/ali3dsw.h
     gfx/blender.cpp
     gfx/blender.h
     gfx/color_engine.cpp
@@ -339,9 +339,13 @@ target_sources(engine
     gfx/gfxfilter_ogl.h
     gfx/gfxfilter_scaling.cpp
     gfx/gfxfilter_scaling.h
+    gfx/gfxfilter_sdl_renderer.cpp
+    gfx/gfxfilter_sdl_renderer.h
     gfx/gfxmodelist.h
     gfx/graphicsdriver.h
+    gfx/hq2x3x.h
     gfx/ogl_headers.h
+    gfx/ogl_support.h
     gui/animatingguibutton.cpp
     gui/animatingguibutton.h
     gui/cscidialog.cpp
@@ -378,7 +382,7 @@ target_sources(engine
     main/graphics_mode.h
     main/main.cpp
     main/main.h
-    main/main_allegro.h
+    main/main_sdl2.cpp
     main/maindefines_ex.h
     main/mainheader.h
     main/quit.cpp
@@ -389,31 +393,21 @@ target_sources(engine
     media/audio/ambientsound.h
     media/audio/audio.cpp
     media/audio/audio.h
+    media/audio/audio_core.cpp
+    media/audio/audio_core.h
+    media/audio/audio_core_defs.h
     media/audio/audio_system.h
     media/audio/audiodefines.h
     media/audio/audiointernaldefs.h
-    media/audio/clip_mydumbmod.cpp
-    media/audio/clip_mydumbmod.h
-    media/audio/clip_myjgmod.cpp
-    media/audio/clip_myjgmod.h
-    media/audio/clip_mymidi.cpp
-    media/audio/clip_mymidi.h
-    media/audio/clip_mymp3.cpp
-    media/audio/clip_mymp3.h
-    media/audio/clip_myogg.cpp
-    media/audio/clip_myogg.h
-    media/audio/clip_mystaticmp3.cpp
-    media/audio/clip_mystaticmp3.h
-    media/audio/clip_mystaticogg.cpp
-    media/audio/clip_mystaticogg.h
-    media/audio/clip_mywave.cpp
-    media/audio/clip_mywave.h
+    media/audio/clip_openal.cpp
+    media/audio/clip_openal.h
+    media/audio/openal.h
+    media/audio/openaldecoder.cpp
+    media/audio/openaldecoder.h
     media/audio/queuedaudioitem.cpp
     media/audio/queuedaudioitem.h
     media/audio/sound.cpp
     media/audio/sound.h
-    media/audio/soundcache.cpp
-    media/audio/soundcache.h
     media/audio/soundclip.cpp
     media/audio/soundclip.h
     media/video/VMR9Graph.h
@@ -506,10 +500,6 @@ target_sources(engine
     gfx/gfxfilter_sdl_renderer.cpp
     gfx/gfxfilter_sdl_renderer.h
     gfx/ogl_headers.h
-    media/audio/audio_core.cpp
-    media/audio/audio_core.h
-    media/audio/clip_openal.cpp
-    media/audio/clip_openal.h
     util/library_sdl2.h
 )
 
@@ -574,10 +564,7 @@ target_link_libraries(engine PUBLIC
     ${CMAKE_DL_LIBS} 
     Glad::Glad 
     Threads::Threads 
-    Allegro::Allegro 
-    AlDumb::AlDumb 
-    AlMp3::AlMp3 
-    AlOgg::AlOgg 
+    Allegro::Allegro
     HQ2X::hq2x
     Cda::Cda
     SDL2::SDL2

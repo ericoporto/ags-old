@@ -51,7 +51,7 @@ SDL_Event getTextEventFromQueue() {
         textEventQueue.pop();
     }
     
-    if ((AGS_Clock::now() < play.ignore_user_input_until_time)) {
+    if (play.IsIgnoringInput()) {
         // ignoring user input
         result =  { 0 };
     }
@@ -513,7 +513,7 @@ int ags_mgetbutton() {
         result = mgetbutton();
     }
 
-    if ((result >= 0) && (AGS_Clock::now() < play.ignore_user_input_until_time))
+    if ((result >= 0) && play.IsIgnoringInput())
     {
         // ignoring user input
         result = NONE;

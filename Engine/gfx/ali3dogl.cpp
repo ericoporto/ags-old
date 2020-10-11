@@ -12,9 +12,8 @@
 //
 //=============================================================================
 
-#include "core/platform.h"
-
-#if AGS_PLATFORM_OS_WINDOWS || AGS_PLATFORM_OS_ANDROID || AGS_PLATFORM_OS_IOS || AGS_PLATFORM_OS_LINUX
+#include "gfx/ogl_support.h"
+#if AGS_OPENGL_DRIVER
 
 #include <algorithm>
 #include "gfx/ali3dexception.h"
@@ -107,6 +106,11 @@ const void (*glSwapIntervalEXT)(int) = NULL;
 
 #define GL_FRAMEBUFFER_EXT GL_FRAMEBUFFER_OES
 #define GL_COLOR_ATTACHMENT0_EXT GL_COLOR_ATTACHMENT0_OES
+
+#else
+
+int device_screen_initialized = 1;
+const char* fbo_extension_string = "GL_ARB_framebuffer_object";
 
 #endif
 
@@ -882,7 +886,7 @@ void OGLGraphicsDriver::ReleaseDisplayMode()
   gfx_driver = nullptr;
 
   if (platform->ExitFullscreenMode())
-    platform->RestoreWindowStyle();
+    platform->AdjustWindowStyleForWindowed();
 }
 
 void OGLGraphicsDriver::UnInit() 
@@ -904,6 +908,39 @@ OGLGraphicsDriver::~OGLGraphicsDriver()
 void OGLGraphicsDriver::ClearRectangle(int x1, int y1, int x2, int y2, RGB *colorToUse)
 {
   // NOTE: this function is practically useless at the moment, because OGL redraws whole game frame each time
+}
+
+BITMAP *wrapGlReadPixelsBuffer(int width, int height, unsigned char *pixels) {
+  auto bmp = (BITMAP *)calloc(1, sizeof(BITMAP) + (sizeof(char *) * height));
+  bmp->w = width;
+  bmp->cr = width;
+  bmp->h = height;
+  bmp->cb = height;
+  bmp->clip = true;
+  bmp->cl = 0;
+  bmp->ct = 0;
+  bmp->id = 0;
+  bmp->extra = nullptr;
+  bmp->x_ofs = 0;
+  bmp->y_ofs = 0;
+  bmp->dat = nullptr;
+
+  // crete a fake bitmap to grab the vtable and whatno.
+  auto tmpbitmap = create_bitmap_ex(32, 1, 1);
+  bmp->vtable = tmpbitmap->vtable;
+  bmp->write_bank = tmpbitmap->write_bank;
+  bmp->read_bank = tmpbitmap->read_bank;
+  destroy_bitmap(tmpbitmap);
+
+  // glGetPixels returns image upside down, correct for this:
+  bmp->dat = pixels;
+  auto p = pixels;
+  for (int i=height-1; i>=0; i--) {
+    bmp->line[i] = p;
+    p += width * 4;
+  }
+
+  return bmp;
 }
 
 bool OGLGraphicsDriver::GetCopyOfScreenIntoBitmap(Bitmap *destination, bool at_native_res, GraphicResolution *want_fmt)
@@ -948,16 +985,10 @@ bool OGLGraphicsDriver::GetCopyOfScreenIntoBitmap(Bitmap *destination, bool at_n
   {
     glReadPixels(retr_rect.Left, retr_rect.Top, retr_rect.GetWidth(), retr_rect.GetHeight(), GL_RGBA, GL_UNSIGNED_BYTE, buffer);
 
-    unsigned char* sourcePtr = buffer;
-    for (int y = destination->GetHeight() - 1; y >= 0; y--)
-    {
-        unsigned int * destPtr = reinterpret_cast<unsigned int*>(&destination->GetScanLineForWriting(y)[0]);
-        for (int dx = 0, sx = 0; dx < destination->GetWidth(); ++dx, sx = dx * bpp)
-        {
-            destPtr[dx] = makeacol32(sourcePtr[sx + 0], sourcePtr[sx + 1], sourcePtr[sx + 2], sourcePtr[sx + 3]);
-        }
-        sourcePtr += retr_rect.GetWidth() * bpp;
-    }
+    // wrap in an allegro buffer to blit
+    auto *bufferBmp = wrapGlReadPixelsBuffer(retr_rect.GetWidth(), retr_rect.GetHeight(), buffer);
+    blit(bufferBmp, destination->GetAllegroBitmap(), 0, 0, 0, 0, retr_rect.GetWidth(), retr_rect.GetHeight());
+    free(bufferBmp);
 
     if (_pollingCallback)
       _pollingCallback();

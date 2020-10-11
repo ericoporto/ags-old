@@ -351,8 +351,12 @@ void InventoryScreen::RedrawOverItem(Bitmap *ds, int isonitem)
 
 bool InventoryScreen::Run()
 {
-    int kgn;
-    if (run_service_key_controls(kgn) && !play.IsIgnoringInput())
+    // Run() can be called in a loop, so keep events going.
+    process_pending_events();
+
+    SDL_Event kgn = getTextEventFromQueue();
+    auto keyAvailable = run_service_key_controls(kgn);
+    if (keyAvailable &&  run_service_key_controls(kgn) && !play.IsIgnoringInput())
     {
         return false; // end inventory screen loop
     }
@@ -370,8 +374,8 @@ bool InventoryScreen::Run()
         if ((isonitem<0) | (isonitem>=numitems) | (isonitem >= top_item + num_visible_items))
             isonitem=-1;
 
-        int mclick, mwheelz;
-        if (!run_service_mb_controls(mclick, mwheelz) || play.IsIgnoringInput()) {
+        int mclick = ags_mgetbutton();
+        if (play.IsIgnoringInput()) {
             mclick = NONE;
         }
 

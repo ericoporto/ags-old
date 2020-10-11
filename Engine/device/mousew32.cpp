@@ -50,9 +50,13 @@
 #include "ac/sys_events.h" // j for ags_iskeypressed
 #endif
 
+#include "util/mutex.h"
+#include "util/mutex_lock.h"
+
 using namespace AGS::Common;
 using namespace AGS::Engine;
 
+extern void process_pending_events();
 
 extern char lib_file_name[13];
 

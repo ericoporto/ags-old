@@ -425,7 +425,7 @@ void IAGSEngine::PollSystem () {
     SDL_Event kgn = getTextEventFromQueue();
     auto keyAvailable = run_service_key_controls(kgn);
     int kp = asciiOrAgsKeyCodeFromEvent(kgn);
-    if (keyAvailable && run_service_key_controls(kp) && !play.IsIgnoringInput()) {
+    if (keyAvailable && run_service_key_controls(kgn) && !play.IsIgnoringInput()) {
         pl_run_plugin_hooks (AGSE_KEYPRESS, kp);
     }
 }
