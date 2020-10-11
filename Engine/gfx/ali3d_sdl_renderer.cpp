@@ -471,7 +471,7 @@ void SDLRendererGraphicsDriver::InitSpriteBatch(size_t index, const SpriteBatchD
     }
     else if (desc.Transform.ScaleX == 1.f && desc.Transform.ScaleY == 1.f)
     {
-        Rect rc = RectWH(desc.Viewport.Left - _virtualScrOff.X, desc.Viewport.Top - _virtualScrOff.Y, desc.Viewport.GetWidth(), desc.Viewport.GetHeight());
+        Rect rc = RectWH(desc.Viewport.Left, desc.Viewport.Top, desc.Viewport.GetWidth(), desc.Viewport.GetHeight());
         batch.Surface.reset(BitmapHelper::CreateSubBitmap(virtualScreen, rc));
         batch.Opaque = true;
     }
@@ -512,24 +512,24 @@ void SDLRendererGraphicsDriver::RenderToBackBuffer()
         const SpriteTransform &transform = _spriteBatchDesc[i].Transform;
         const ALSpriteBatch &batch = _spriteBatches[i];
 
-        virtualScreen->SetClip(Rect::MoveBy(viewport, -_virtualScrOff.X, -_virtualScrOff.Y));
+        virtualScreen->SetClip(viewport);
         Bitmap *surface = batch.Surface.get();
         // TODO: correct transform offsets to have pre-scale (source) and post-scale (dest) offsets!
-        int view_offx = viewport.Left + transform.X - _virtualScrOff.X;
-        int view_offy = viewport.Top + transform.Y - _virtualScrOff.Y;
+        int view_offx = viewport.Left; //+ transform.X - _virtualScrOff.X;
+        int view_offy = viewport.Top; //+ transform.Y - _virtualScrOff.Y;
         if (surface)
         {
             if (!batch.Opaque)
                 surface->ClearTransparent();
             _stageVirtualScreen = surface;
-            RenderSpriteBatch(batch, surface, 0, 0);
+            RenderSpriteBatch(batch, surface, transform.X, transform.Y);
             // TODO: extract this to the generic software blit-with-transform function
             virtualScreen->StretchBlt(surface, RectWH(view_offx, view_offy, viewport.GetWidth(), viewport.GetHeight()),
                 batch.Opaque ? kBitmap_Copy : kBitmap_Transparency);
         }
         else
         {
-            RenderSpriteBatch(batch, virtualScreen, view_offx, view_offy);
+            RenderSpriteBatch(batch, virtualScreen, view_offx+transform.X, view_offy+transform.Y);
         }
         _stageVirtualScreen = virtualScreen;
     }
@@ -593,7 +593,7 @@ void SDLRendererGraphicsDriver::RenderSpriteBatch(const ALSpriteBatch &batch, Co
         set_alpha_blender();
       else
         // here _transparency is used as alpha (between 1 and 254)
-        set_blender_mode(NULL, NULL, _trans_alpha_blender32, 0, 0, 0, bitmap->_transparency);
+        set_blender_mode(nullptr, nullptr, _trans_alpha_blender32, 0, 0, 0, bitmap->_transparency);
 
       surface->TransBlendBlt(bitmap->_bmp, drawAtX, drawAtY);
     }
