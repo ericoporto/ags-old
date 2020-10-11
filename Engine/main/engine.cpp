@@ -104,7 +104,6 @@ ResourcePaths ResPaths;
 
 t_engine_pre_init_callback engine_pre_init_callback = nullptr;
 
-#define ALLEGRO_KEYBOARD_HANDLER
 
 bool engine_init_allegro()
 {
@@ -419,6 +418,8 @@ void engine_locate_audio_pak()
     }
 }
 
+#ifdef AGS_DELETE_FOR_3_6
+
 void engine_init_keyboard()
 {
 #ifdef ALLEGRO_KEYBOARD_HANDLER
@@ -430,6 +431,8 @@ void engine_init_keyboard()
     setlocale(LC_NUMERIC, "C"); // needed in X platform because install keyboard affects locale of printfs
 #endif
 }
+
+#endif
 
 void engine_init_timer()
 {
@@ -1312,9 +1315,13 @@ int initialize_engine(const ConfigTree &startup_opts)
 
     engine_init_fonts();
 
+#ifdef AGS_DELETE_FOR_3_6
+
     our_eip = -195;
 
     engine_init_keyboard();
+
+#endif
 
     our_eip = -196;
 

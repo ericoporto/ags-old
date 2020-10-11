@@ -20,6 +20,23 @@ endif()
 
 include_directories(src)
 
+include(CheckFunctionExists)
+
+if(NOT FLOOR_FUNCTION_EXISTS AND NOT NEED_LINKING_AGAINST_LIBM)
+    CHECK_FUNCTION_EXISTS(floor FLOOR_FUNCTION_EXISTS)
+    if(NOT FLOOR_FUNCTION_EXISTS)
+        unset(FLOOR_FUNCTION_EXISTS CACHE)
+        list(APPEND CMAKE_REQUIRED_LIBRARIES m)
+        CHECK_FUNCTION_EXISTS(floor FLOOR_FUNCTION_EXISTS)
+        if(FLOOR_FUNCTION_EXISTS)
+            message(STATUS "Need to link to libm for floor() function available")
+            set(NEED_LINKING_AGAINST_LIBM True CACHE BOOL "" FORCE)
+        else()
+            message(FATAL_ERROR "Failed making the floor() function available")
+        endif()
+    endif()
+endif()
+
 if(CMAKE_COMPILER_IS_GNUCC)
     # Don't use -rpath.
     set(CMAKE_SKIP_RPATH ON CACHE BOOL "Skip RPATH" FORCE)
@@ -131,6 +148,11 @@ if(SDLSOUND_BUILD_STATIC)
         set_target_properties(SDL2_sound-static PROPERTIES OUTPUT_NAME "SDL2_sound")
     endif()
     target_link_libraries(SDL2_sound-static ${SDL2_LIBRARIES} ${OPTIONAL_LIBRARY_LIBS} ${OTHER_LDFLAGS})
+
+    if (NEED_LINKING_AGAINST_LIBM)
+        target_link_libraries(SDL2_sound-static PRIVATE m)
+    endif()
+
     target_include_directories(SDL2_sound-static INTERFACE src)
     set(SDLSOUND_LIB_TARGET SDL2_sound-static)
     set(SDLSOUND_INSTALL_TARGETS ${SDLSOUND_INSTALL_TARGETS} ";SDL2_sound-static")
@@ -143,6 +165,11 @@ if(SDLSOUND_BUILD_SHARED)
     set_target_properties(SDL2_sound PROPERTIES VERSION ${SDLSOUND_VERSION})
     set_target_properties(SDL2_sound PROPERTIES SOVERSION ${SDLSOUND_SOVERSION})
     target_link_libraries(SDL2_sound ${SDL2_LIBRARIES} ${OPTIONAL_LIBRARY_LIBS} ${OTHER_LDFLAGS})
+
+    if (NEED_LINKING_AGAINST_LIBM)
+        target_link_libraries(SDL2_sound PRIVATE m)
+    endif()
+
     target_include_directories(SDL2_sound INTERFACE src)
     set(SDLSOUND_LIB_TARGET SDL2_sound)
     set(SDLSOUND_INSTALL_TARGETS ${SDLSOUND_INSTALL_TARGETS} ";SDL2_sound")

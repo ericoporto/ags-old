@@ -8,6 +8,13 @@
 #include "libmodplug.h"
 #include <math.h>
 
+
+//TODO: FIX UNDEFINED REFERENCE TO FLOOR
+float eri_floor(float value) {
+    float tmp = (float) (int) value;
+    return (tmp != value) ? (tmp - 1.0f) : tmp;
+}
+
 // 4x256 taps polyphase FIR resampling filter
 extern short int gFastSinc[];
 extern short int gKaiserSinc[]; // 8-taps polyphase
@@ -79,10 +86,10 @@ static void initCzCUBICSPLINE()
 	{	float _LCm1, _LC0, _LC1, _LC2;
 		float _LX = ((float)_LIi)*_LFlen;
 		int _LSum,_LIdx	= _LIi<<2;
-		_LCm1 = (float)floor( 0.5 + _LScale*(-0.5*_LX*_LX*_LX + 1.0*_LX*_LX - 0.5*_LX ) );
-		_LC0 = (float)floor( 0.5 + _LScale*( 1.5*_LX*_LX*_LX - 2.5*_LX*_LX + 1.0 ) );
-		_LC1 = (float)floor( 0.5 + _LScale*(-1.5*_LX*_LX*_LX + 2.0*_LX*_LX + 0.5*_LX ) );
-		_LC2 = (float)floor( 0.5 + _LScale*( 0.5*_LX*_LX*_LX - 0.5*_LX*_LX) );
+		_LCm1 = (float)eri_floor( 0.5 + _LScale*(-0.5*_LX*_LX*_LX + 1.0*_LX*_LX - 0.5*_LX ) );
+		_LC0 = (float)eri_floor( 0.5 + _LScale*( 1.5*_LX*_LX*_LX - 2.5*_LX*_LX + 1.0 ) );
+		_LC1 = (float)eri_floor( 0.5 + _LScale*(-1.5*_LX*_LX*_LX + 2.0*_LX*_LX + 0.5*_LX ) );
+		_LC2 = (float)eri_floor( 0.5 + _LScale*( 0.5*_LX*_LX*_LX - 0.5*_LX*_LX) );
 		CzCUBICSPLINE_lut[_LIdx+0] = (signed short)( (_LCm1 < -_LScale) ? -_LScale : ((_LCm1 > _LScale) ? _LScale : _LCm1) );
 		CzCUBICSPLINE_lut[_LIdx+1] = (signed short)( (_LC0  < -_LScale) ? -_LScale : ((_LC0  > _LScale) ? _LScale : _LC0 ) );
 		CzCUBICSPLINE_lut[_LIdx+2] = (signed short)( (_LC1  < -_LScale) ? -_LScale : ((_LC1  > _LScale) ? _LScale : _LC1 ) );
@@ -224,7 +231,7 @@ static void initCzWINDOWEDFIR()
 		}
 		_LGain = 1.0f/_LGain;
 		for( _LCc=0;_LCc<WFIR_WIDTH;_LCc++ )
-		{	float _LCoef = (float)floor( 0.5 + _LScale*_LCoefs[_LCc]*_LGain );
+		{	float _LCoef = (float)eri_floor( 0.5 + _LScale*_LCoefs[_LCc]*_LGain );
 		CzWINDOWEDFIR_lut[_LIdx+_LCc] = (signed short)( (_LCoef<-_LScale)?-_LScale:((_LCoef>_LScale)?_LScale:_LCoef) );
 		}
 	}

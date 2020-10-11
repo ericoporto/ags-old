@@ -944,10 +944,24 @@ ScriptCamera* Game_GetAnyCamera(int index)
 
 void Game_SimulateKeyPress(int key)
 {
-    int platformKey = GetKeyForKeyPressCb(key);
-    platformKey = PlatformKeyFromAgsKey(platformKey);
-    if (platformKey >= 0) {
-        simulate_keypress(platformKey);
+    SDL_Keysym sdlkeysym = SDLKeysymFromAgsKey(key);
+    if (sdlkeysym.sym != SDLK_UNKNOWN) {
+        //simulate_keypress(platformKey);
+        SDL_Event event_press;
+        event_press.key.type = SDL_KEYDOWN;
+        event_press.key.state = SDL_PRESSED;
+        event_press.key.windowID = 1;
+        event_press.key.timestamp = SDL_GetTicks()+1;
+        event_press.key.keysym = sdlkeysym;
+        SDL_PushEvent(&event_press);
+
+        SDL_Event event_release;
+        event_release.key.type = SDL_KEYUP;
+        event_release.key.state = SDL_RELEASED;
+        event_release.key.windowID = 1;
+        event_release.key.timestamp = SDL_GetTicks()+1;
+        event_release.key.keysym = sdlkeysym;
+        SDL_PushEvent(&event_release);
     }
 }
 

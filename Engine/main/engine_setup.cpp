@@ -184,6 +184,7 @@ void engine_pre_gfxsystem_screen_destroy()
 // Setup color conversion parameters
 void engine_setup_color_conversions(int coldepth)
 {
+#ifdef DELETE_FOR_AGS_3_6
     // default shifts for how we store the sprite data1
     _rgb_r_shift_32 = 16;
     _rgb_g_shift_32 = 8;
@@ -256,7 +257,8 @@ void engine_setup_color_conversions(int coldepth)
         _rgb_r_shift_15 = 10;
 #endif
     }
-
+    
+#endif
     set_color_conversion(COLORCONV_MOST | COLORCONV_EXPAND_256);
 }
 
@@ -277,6 +279,8 @@ void engine_pre_gfxmode_draw_cleanup()
 // Setup mouse control mode and graphic area
 void engine_post_gfxmode_mouse_setup(const DisplayMode &dm, const Size &init_desktop)
 {
+#ifdef AGS_DELETE_FOR_3_6
+
     // Assign mouse control parameters.
     //
     // NOTE that we setup speed and other related properties regardless of
@@ -293,6 +297,11 @@ void engine_post_gfxmode_mouse_setup(const DisplayMode &dm, const Size &init_des
     Mouse_EnableControl(usetup.mouse_ctrl_enabled);
     Debug::Printf(kDbgMsg_Info, "Mouse control: %s, base: %f, speed: %f", Mouse::IsControlEnabled() ? "on" : "off",
         Mouse::GetSpeedUnit(), Mouse::GetSpeed());
+
+#endif
+
+    // Since we're always use desktop resolution, we don't need to adjust mouse acceleration
+    Mouse::DisableControl();
 
     on_coordinates_scaling_changed();
 

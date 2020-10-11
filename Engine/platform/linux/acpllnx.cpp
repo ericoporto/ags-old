@@ -61,7 +61,7 @@ struct AGSLinux : AGSPlatformDriver {
   void ShutdownCDPlayer() override;
   bool LockMouseToWindow() override;
   void UnlockMouse() override;
-  void GetSystemDisplayModes(std::vector<Engine::DisplayMode> &dms) override;
+//  void GetSystemDisplayModes(std::vector<Engine::DisplayMode> &dms) override;
 };
 
 

@@ -108,8 +108,9 @@ void mgraphconfine(int x1, int y1, int x2, int y2)
 
 void mgetgraphpos()
 {
+#ifdef AGS_DELETE_FOR_3_6
+
     poll_mouse();
-    process_pending_events();
     if (disable_mgetgraphpos)
     {
         // The cursor coordinates are provided from alternate source;
@@ -168,6 +169,12 @@ void mgetgraphpos()
             return;
     }
     else
+
+#endif
+
+#pragma message ("SDL-TODO: find out where mgetgraphpos is needed, are events polled before that?")
+    process_pending_events();
+
     {
         // Save real cursor coordinates provided by system
         real_mouse_x = mouse_x;
@@ -211,6 +218,8 @@ void domouse(int str)
   const Rect &viewport = play.GetMainViewport();
 
   mgetgraphpos();
+
+  // temporarily adjust mousex/y. Original values returned at end of func.
   mousex -= hotx;
   mousey -= hoty;
 
@@ -225,6 +234,8 @@ void domouse(int str)
   hotxwas = hotx;
   hotywas = hoty;
 }
+
+#ifdef AGS_DELETE_FOR_3_6
 
 int ismouseinbox(int lf, int tp, int rt, int bt)
 {
@@ -252,6 +263,8 @@ void mloadwcursor(char *namm)
     exit(1);
   }
 }
+
+#endif
 
 extern int get_mouse_b();
 
@@ -317,7 +330,14 @@ void Mouse::AdjustPosition(int &x, int &y)
 void Mouse::SetGraphicArea()
 {
     Rect dst_r = GameScaling.ScaleRange(play.GetMainViewport());
-    mgraphconfine(dst_r.Left, dst_r.Top, dst_r.Right, dst_r.Bottom);
+
+    Mouse::ControlRect = Rect(dst_r.Left, dst_r.Top, dst_r.Right, dst_r.Bottom);
+    set_mouse_range(Mouse::ControlRect.Left, Mouse::ControlRect.Top, Mouse::ControlRect.Right, Mouse::ControlRect.Bottom);
+    Debug::Printf("Mouse confined: (%d,%d)-(%d,%d) (%dx%d)",
+    Mouse::ControlRect.Left, Mouse::ControlRect.Top, Mouse::ControlRect.Right, Mouse::ControlRect.Bottom,
+    Mouse::ControlRect.GetWidth(), Mouse::ControlRect.GetHeight());
+
+
 }
 
 void Mouse::SetMoveLimit(const Rect &r)
@@ -367,6 +387,8 @@ bool Mouse::IsControlEnabled()
     return ControlEnabled;
 }
 
+#ifdef AGS_DELETE_FOR_3_6
+
 void Mouse::SetSpeedUnit(float f)
 {
     SpeedUnit = f;
@@ -378,10 +400,16 @@ float Mouse::GetSpeedUnit()
     return SpeedUnit;
 }
 
+#endif
+
 void Mouse::SetSpeed(float speed)
 {
+#ifdef AGS_DELETE_FOR_3_6
+    if (!ControlEnabled)
+        return;
     SpeedVal = Math::Max(0.f, speed);
     Speed = SpeedUnit * SpeedVal;
+#endif
 }
 
 float Mouse::GetSpeed()
