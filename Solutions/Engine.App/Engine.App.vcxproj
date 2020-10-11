@@ -437,7 +437,7 @@
     <ClCompile Include="..\..\Engine\game\savegame_components.cpp" />
     <ClCompile Include="..\..\Engine\game\viewport.cpp" />
     <ClCompile Include="..\..\Engine\gfx\ali3dogl.cpp" />
-    <ClCompile Include="..\..\Engine\gfx\ali3dsw.cpp" />
+    <ClCompile Include="..\..\Engine\gfx\ali3d_sdl_renderer.cpp" />
     <ClCompile Include="..\..\Engine\gfx\blender.cpp" />
     <ClCompile Include="..\..\Engine\gfx\color_engine.cpp" />
     <ClCompile Include="..\..\Engine\gfx\gfxdriverbase.cpp" />
@@ -449,6 +449,7 @@
     <ClCompile Include="..\..\Engine\gfx\gfxfilter_hqx.cpp" />
     <ClCompile Include="..\..\Engine\gfx\gfxfilter_ogl.cpp" />
     <ClCompile Include="..\..\Engine\gfx\gfxfilter_scaling.cpp" />
+    <ClCompile Include="..\..\Engine\gfx\gfxfilter_sdl_renderer.cpp" />
     <ClCompile Include="..\..\Engine\gfx\gfx_util.cpp" />
     <ClCompile Include="..\..\Engine\gui\animatingguibutton.cpp" />
     <ClCompile Include="..\..\Engine\gui\cscidialog.cpp" />
@@ -483,7 +484,7 @@
     <ClCompile Include="..\..\Engine\main\game_start.cpp" />
     <ClCompile Include="..\..\Engine\main\graphics_mode.cpp" />
     <ClCompile Include="..\..\Engine\main\main.cpp" />
-    <ClCompile Include="..\..\Engine\main\main_allegro.cpp" />
+    <ClCompile Include="..\..\Engine\main\main_sdl2.cpp" />
     <ClCompile Include="..\..\Engine\main\quit.cpp" />
     <ClCompile Include="..\..\Engine\main\update.cpp" />
     <ClCompile Include="..\..\Engine\media\audio\ambientsound.cpp" />
@@ -767,7 +768,7 @@
     <ClInclude Include="..\..\Engine\game\viewport.h" />
     <ClInclude Include="..\..\Engine\gfx\ali3dexception.h" />
     <ClInclude Include="..\..\Engine\gfx\ali3dogl.h" />
-    <ClInclude Include="..\..\Engine\gfx\ali3dsw.h" />
+    <ClInclude Include="..\..\Engine\gfx\ali3d_sdl_renderer.h" />
     <ClInclude Include="..\..\Engine\gfx\blender.h" />
     <ClInclude Include="..\..\Engine\gfx\ddb.h" />
     <ClInclude Include="..\..\Engine\gfx\gfxdefines.h" />
@@ -782,11 +783,13 @@
     <ClInclude Include="..\..\Engine\gfx\gfxfilter_hqx.h" />
     <ClInclude Include="..\..\Engine\gfx\gfxfilter_ogl.h" />
     <ClInclude Include="..\..\Engine\gfx\gfxfilter_scaling.h" />
+    <ClInclude Include="..\..\Engine\gfx\gfxfilter_sdl_renderer.h" />
     <ClInclude Include="..\..\Engine\gfx\gfxmodelist.h" />
     <ClInclude Include="..\..\Engine\gfx\gfx_util.h" />
     <ClInclude Include="..\..\Engine\gfx\graphicsdriver.h" />
     <ClInclude Include="..\..\Engine\gfx\hq2x3x.h" />
     <ClInclude Include="..\..\Engine\gfx\ogl_headers.h" />
+    <ClInclude Include="..\..\Engine\gfx\ogl_support.h" />
     <ClInclude Include="..\..\Engine\gui\animatingguibutton.h" />
     <ClInclude Include="..\..\Engine\gui\cscidialog.h" />
     <ClInclude Include="..\..\Engine\gui\gui.h" />
@@ -848,6 +851,7 @@
     <ClInclude Include="..\..\Engine\script\systemimports.h" />
     <ClInclude Include="..\..\Engine\test\test_all.h" />
     <ClInclude Include="..\..\Engine\util\library.h" />
+    <ClInclude Include="..\..\Engine\util\library_sdl2.h" />
     <ClInclude Include="..\..\Engine\util\library_windows.h" />
     <ClInclude Include="..\..\Engine\util\mutex.h" />
     <ClInclude Include="..\..\Engine\util\mutex_base.h" />
