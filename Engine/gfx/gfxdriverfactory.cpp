@@ -22,6 +22,7 @@
 #include "gfx/gfxfilter_ogl.h"
 #endif
 
+#define  AGS_HAS_DIRECT3D 0
 #if AGS_HAS_DIRECT3D
 #include "platform/windows/gfx/ali3dd3d.h"
 #include "gfx/gfxfilter_d3d.h"
