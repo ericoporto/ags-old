@@ -65,6 +65,8 @@
 #include "util/memory.h"
 #include "util/filestream.h"
 #include "media/audio/audio_system.h"
+#include "main/game_run.h"
+#include "ac/sys_events.h"
 
 using namespace AGS::Common;
 using namespace AGS::Common::Memory;
@@ -229,9 +231,9 @@ int IAGSEngine::GetSavedData (char *buffer, int32 bufsize) {
 
 void IAGSEngine::DrawText (int32 x, int32 y, int32 font, int32 color, char *text) 
 {
+    if (gfxDriver == nullptr) { return; }
     Bitmap *ds = gfxDriver->GetStageBackBuffer();
-    if (!ds)
-        return;
+    if (ds == nullptr) { return; }
     color_t text_color = ds->GetCompatibleColor(color);
     draw_and_invalidate_text(ds, x, y, font, text_color, text);
 }
@@ -409,19 +411,23 @@ void IAGSEngine::BlitSpriteRotated(int32 x, int32 y, BITMAP *bmp, int32 angle)
 }
 
 extern void domouse(int);
+extern int  mgetbutton();
 
 void IAGSEngine::PollSystem () {
 
+    process_pending_events();
     domouse(DOMOUSE_NOCURSOR);
     update_polled_stuff_if_runtime();
-    int mbut, mwheelz;
-    if (run_service_mb_controls(mbut, mwheelz) && mbut >= 0 && !play.IsIgnoringInput())
+    int mbut = mgetbutton();
+    if (mbut > NONE)
         pl_run_plugin_hooks (AGSE_MOUSECLICK, mbut);
-    int kp;
-    if (run_service_key_controls(kp) && !play.IsIgnoringInput()) {
+
+    SDL_Event kgn = getTextEventFromQueue();
+    auto keyAvailable = run_service_key_controls(kgn);
+    int kp = asciiOrAgsKeyCodeFromEvent(kgn);
+    if (keyAvailable && run_service_key_controls(kp) && !play.IsIgnoringInput()) {
         pl_run_plugin_hooks (AGSE_KEYPRESS, kp);
     }
-
 }
 AGSCharacter* IAGSEngine::GetCharacter (int32 charnum) {
     if (charnum >= game.numcharacters)

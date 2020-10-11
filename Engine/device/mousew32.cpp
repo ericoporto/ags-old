@@ -105,6 +105,7 @@ void mgraphconfine(int x1, int y1, int x2, int y2)
 void mgetgraphpos()
 {
     poll_mouse();
+    process_pending_events();
     if (disable_mgetgraphpos)
     {
         // The cursor coordinates are provided from alternate source;
@@ -248,12 +249,13 @@ void mloadwcursor(char *namm)
   }
 }
 
+extern int get_mouse_b();
+
 int butwas = 0;
 int mgetbutton()
 {
   int toret = NONE;
-  poll_mouse();
-  int butis = mouse_b;
+  int butis = get_mouse_b();
 
   if ((butis > 0) & (butwas > 0))
     return NONE;  // don't allow holding button down
@@ -281,10 +283,7 @@ int mgetbutton()
 const int MB_ARRAY[3] = { 1, 2, 4 };
 int misbuttondown(int buno)
 {
-  poll_mouse();
-  if (mouse_b & MB_ARRAY[buno])
-    return TRUE;
-  return FALSE;
+  return get_mouse_b() & MB_ARRAY[buno];
 }
 
 void msetgraphpos(int xa, int ya)
@@ -302,7 +301,7 @@ void msethotspot(int xx, int yy)
 
 int minstalled()
 {
-  return install_mouse();
+  return 3;
 }
 
 void Mouse::AdjustPosition(int &x, int &y)

@@ -35,6 +35,7 @@
 #include "script/cc_error.h"
 #include "util/string_utils.h"
 #include "util/textstreamwriter.h"
+#include "SDL.h"
 
 #if AGS_PLATFORM_OS_WINDOWS
 #include <winalleg.h>
@@ -614,10 +615,13 @@ int scrlockWasDown = 0;
 void check_debug_keys() {
     if (play.debug_mode) {
         // do the run-time script debugging
+        
+        SDL_PumpEvents();
+        const Uint8 * keyboardState = SDL_GetKeyboardState(NULL);
 
-        if ((!key[KEY_SCRLOCK]) && (scrlockWasDown))
+        if ((!keyboardState[SDL_SCANCODE_SCROLLLOCK]) && (scrlockWasDown))
             scrlockWasDown = 0;
-        else if ((key[KEY_SCRLOCK]) && (!scrlockWasDown)) {
+        else if ((keyboardState[SDL_SCANCODE_SCROLLLOCK]) && (!scrlockWasDown)) {
 
             break_on_next_script_step = 1;
             scrlockWasDown = 1;

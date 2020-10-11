@@ -500,6 +500,17 @@ target_sources(engine
     platform/windows/win_ex_handling.h
     platform/windows/minidump.cpp
     platform/windows/winapi_exclusive.h
+
+    gfx/ali3d_sdl_renderer.cpp
+    gfx/ali3d_sdl_renderer.h
+    gfx/gfxfilter_sdl_renderer.cpp
+    gfx/gfxfilter_sdl_renderer.h
+    gfx/ogl_headers.h
+    media/audio/audio_core.cpp
+    media/audio/audio_core.h
+    media/audio/clip_openal.cpp
+    media/audio/clip_openal.h
+    util/library_sdl2.h
 )
 
 if(MACOS)
@@ -569,6 +580,9 @@ target_link_libraries(engine PUBLIC
     AlOgg::AlOgg 
     HQ2X::hq2x
     Cda::Cda
+    SDL2::SDL2
+    SDL2_sound::SDL2_sound
+    External::OpenAL
 )
 
 # common has a circular dependency on engine
@@ -615,10 +629,10 @@ target_include_directories(ags PRIVATE .)
 
 target_sources(ags
     PRIVATE
-    main/main_allegro.cpp
+    main/main_sdl2.cpp
 )
 
-target_link_libraries(ags PRIVATE engine)
+target_link_libraries(ags PRIVATE engine SDL2::SDL2main)
 
 if (LINUX)
     # We may override `allegro_icon` and `load_midi_pf` depending on the version
@@ -664,11 +678,11 @@ if (MACOS)
 
     target_sources(ags-app
         PRIVATE
-        main/main_allegro.cpp
+        main/main_sdl2.cpp
         ${RESOURCE_FILES}
     )
 
-    target_link_libraries(ags-app PRIVATE engine)
+    target_link_libraries(ags-app PRIVATE engine SDL2::SDL2main)
 
     set_target_properties(ags-app PROPERTIES
         RUNTIME_OUTPUT_NAME AGS

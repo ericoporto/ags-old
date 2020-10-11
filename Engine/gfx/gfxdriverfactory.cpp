@@ -13,16 +13,11 @@
 //=============================================================================
 
 #include "gfx/gfxdriverfactory.h"
-
-#include "core/platform.h"
-
-#define AGS_HAS_DIRECT3D (AGS_PLATFORM_OS_WINDOWS)
-#define AGS_HAS_OPENGL (AGS_PLATFORM_OS_WINDOWS || AGS_PLATFORM_OS_ANDROID || AGS_PLATFORM_OS_IOS || AGS_PLATFORM_OS_LINUX)
-
-#include "gfx/ali3dsw.h"
+#include "gfx/ali3d_sdl_renderer.h"
 #include "gfx/gfxfilter_allegro.h"
+#include "gfx/ogl_support.h"
 
-#if AGS_HAS_OPENGL
+#if AGS_OPENGL_DRIVER
 #include "gfx/ali3dogl.h"
 #include "gfx/gfxfilter_ogl.h"
 #endif
@@ -44,7 +39,7 @@ void GetGfxDriverFactoryNames(StringV &ids)
 #if AGS_HAS_DIRECT3D
     ids.push_back("D3D9");
 #endif
-#if AGS_HAS_OPENGL
+#if AGS_OPENGL_DRIVER
     ids.push_back("OGL");
 #endif
     ids.push_back("Software");
@@ -56,12 +51,13 @@ IGfxDriverFactory *GetGfxDriverFactory(const String id)
     if (id.CompareNoCase("D3D9") == 0)
         return D3D::D3DGraphicsFactory::GetFactory();
 #endif
-#if AGS_HAS_OPENGL
+#if AGS_OPENGL_DRIVER
     if (id.CompareNoCase("OGL") == 0)
         return OGL::OGLGraphicsFactory::GetFactory();
 #endif
-    if (id.CompareNoCase("Software") == 0)
-        return ALSW::ALSWGraphicsFactory::GetFactory();
+    if ((id.CompareNoCase("Software") == 0) || (id.CompareNoCase("DX5") == 0)) {
+        return SDLRenderer::SDLRendererGraphicsFactory::GetFactory();
+    }
     set_allegro_error("No graphics factory with such id: %s", id.GetCStr());
     return nullptr;
 }

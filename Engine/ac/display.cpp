@@ -46,6 +46,7 @@
 #include "ac/mouse.h"
 #include "media/audio/audio_system.h"
 #include "ac/timer.h"
+#include "device/mousew32.h"
 
 using namespace AGS::Common;
 using namespace AGS::Common::BitmapHelper;
@@ -268,20 +269,27 @@ int _display_main(int xx, int yy, int wii, const char *text, int disp_type, int 
             ags_domouse(DOMOUSE_ENABLE);
         int countdown = GetTextDisplayTime (todis);
         int skip_setting = user_to_internal_skip_speech((SkipSpeechStyle)play.skip_display);
+
+        // INNER GAME LOOP - blocking display
         // Loop until skipped
         while (true) {
+            process_pending_events();
             update_audio_system_on_game_loop();
             render_graphics();
-            int mbut, mwheelz;
-            if (run_service_mb_controls(mbut, mwheelz) && mbut >= 0) {
+            int mbut = ags_mgetbutton();
+            if (mbut > NONE) {
                 check_skip_cutscene_mclick(mbut);
                 if (play.fast_forward)
                     break;
                 if (skip_setting & SKIP_MOUSECLICK && !play.IsIgnoringInput())
                     break;
             }
-            int kp;
-            if (run_service_key_controls(kp)) {
+
+            // let them press kp to skip the cutscene
+            SDL_Event kpEvent = getTextEventFromQueue();
+            int kp = asciiFromEvent(kpEvent);
+            auto keyAvailable = run_service_key_controls(kpEvent);
+            if (keyAvailable && kp > 0) {
                 check_skip_cutscene_keypress (kp);
                 if (play.fast_forward)
                     break;

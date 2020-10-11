@@ -12,30 +12,36 @@
 //
 //=============================================================================
 //
-//
+// Standard software scaling filter
 //
 //=============================================================================
-#ifndef __AGS_EE_AC__SYS_EVENTS_H
-#define __AGS_EE_AC__SYS_EVENTS_H
 
-void process_pending_events();
+#ifndef __AGS_EE_GFX__ALLEGROGFXFILTER_H
+#define __AGS_EE_GFX__ALLEGROGFXFILTER_H
 
-void ags_clear_input_buffer(); // Clears buffered keypresses and mouse clicks, if any
+#include "gfx/bitmap.h"
+#include "gfx/gfxfilter_scaling.h"
+#include "gfx/gfxdefines.h"
 
-int  ags_mgetbutton();
-void ags_domouse (int what);
-int  ags_check_mouse_wheel ();
+namespace AGS
+{
+namespace Engine
+{
+namespace SDLRenderer
+{
 
-SDL_Event getTextEventFromQueue();
-int  ags_iskeypressed (int keycode);
+using Common::Bitmap;
 
-int asciiFromEvent(SDL_Event event);
-int agsKeyCodeFromEvent(SDL_Event event);
-int asciiOrAgsKeyCodeFromEvent(SDL_Event event);
+class SDLRendererGfxFilter : public ScalingGfxFilter
+{
+public:
+    virtual const GfxFilterInfo &GetInfo() const;
 
-#define ASCII_BACKSPACE (8)
-#define ASCII_TAB (9)
-#define ASCII_RETURN (13)
-#define ASCII_ESCAPE (27)
+    static const GfxFilterInfo FilterInfo;
+};
 
-#endif // __AGS_EE_AC__SYS_EVENTS_H
+} // namespace ALSW
+} // namespace Engine
+} // namespace AGS
+
+#endif // __AGS_EE_GFX__ALLEGROGFXFILTER_H
