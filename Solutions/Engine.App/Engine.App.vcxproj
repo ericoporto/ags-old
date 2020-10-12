@@ -892,6 +892,9 @@
   <ItemGroup>
     <Library Include="..\..\libsrc\SDL2-2.0.12\VisualC\lib\SDL2.lib" />
   </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\..\libsrc\SDL2-2.0.12\VisualC\lib\SDL2main.lib" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

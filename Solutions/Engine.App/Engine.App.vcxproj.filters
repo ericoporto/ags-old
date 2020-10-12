@@ -1948,4 +1948,9 @@
       <Filter>Library Sources\SDL2_static</Filter>
     </Library>
   </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\..\libsrc\SDL2-2.0.12\VisualC\lib\SDL2main.lib">
+      <Filter>Library Sources\SDL2_static</Filter>
+    </Library>
+  </ItemGroup>
 </Project>

@@ -222,7 +222,7 @@ void GfxDriverOnSurfaceUpdate()
     on_coordinates_scaling_changed();
 }
 
-uint32_t convert_scaling_to_fp(int scale_factor)
+uint32_t gmconvert_scaling_to_fp(int scale_factor)
 {
     if (scale_factor >= 0)
         return scale_factor <<= kShift;
@@ -249,7 +249,7 @@ Size set_game_frame_after_screen_size(const Size &game_size, const Size screen_s
             scale = Math::Min((screen_size.Width / game_size.Width) << kShift,
                               (screen_size.Height / game_size.Height) << kShift);
         else
-            scale = convert_scaling_to_fp(setup.ScaleFactor);
+            scale = gmconvert_scaling_to_fp(setup.ScaleFactor);
 
         // Ensure scaling factors are sane
         if (scale <= 0)
