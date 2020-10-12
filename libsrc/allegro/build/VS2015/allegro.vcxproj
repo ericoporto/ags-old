@@ -211,6 +211,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\include\allegro\platform\almsvc-sdl2.h" />
     <ClInclude Include="..\..\include\allegro\platform\alsdl2.h" />
+    <ClInclude Include="..\..\include\sdl2alleg.h" />
     <ClInclude Include="include\allegro\platform\alplatf.h" />
     <ClInclude Include="..\..\include\allegro.h" />
     <ClInclude Include="..\..\include\allegro\3d.h" />

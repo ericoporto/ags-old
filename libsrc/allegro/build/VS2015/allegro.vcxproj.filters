@@ -456,6 +456,9 @@
     <ClInclude Include="..\..\include\allegro\platform\alsdl2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\sdl2alleg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
