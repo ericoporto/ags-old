@@ -316,7 +316,7 @@ public:
   AGSIFUNC(void) RegisterScriptFunction (const char *name, void *address);
 #ifdef WINDOWS_VERSION
   // get game window handle
-  AGSIFUNC(HWND) GetWindowHandle();
+//  AGSIFUNC(HWND) GetWindowHandle();
   // get reference to main DirectDraw interface
   AGSIFUNC(LPDIRECTDRAW2) GetDirectDraw2 ();
   // get the DDraw surface associated with a bitmap

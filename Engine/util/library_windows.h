@@ -84,7 +84,7 @@ public:
   {
     if (_library)
     {
-      return (FreeLibrary(_library) != 0);
+      return (FreeLibrary((HMODULE) _library) != 0);
     }
     else
     {
@@ -94,7 +94,7 @@ public:
 
   void *GetFunctionAddress(AGS::Common::String functionName)
   {
-    return GetProcAddress(_library, functionName.GetCStr());
+    return GetProcAddress((HMODULE) _library, functionName.GetCStr());
   }
 
 private:

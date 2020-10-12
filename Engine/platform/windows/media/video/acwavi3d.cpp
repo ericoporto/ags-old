@@ -39,6 +39,7 @@ typedef float D3DVALUE, *LPD3DVALUE;
 #include "platform/base/agsplatformdriver.h"
 //#include <atlbase.h>
 #include "media/audio/audio_system.h"
+#include <ac\sys_events.h>
 
 #define USES_CONVERSION int _convert = 0; _convert; UINT _acp = CP_ACP; _acp; LPCWSTR _lpw = NULL; _lpw; LPCSTR _lpa = NULL; _lpa
 
@@ -119,11 +120,10 @@ int dxmedia_play_video_3d(const char* filename, IDirect3DDevice9 *device, bool u
 
     filterState = graph->GetState();
 
-    // auto keyAvailable = run_service_key_controls(gkey);
-    if (rec_kbhit()) {
-      int key = rec_getch();
-      
-      if ((canskip == 1) && (key == 27))
+	SDL_Event keywas = getTextEventFromQueue();
+    bool keyAvailable = run_service_key_controls(keywas);
+    if (keyAvailable && keywas.type != 0) {   
+      if ((canskip == 1) && (keywas.key.keysym.scancode == SDL_SCANCODE_ESCAPE))
         break;
       if (canskip >= 2)
         break;

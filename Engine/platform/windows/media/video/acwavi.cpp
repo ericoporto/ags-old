@@ -36,6 +36,7 @@
 #include "gfx/graphicsdriver.h"
 #include "main/game_run.h"
 #include "platform/base/agsplatformdriver.h"
+#include <ac\sys_events.h>
 
 using namespace AGS::Common;
 using namespace AGS::Engine;
@@ -391,11 +392,11 @@ int dxmedia_play_video(const char* filename, bool pUseSound, int canskip, int st
 
     RenderToSurface(vscreen);
     //Sleep(0);
-    // auto keyAvailable = run_service_key_controls(gkey);
-    if (rec_kbhit()) {
-      int key = rec_getch();
-      
-      if ((canskip == 1) && (key == 27))
+
+	SDL_Event keywas = getTextEventFromQueue();
+    bool keyAvailable = run_service_key_controls(keywas);
+    if (keyAvailable && keywas.type != 0) {   
+      if ((canskip == 1) && (keywas.key.keysym.scancode == SDL_SCANCODE_ESCAPE))
         break;
       if (canskip >= 2)
         break;

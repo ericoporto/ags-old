@@ -1972,6 +1972,10 @@ void D3DGraphicsDriver::SetScreenTint(int red, int green, int blue)
     _spriteBatches[_actSpriteBatch].List.push_back(D3DDrawListEntry(ddb));
 }
 
+void D3DGraphicsDriver::ToggleFullscreen() {
+
+}
+
 
 D3DGraphicsFactory *D3DGraphicsFactory::_factory = NULL;
 Library D3DGraphicsFactory::_library;

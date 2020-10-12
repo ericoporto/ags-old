@@ -189,6 +189,7 @@ public:
     void DrawSprite(int x, int y, IDriverDependantBitmap* bitmap) override;
     void SetScreenFade(int red, int green, int blue) override;
     void SetScreenTint(int red, int green, int blue) override;
+	void ToggleFullscreen();
     void RenderToBackBuffer() override;
     void Render() override;
     void Render(int xoff, int yoff, GlobalFlipType flip) override;

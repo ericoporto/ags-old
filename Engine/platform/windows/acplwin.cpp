@@ -763,7 +763,7 @@ void AGSWin32::ResumeApplication()
 void AGSWin32::GetSystemDisplayModes(std::vector<DisplayMode> &dms)
 {
     dms.clear();
-    GFX_MODE_LIST *gmlist = get_gfx_mode_list(GFX_DIRECTX);
+    GFX_MODE_LIST *gmlist = get_gfx_mode_list(GFX_SDL2_WINDOW);
     for (int i = 0; i < gmlist->num_modes; ++i)
     {
         const GFX_MODE &m = gmlist->mode[i];
@@ -1087,9 +1087,10 @@ AGSPlatformDriver* AGSPlatformDriver::GetDriver() {
 
 // *********** WINDOWS-SPECIFIC PLUGIN API FUNCTIONS *************
 
-HWND IAGSEngine::GetWindowHandle () {
-  return win_get_window();
-}
+//HWND IAGSEngine::GetWindowHandle () {
+ // return win_get_window();
+//    return nullptr;/
+//}
 LPDIRECTDRAW2 IAGSEngine::GetDirectDraw2 () {
   if (directdraw == NULL)
     quit("!This plugin requires DirectDraw based graphics driver (software driver).");

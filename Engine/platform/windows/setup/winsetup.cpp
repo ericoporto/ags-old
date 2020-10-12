@@ -1149,12 +1149,12 @@ void WinSetupDialog::SelectNearestGfxMode(const Size screen_size)
         // Look up for the nearest supported mode
         int index = -1;
         DisplayMode dm;
-        if (find_nearest_supported_mode(_drvDesc->GfxModeList, screen_size, _drvDesc->UseColorDepth,
-                                        NULL, NULL, dm, &index))
-        {
-            SetCurSelToItemData(_hGfxModeList, index, NULL, kGfxMode_Desktop);
-        }
-        else
+      //  if (find_nearest_supported_mode(_drvDesc->GfxModeList, screen_size, _drvDesc->UseColorDepth,
+      //                                  NULL, NULL, dm, &index))
+      //  {
+      //      SetCurSelToItemData(_hGfxModeList, index, NULL, kGfxMode_Desktop);
+      //  }
+      //  else
             SetCurSelToItemData(_hGfxModeList, kGfxMode_Desktop);
     }
     OnGfxModeUpdate();
