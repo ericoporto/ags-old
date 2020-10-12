@@ -119,14 +119,16 @@ int dxmedia_play_video_3d(const char* filename, IDirect3DDevice9 *device, bool u
 
     filterState = graph->GetState();
 
-    int key, mbut, mwheelz;
-    if (run_service_key_controls(key)) {
+    // auto keyAvailable = run_service_key_controls(gkey);
+    if (rec_kbhit()) {
+      int key = rec_getch();
+      
       if ((canskip == 1) && (key == 27))
         break;
       if (canskip >= 2)
         break;
     }
-    if (run_service_mb_controls(mbut, mwheelz) && mbut >= 0 && (canskip == 3))
+    if ((ags_mgetbutton() >= 0) && (canskip == 3))
       break;
 
     //device->Present(NULL, NULL, 0, NULL);
