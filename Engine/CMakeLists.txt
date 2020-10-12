@@ -608,7 +608,7 @@ if (LINUX)
 endif ()
 
 set_target_properties(ags PROPERTIES
-    CXX_STANDARD 11
+    CXX_STANDARD 14
     CXX_EXTENSIONS NO
 )
 
@@ -646,7 +646,7 @@ if (MACOS)
     add_executable(ags-app)
 
     set_target_properties(ags-app PROPERTIES
-        CXX_STANDARD 11
+        CXX_STANDARD 14
         CXX_EXTENSIONS NO
     )
 
