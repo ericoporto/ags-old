@@ -15,10 +15,13 @@
 #cmakedefine ALLEGRO_UNIX_SDL2
 
 /* These are always defined now. */
-#ifdef _MSC_VER && !__INTEL_COMPILER
-	#define ALLEGRO_MSVC_SDL2
-	#define ALLEGRO_SDL2
-#endif
+#if defined(_MSC_VER) && !defined(__INTEL_COMPILER) && !defined(ALLEGRO_MSVC_SDL2)
+#define ALLEGRO_MSVC_SDL2
+#endif // !ALLEGRO_MSVC_SDL2
+
+#if defined(_MSC_VER) && !defined(__INTEL_COMPILER) && !defined(ALLEGRO_SDL2)
+#define ALLEGRO_SDL2
+#endif // !ALLEGRO_SDL2
 
 #define ALLEGRO_NO_ASM
 #define ALLEGRO_USE_C

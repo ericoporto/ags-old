@@ -2,7 +2,8 @@
 #define SDL2_ALLEGRO_H
 
 #ifndef ALLEGRO_H
-   #error Please include allegro.h before sdl2alleg.h!
+    //#error Please include allegro.h before sdl2alleg.h!
+    #include "allegro.h"
 #endif
 
 /* Allegro's SDL2 specific interface */
