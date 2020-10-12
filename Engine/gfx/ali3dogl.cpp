@@ -983,7 +983,7 @@ bool OGLGraphicsDriver::GetCopyOfScreenIntoBitmap(Bitmap *destination, bool at_n
   unsigned char* buffer = new unsigned char[bufferSize];
   if (buffer)
   {
-    glReadPixels(retr_rect.Left, retr_rect.Top, retr_rect.GetWidth(), retr_rect.GetHeight(), GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+    glReadPixels(retr_rect.Left, retr_rect.Top, retr_rect.GetWidth(), retr_rect.GetHeight(), GL_BGRA, GL_UNSIGNED_BYTE, buffer);
 
     // wrap in an allegro buffer to blit
     auto *bufferBmp = wrapGlReadPixelsBuffer(retr_rect.GetWidth(), retr_rect.GetHeight(), buffer);
@@ -1714,7 +1714,7 @@ IDriverDependantBitmap* OGLGraphicsDriver::CreateDDBFromBitmap(Bitmap *bitmap, b
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
       // NOTE: pay attention that the texture format depends on the **display mode**'s format,
       // rather than source bitmap's color depth!
-      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, thisAllocatedWidth, thisAllocatedHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, thisAllocatedWidth, thisAllocatedHeight, 0, GL_BGRA, GL_UNSIGNED_BYTE, nullptr);
     }
   }
 
