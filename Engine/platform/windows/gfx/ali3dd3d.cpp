@@ -35,6 +35,8 @@
 #include "platform/base/agsplatformdriver.h"
 #include "util/library.h"
 
+extern void process_pending_events();
+
 #ifndef AGS_NO_VIDEO_PLAYER
 extern int dxmedia_play_video_3d(const char*filename, IDirect3DDevice9 *device, bool useAVISound, int canskip, int stretch);
 extern void dxmedia_shutdown_3d();
@@ -357,6 +359,9 @@ void D3DGraphicsDriver::ReleaseDisplayMode()
   DestroyAllStageScreens();
 
   gfx_driver = NULL;
+
+  if (platform->ExitFullscreenMode())
+    platform->AdjustWindowStyleForWindowed();
 }
 
 int D3DGraphicsDriver::FirstTimeInit()
