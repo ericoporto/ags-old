@@ -620,4 +620,9 @@
       <Filter>Header Files\util</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\..\libsrc\SDL2-2.0.12\VisualC\lib\SDL2.lib">
+      <Filter>Library Sources\SDL2_static</Filter>
+    </Library>
+  </ItemGroup>
 </Project>
