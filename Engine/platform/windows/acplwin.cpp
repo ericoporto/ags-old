@@ -1092,34 +1092,36 @@ AGSPlatformDriver* AGSPlatformDriver::GetDriver() {
 //    return nullptr;/
 //}
 LPDIRECTDRAW2 IAGSEngine::GetDirectDraw2 () {
-  if (directdraw == NULL)
-    quit("!This plugin requires DirectDraw based graphics driver (software driver).");
-
-  return directdraw;
+    return NULL;
+    //  if (directdraw == NULL)
+//    quit("!This plugin requires DirectDraw based graphics driver (software driver).");
+//
+//  return directdraw;
 }
 LPDIRECTDRAWSURFACE2 IAGSEngine::GetBitmapSurface (BITMAP *bmp) 
 {
-  if (directdraw == NULL)
-    quit("!This plugin requires DirectDraw based graphics driver (software driver).");
-
-  BMP_EXTRA_INFO *bei = (BMP_EXTRA_INFO*)bmp->extra;
-
-  if (bmp == gfxDriver->GetMemoryBackBuffer()->GetAllegroBitmap())
-    invalidate_screen();
-
-  return bei->surf;
+    return NULL;
+//  if (directdraw == NULL)
+//    quit("!This plugin requires DirectDraw based graphics driver (software driver).");
+//
+//  BMP_EXTRA_INFO *bei = (BMP_EXTRA_INFO*)bmp->extra;
+//
+//  if (bmp == gfxDriver->GetMemoryBackBuffer()->GetAllegroBitmap())
+//    invalidate_screen();
+//
+//  return bei->surf;
 }
 
 LPDIRECTSOUND IAGSEngine::GetDirectSound() {
-  return directsound;
+    return NULL;//return directsound;
 }
 
 LPDIRECTINPUTDEVICE IAGSEngine::GetDirectInputKeyboard() {
-  return key_dinput_device;
+    return NULL;//return key_dinput_device;
 }
 
 LPDIRECTINPUTDEVICE IAGSEngine::GetDirectInputMouse() {
-  return mouse_dinput_device;
+    return NULL;//return mouse_dinput_device;
 }
 
 #endif

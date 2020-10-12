@@ -22,6 +22,8 @@
 
 #include "platform/windows/gfx/ali3dd3d.h"
 
+#if AGS_HAS_DIRECT3D
+
 #include <allegro.h>
 #include <allegro/platform/aintwin.h>
 #include "ac/timer.h"
@@ -2093,5 +2095,7 @@ bool D3DGraphicsFactory::Init()
 } // namespace D3D
 } // namespace Engine
 } // namespace AGS
+
+#endif // AGS_HAS_DIRECT3D
 
 #endif // AGS_PLATFORM_OS_WINDOWS

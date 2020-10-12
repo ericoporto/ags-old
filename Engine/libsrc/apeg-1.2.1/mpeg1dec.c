@@ -47,10 +47,19 @@ static void check_stream_type(APEG_LAYER *layer);
 static void setup_stream(APEG_LAYER *layer);
 
 //TODO: FIX UNDEFINED REFERENCE TO FLOOR
+#if !defined(_WIN32)
+
+#ifndef ERI_FLOOR
+#define ERI_FLOOR
 float eri_floor(float value) {
-    float tmp = (float) (int) value;
-    return (tmp != value) ? (tmp - 1.0f) : tmp;
+	float tmp = (float)(int)value;
+	return (tmp != value) ? (tmp - 1.0f) : tmp;
 }
+#endif // !ERI_FLOOR
+
+#else
+#define eri_floor floor
+#endif
 
 // Packfile vtable to read from memory sources
 static int mem_close(void *_f)

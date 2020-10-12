@@ -10,10 +10,21 @@
 
 
 //TODO: FIX UNDEFINED REFERENCE TO FLOOR
+#if !defined(_WIN32)
+
+#ifndef ERI_FLOOR
+#define ERI_FLOOR
 float eri_floor(float value) {
-    float tmp = (float) (int) value;
-    return (tmp != value) ? (tmp - 1.0f) : tmp;
+	float tmp = (float)(int)value;
+	return (tmp != value) ? (tmp - 1.0f) : tmp;
 }
+#endif // !ERI_FLOOR
+
+#else
+#define eri_floor floor
+#endif
+
+
 
 // 4x256 taps polyphase FIR resampling filter
 extern short int gFastSinc[];

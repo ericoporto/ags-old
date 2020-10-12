@@ -25,6 +25,8 @@
 #error This file should only be included on the Windows build
 #endif
 
+#if AGS_HAS_DIRECT3D
+
 #include <memory>
 #include <allegro.h>
 #include <winalleg.h>
@@ -333,5 +335,7 @@ private:
 } // namespace D3D
 } // namespace Engine
 } // namespace AGS
+
+#endif // AGS_HAS_DIRECT3D
 
 #endif // __AGS_EE_GFX__ALI3DD3D_H

@@ -102,4 +102,9 @@
     #define AGS_PLATFORM_DEBUG  (0)
 #endif
 
+#ifndef  AGS_HAS_DIRECT3D
+#define AGS_HAS_DIRECT3D (0)
+#endif // ! AGS_HAS_DIRECT3D
+
+
 #endif // __AC_PLATFORM_H
