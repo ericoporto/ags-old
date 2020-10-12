@@ -42,6 +42,13 @@ if (WIN32 AND NOT CMAKE_SIZEOF_VOID_P EQUAL 4)
 	message(FATAL_ERROR "Windows builds only support 32bit for now")
 endif()
 
+if(LINUX)
+    if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+        # without no-pie we can't double-click run ags in Nautilus
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fno-pie -no-pie")
+    endif ()
+endif (LINUX)
+
 
 include(CheckIPOSupported)
 check_ipo_supported(RESULT ipo_supported OUTPUT ipo_not_supported_reason)
