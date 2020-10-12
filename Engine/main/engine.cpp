@@ -1315,14 +1315,6 @@ int initialize_engine(const ConfigTree &startup_opts)
 
     engine_init_fonts();
 
-#ifdef AGS_DELETE_FOR_3_6
-
-    our_eip = -195;
-
-    engine_init_keyboard();
-
-#endif
-
     our_eip = -196;
 
     engine_init_mouse();
