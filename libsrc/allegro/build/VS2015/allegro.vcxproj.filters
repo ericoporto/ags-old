@@ -184,6 +184,12 @@
     <ClCompile Include="..\..\src\win\wsystem.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\sdl2\drivers.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\sdl2\system.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\allegro\platform\alplatf.h">
@@ -447,7 +453,7 @@
     <ClInclude Include="..\..\include\allegro\platform\almsvc-sdl2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\sdl2alleg.h">
+    <ClInclude Include="..\..\include\allegro\platform\alsdl2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
