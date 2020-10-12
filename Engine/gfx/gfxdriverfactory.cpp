@@ -52,7 +52,7 @@ IGfxDriverFactory *GetGfxDriverFactory(const String id)
         return D3D::D3DGraphicsFactory::GetFactory();
 #endif
 #if AGS_OPENGL_DRIVER
-    if (id.CompareNoCase("OGL") == 0)
+    if (id.CompareNoCase("OGL") == 0 || id.CompareNoCase("D3D9") == 0)
         return OGL::OGLGraphicsFactory::GetFactory();
 #endif
     if ((id.CompareNoCase("Software") == 0) || (id.CompareNoCase("DX5") == 0)) {
