@@ -48,7 +48,8 @@ static int trace_handler(AL_CONST char *msg) {
 
 static int sdl2_sys_init(void)
 {
-   SDL_LogSetAllPriority(SDL_LOG_PRIORITY_VERBOSE);
+   // SDL_LogSetAllPriority(SDL_LOG_PRIORITY_VERBOSE);
+    SDL_LogSetAllPriority(SDL_LOG_PRIORITY_INFO);
 
    if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO|SDL_INIT_TIMER|SDL_INIT_EVENTS|SDL_INIT_GAMECONTROLLER) != 0) {
       SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
