@@ -736,14 +736,14 @@ const char *AGSWin32::GetGraphicsTroubleshootingText()
 void AGSWin32::DisplaySwitchOut()
 {
     // If we have explicitly set up fullscreen mode then minimize the window
-    if (_preFullscreenMode.IsValid())
-        ShowWindow(win_get_window(), SW_MINIMIZE);
+ //   if (_preFullscreenMode.IsValid())
+ //       ShowWindow(win_get_window(), SW_MINIMIZE);
 }
 
 void AGSWin32::DisplaySwitchIn() {
     // If we have explicitly set up fullscreen mode then restore the window
-    if (_preFullscreenMode.IsValid())
-        ShowWindow(win_get_window(), SW_RESTORE);
+ //   if (_preFullscreenMode.IsValid())
+ //       ShowWindow(win_get_window(), SW_RESTORE);
 }
 
 void AGSWin32::PauseApplication()
@@ -807,22 +807,22 @@ bool AGSWin32::ExitFullscreenMode()
 void AGSWin32::AdjustWindowStyleForFullscreen()
 {
   // Remove the border in full-screen mode
-  Size sz;
-  get_desktop_resolution(&sz.Width, &sz.Height);
-  HWND allegro_wnd = win_get_window();
-  LONG winstyle = GetWindowLong(allegro_wnd, GWL_STYLE);
-  SetWindowLong(allegro_wnd, GWL_STYLE, (winstyle & ~WS_OVERLAPPEDWINDOW) | WS_POPUP);
-  SetWindowPos(allegro_wnd, HWND_TOP, 0, 0, sz.Width, sz.Height, 0);
+ // Size sz;
+//  get_desktop_resolution(&sz.Width, &sz.Height);
+//  HWND allegro_wnd = win_get_window();
+//  LONG winstyle = GetWindowLong(allegro_wnd, GWL_STYLE);
+//  SetWindowLong(allegro_wnd, GWL_STYLE, (winstyle & ~WS_OVERLAPPEDWINDOW) | WS_POPUP);
+//  SetWindowPos(allegro_wnd, HWND_TOP, 0, 0, sz.Width, sz.Height, 0);
 }
 
 void AGSWin32::AdjustWindowStyleForWindowed()
 {
   // Make a regular window with a border
-  HWND allegro_wnd = win_get_window();
-  LONG winstyle = GetWindowLong(allegro_wnd, GWL_STYLE);
-  SetWindowLong(allegro_wnd, GWL_STYLE, (winstyle & ~WS_POPUP) | (WS_SYSMENU | WS_CAPTION | WS_MINIMIZEBOX));
-  // Make window go on top, but at the same time remove WS_EX_TOPMOST style (applied by Direct3D fullscreen mode)
-  SetWindowPos(allegro_wnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_FRAMECHANGED);
+//  HWND allegro_wnd = win_get_window();
+//  LONG winstyle = GetWindowLong(allegro_wnd, GWL_STYLE);
+//  SetWindowLong(allegro_wnd, GWL_STYLE, (winstyle & ~WS_POPUP) | (WS_SYSMENU | WS_CAPTION | WS_MINIMIZEBOX));
+  // Make window go on top, but at the same time remove WS_EX_TOPMOST style (applied by Direct3D fullscreen mode)/
+//  SetWindowPos(allegro_wnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_FRAMECHANGED);
 }
 
 int AGSWin32::CDPlayerCommand(int cmdd, int datt) {
@@ -867,7 +867,8 @@ void AGSWin32::DisplayAlert(const char *text, ...) {
   vsprintf(displbuf, text, ap);
   va_end(ap);
   if (_guiMode)
-    MessageBox(win_get_window(), displbuf, "Adventure Game Studio", MB_OK | MB_ICONEXCLAMATION);
+      SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Adventure Game Studio", displbuf, NULL /* SDL Window */);
+    //MessageBox(win_get_window(), displbuf, "Adventure Game Studio", MB_OK | MB_ICONEXCLAMATION);
 
   // Always write to either stderr or stdout, even if message boxes are enabled.
   if (_logToStdErr)
@@ -986,12 +987,13 @@ void AGSWin32::PostAllegroExit() {
 
 SetupReturnValue AGSWin32::RunSetup(const ConfigTree &cfg_in, ConfigTree &cfg_out)
 {
-  String version_str = String::FromFormat("Adventure Game Studio v%s setup", get_engine_version());
-  return AGS::Engine::WinSetup(cfg_in, cfg_out, usetup.data_files_dir, version_str);
+    return kSetup_Cancel;
+  //String version_str = String::FromFormat("Adventure Game Studio v%s setup", get_engine_version());
+  //return AGS::Engine::WinSetup(cfg_in, cfg_out, usetup.data_files_dir, version_str);
 }
 
 void AGSWin32::SetGameWindowIcon() {
-  SetWinIcon();
+ // SetWinIcon();
 }
 
 void AGSWin32::WriteStdOut(const char *fmt, ...) {
@@ -1042,6 +1044,7 @@ extern "C" const unsigned char hw_to_mycode[256];
 
 void AGSWin32::ValidateWindowSize(int &x, int &y, bool borderless) const
 {
+#ifdef DELETE_FOR_AGS_3_6
     RECT wa_rc, nc_rc;
     // This is the size of the available workspace on user's desktop
     SystemParametersInfo(SPI_GETWORKAREA, 0, &wa_rc, 0);
@@ -1059,10 +1062,12 @@ void AGSWin32::ValidateWindowSize(int &x, int &y, bool borderless) const
     y = Math::Min(y, (int)(max_win.Height - (nc_rc.bottom - nc_rc.top)));
     x = Math::Clamp(x, 1, (int)(wa_rc.right - wa_rc.left));
     y = Math::Clamp(y, 1, (int)(wa_rc.bottom - wa_rc.top));
+#endif
 }
 
 bool AGSWin32::LockMouseToWindow()
 {
+#ifdef DELETE_FOR_AGS_3_6
     RECT rc;
     HWND allegro_wnd = win_get_window();
     GetClientRect(allegro_wnd, &rc);
@@ -1071,6 +1076,8 @@ bool AGSWin32::LockMouseToWindow()
     --rc.right;
     --rc.bottom;
     return ::ClipCursor(&rc) != 0;
+#endif
+    return false;
 }
 
 void AGSWin32::UnlockMouse()
