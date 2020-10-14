@@ -1,7 +1,12 @@
 # Engine
 # -----------------------------------------------------------------------------
 
+if (NOT ANDROID)
+add_library(engine STATIC)
+else ()
 add_library(engine)
+endif ()
+
 
 set_target_properties(engine PROPERTIES
     CXX_STANDARD 14
@@ -573,7 +578,10 @@ target_link_libraries(engine PUBLIC
 )
 
 # common has a circular dependency on engine
+# TODO: currently required for gcc support, will look into this.
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 target_link_libraries(common PUBLIC engine)
+endif ()
 
 if (WIN32 OR LINUX)
     target_compile_definitions(engine PRIVATE AGS_HAS_CD_AUDIO)
@@ -602,7 +610,12 @@ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/.. PREFIX "Source Files" FILES ${E
 # Standalone exe
 # -----------------------------------------------------------------------------
 
+if (NOT ANDROID)
 add_executable(ags)
+else ()
+add_library(ags)
+endif (NOT ANDROID)
+
 if (LINUX)
     install(TARGETS ags RUNTIME DESTINATION bin)
 endif ()
@@ -639,10 +652,11 @@ if (WIN32)
 endif()
 
 
+
 # macOS App Bundle
 # -----------------------------------------------------------------------------
 
-if (MACOS)
+if (MACOS AND NOT ANDROID)
     add_executable(ags-app)
 
     set_target_properties(ags-app PROPERTIES
