@@ -55,7 +55,8 @@ IGfxDriverFactory *GetGfxDriverFactory(const String id)
     if (id.CompareNoCase("OGL") == 0 || id.CompareNoCase("D3D9") == 0)
         return OGL::OGLGraphicsFactory::GetFactory();
 #endif
-    if ((id.CompareNoCase("Software") == 0) || (id.CompareNoCase("DX5") == 0)) {
+    //if ((id.CompareNoCase("Software") == 0) || (id.CompareNoCase("DX5") == 0)) {
+    if(id.CompareNoCase("OGL") != 0 || id.CompareNoCase("D3D9") != 0) {
         return SDLRenderer::SDLRendererGraphicsFactory::GetFactory();
     }
     set_allegro_error("No graphics factory with such id: %s", id.GetCStr());

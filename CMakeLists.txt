@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.13..3.14)
+cmake_minimum_required(VERSION 3.13)
 
 set(CMAKE_USER_MAKE_RULES_OVERRIDE ${CMAKE_CURRENT_SOURCE_DIR}/CMake/c_flag_overrides.cmake)
 set(CMAKE_USER_MAKE_RULES_OVERRIDE_CXX ${CMAKE_CURRENT_SOURCE_DIR}/CMake/cxx_flag_overrides.cmake)
@@ -34,9 +34,17 @@ elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     set(LINUX TRUE)
 elseif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(MACOS TRUE)
+elseif (${CMAKE_SYSTEM_NAME} MATCHES "Android")
+    set(ANDROID TRUE)
 else()
     message(FATAL_ERROR "Unsupported system: ${CMAKE_SYSTEM_NAME}")
 endif ()
+
+message( "CMAKE_SYSTEM_NAME:" ${CMAKE_SYSTEM_NAME} )
+message( "WIN32:" ${WIN32} )
+message( "LINUX:" ${LINUX} )
+message( "MACOS:" ${MACOS} )
+message( "ANDROID:" ${ANDROID} )
 
 if (WIN32 AND NOT CMAKE_SIZEOF_VOID_P EQUAL 4)
 	message(FATAL_ERROR "Windows builds only support 32bit for now")
@@ -74,8 +82,8 @@ if(MSVC)
     add_compile_definitions(_CRT_NONSTDC_NO_DEPRECATE)
 else()
     add_compile_options(
-        -fsigned-char 
-        -fno-strict-aliasing 
+        -fsigned-char
+        -fno-strict-aliasing
         -fwrapv
 
         -Wall
@@ -121,6 +129,12 @@ else()
     add_compile_options($<$<COMPILE_LANGUAGE:C>:-Wstrict-prototypes>)
 
 endif()
+
+if (ANDROID)
+    # armeabi-v7a requires cpufeatures library
+    include(AndroidNdkModules)
+    android_ndk_import_module_cpufeatures()
+endif(ANDROID)
 
 find_package(PkgConfig)
 find_package(Threads)

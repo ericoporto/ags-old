@@ -201,8 +201,8 @@ SDL_Keysym SDLKeysymFromAgsKey (int key)
         case eAGSKeyCodeLessThan: { sk.sym = SDLK_LESS; sk.mod = KMOD_NONE; } break;
         case eAGSKeyCodeEquals: { sk.scancode = SDL_SCANCODE_EQUALS; sk.sym = SDLK_EQUALS; sk.mod = KMOD_NONE; } break;
         case eAGSKeyCodeGreaterThan: { sk.sym = SDLK_GREATER; sk.mod = KMOD_NONE; } break;
-        case eAGSKeyCodeQuestionMark: { sk.sym = SDLK_LESS; sk.mod = SDLK_QUESTION; } break;
-        case eAGSKeyCodeAt: { sk.sym = SDLK_AT; sk.mod = SDLK_QUESTION; } break;
+        case eAGSKeyCodeQuestionMark: { sk.sym = SDLK_QUESTION; sk.mod = KMOD_NONE; } break;
+        case eAGSKeyCodeAt: { sk.sym = SDLK_AT; sk.mod = KMOD_NONE; } break;
         case eAGSKeyCodeOpenBracket: { sk.scancode = SDL_SCANCODE_LEFTBRACKET; sk.sym = SDLK_LEFTBRACKET; sk.mod = KMOD_NONE; } break;
         case eAGSKeyCodeBackSlash: { sk.scancode = SDL_SCANCODE_BACKSLASH; sk.sym = SDLK_BACKSLASH; sk.mod = KMOD_NONE; } break;
         case eAGSKeyCodeCloseBracket: { sk.scancode = SDL_SCANCODE_RIGHTBRACKET; sk.sym = SDLK_RIGHTBRACKET; sk.mod = KMOD_NONE; } break;

@@ -73,7 +73,7 @@ public:
         _useResampler = useResampler;
     }
     void SetLightLevel(int lightLevel) override  { _lightLevel = lightLevel; }
-    void SetTint(int red, int green, int blue, int tintSaturation) override 
+    void SetTint(int red, int green, int blue, int tintSaturation) override
     {
         _red = red;
         _green = green;
@@ -286,7 +286,7 @@ private:
 
     SDL_Window *sdlWindow {nullptr};
     SDL_GLContext sdlGlContext {nullptr};
-    
+
     // Sets up GL objects not related to particular display mode
     void FirstTimeInit();
     // Initializes Gl rendering context
@@ -310,7 +310,7 @@ private:
     // Configure backbuffer texture, that is used in render-to-texture mode
     void SetupBackbufferTexture();
     void DeleteBackbufferTexture();
-#if AGS_PLATFORM_OS_WINDOWS || AGS_PLATFORM_OS_LINUX || AGS_PLATFORM_OS_MACOS
+#if AGS_PLATFORM_OS_WINDOWS || AGS_PLATFORM_OS_LINUX || AGS_PLATFORM_OS_MACOS || AGS_PLATFORM_OS_ANDROID
     void CreateDesktopScreen(int width, int height, int depth);
 #elif AGS_PLATFORM_OS_ANDROID || AGS_PLATFORM_OS_IOS
     void UpdateDeviceScreen();

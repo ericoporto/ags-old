@@ -4,7 +4,7 @@
 if (NOT ANDROID)
 add_library(engine STATIC)
 else ()
-add_library(engine)
+add_library(engine SHARED)
 endif ()
 
 
@@ -613,7 +613,7 @@ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/.. PREFIX "Source Files" FILES ${E
 if (NOT ANDROID)
 add_executable(ags)
 else ()
-add_library(ags)
+add_library(ags SHARED)
 endif (NOT ANDROID)
 
 if (LINUX)
@@ -634,7 +634,7 @@ target_sources(ags
 
 target_link_libraries(ags PRIVATE engine SDL2::SDL2main)
 
-if (LINUX)
+if (LINUX OR ANDROID)
     # We may override `allegro_icon` and `load_midi_pf` depending on the version
     target_link_options(ags PRIVATE -Wl,--allow-multiple-definition)
 endif ()

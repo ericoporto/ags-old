@@ -111,13 +111,21 @@ if(UNIX)
         set(MAP_FAILED "((void *) -1)")
     endif()
 
+    set(ALLEGRO_WITH_MAGIC_MAIN 0)
+
+    # XXX const
+    # XXX inline
+    # XXX size_t
+endif(UNIX)
+
+if(UNIX AND NOT ANDROID)
     check_c_source_runs("
         static int notsupported = 1;
         void test_ctor (void) __attribute__((constructor));
         void test_ctor (void) { notsupported = 0; }
         int main(void) { return (notsupported); }
         "
-        ALLEGRO_USE_CONSTRUCTOR)
+            ALLEGRO_USE_CONSTRUCTOR)
 
     find_library(RT_LIBRARY rt)
     check_c_source_compiles("
@@ -127,15 +135,15 @@ if(UNIX)
             clock_gettime(CLOCK_MONOTONIC, &new_time_ns);
             return 0;
         }"
-        ALLEGRO_HAVE_POSIX_MONOTONIC_CLOCK
-        )
+            ALLEGRO_HAVE_POSIX_MONOTONIC_CLOCK
+            )
+endif()
 
-    set(ALLEGRO_WITH_MAGIC_MAIN 0)
 
-    # XXX const
-    # XXX inline
-    # XXX size_t
-endif(UNIX)
+if(ANDROID)
+    set(ALLEGRO_USE_CONSTRUCTOR true)
+    set(ALLEGRO_HAVE_POSIX_MONOTONIC_CLOCK true)
+endif()
 
 #-----------------------------------------------------------------------------#
 #

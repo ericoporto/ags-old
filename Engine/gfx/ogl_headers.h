@@ -44,6 +44,7 @@
 #include "glad/glad.h"
 
 #elif AGS_PLATFORM_OS_ANDROID
+#include "SDL.h"
 
 #include <GLES/gl.h>
 #include <GLES2/gl2.h>

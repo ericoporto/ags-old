@@ -19,6 +19,8 @@
 #include "core/platform.h"
 
 #include <errno.h>
+#include <string>
+
 #if AGS_PLATFORM_OS_WINDOWS
 #include <process.h>  // _spawnl
 #endif
@@ -523,14 +525,14 @@ int engine_load_game_data()
 
 int engine_check_register_game()
 {
-    if (justRegisterGame) 
+    if (justRegisterGame)
     {
         platform->RegisterGameWithGameExplorer();
         proper_exit = 1;
         return EXIT_NORMAL;
     }
 
-    if (justUnRegisterGame) 
+    if (justUnRegisterGame)
     {
         platform->UnRegisterGameWithGameExplorer();
         proper_exit = 1;
@@ -642,7 +644,7 @@ int engine_check_disk_space()
     if (check_write_access()==0) {
         platform->DisplayAlert("Unable to write in the savegame directory.\n%s", platform->GetDiskWriteAccessTroubleshootingText());
         proper_exit = 1;
-        return EXIT_ERROR; 
+        return EXIT_ERROR;
     }
 
     return 0;
@@ -699,7 +701,7 @@ int engine_init_sprites()
     Debug::Printf(kDbgMsg_Info, "Initialize sprites");
 
     HError err = spriteset.InitFile(SpriteCache::DefaultSpriteFileName, SpriteCache::DefaultSpriteIndexName);
-    if (!err) 
+    if (!err)
     {
         platform->FinishedUsingGraphicsMode();
         allegro_exit();
@@ -728,7 +730,7 @@ void engine_init_game_settings()
             palette[ee]=game.defpal[ee];
     }
 
-    for (ee = 0; ee < game.numcursors; ee++) 
+    for (ee = 0; ee < game.numcursors; ee++)
     {
         // The cursor graphics are assigned to mousecurs[] and so cannot
         // be removed from memory
@@ -937,7 +939,7 @@ void engine_init_game_settings()
     strcpy(play.game_name, game.gamename);
     play.lastParserEntry[0] = 0;
     play.follow_change_room_timer = 150;
-    for (ee = 0; ee < MAX_ROOM_BGFRAMES; ee++) 
+    for (ee = 0; ee < MAX_ROOM_BGFRAMES; ee++)
         play.raw_modified[ee] = 0;
     play.game_speed_modifier = 0;
     if (debug_flags & DBG_DEBUGMODE)
@@ -950,7 +952,7 @@ void engine_init_game_settings()
     memset(&play.default_audio_type_volumes[0], -1, MAX_AUDIO_TYPES * sizeof(int));
 
     // reset graphical script vars (they're still used by some games)
-    for (ee = 0; ee < MAXGLOBALVARS; ee++) 
+    for (ee = 0; ee < MAXGLOBALVARS; ee++)
         play.globalvars[ee] = 0;
 
     for (ee = 0; ee < MAXGLOBALSTRINGS; ee++)
@@ -968,7 +970,7 @@ void engine_init_game_settings()
 
     // We use same variable to read config and be used at runtime for now,
     // so update it here with regards to game design option
-    usetup.RenderAtScreenRes = 
+    usetup.RenderAtScreenRes =
         (game.options[OPT_RENDERATSCREENRES] == kRenderAtScreenRes_UserDefined && usetup.RenderAtScreenRes) ||
          game.options[OPT_RENDERATSCREENRES] == kRenderAtScreenRes_Enabled;
 }
@@ -1063,9 +1065,9 @@ HError define_gamedata_location_checkall(const String &exe_path)
 bool define_gamedata_location(const String &exe_path)
 {
     HError err = define_gamedata_location_checkall(exe_path);
-    if (!err)
-    {
-        platform->DisplayAlert("ERROR: Unable to determine game data.\n%s", err->FullMessage().GetCStr());
+    if (!err) {
+        platform->DisplayAlert("ERROR: Unable to determine game data.\n%s",
+                               err->FullMessage().GetCStr());
         main_print_help();
         return false;
     }
@@ -1309,7 +1311,7 @@ int initialize_engine(const ConfigTree &startup_opts)
 
     //-----------------------------------------------------
     // Begin setting up systems
-    engine_setup_window();    
+    engine_setup_window();
 
     our_eip = -194;
 
@@ -1347,7 +1349,7 @@ int initialize_engine(const ConfigTree &startup_opts)
     int res = engine_load_game_data();
     if (res != 0)
         return res;
-    
+
     res = engine_check_register_game();
     if (res != 0)
         return res;
@@ -1421,9 +1423,9 @@ bool engine_try_switch_windowed_gfxmode()
     auto timeSinceLastToggle = SDL_GetTicks() - lastFullscreenToggle;
     if (timeSinceLastToggle < 250) { return false; }
     lastFullscreenToggle = SDL_GetTicks();
-    
+
     graphics_mode_toggle_full_screen();
-    
+
     const Size ignored;
     engine_post_gfxmode_setup(ignored);
 
@@ -1432,7 +1434,7 @@ bool engine_try_switch_windowed_gfxmode()
     return true;
 }
 
-void engine_on_window_size_changed() 
+void engine_on_window_size_changed()
 {
     graphics_mode_on_window_size_changed();
     Size ignored;

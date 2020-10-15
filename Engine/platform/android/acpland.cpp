@@ -23,7 +23,7 @@
 #include "plugin/agsplugin.h"
 #include <stdio.h>
 #include <dirent.h>
-#include <sys/stat.h> 
+#include <sys/stat.h>
 #include <ctype.h>
 #include <unistd.h>
 #include "util/string_compat.h"
@@ -68,12 +68,12 @@ char psp_translation[100];
 char* psp_translations[100];
 
 // Mouse option from Allegro.
-extern int config_mouse_control_mode;
+int config_mouse_control_mode;
 
 
 // Graphic options from the Allegro library.
-extern int psp_gfx_scaling;
-extern int psp_gfx_smoothing;
+int psp_gfx_scaling;
+int psp_gfx_smoothing;
 
 
 // Audio options from the Allegro library.
@@ -123,7 +123,7 @@ jmethodID java_enableLongclick;
 
 bool reset_configuration = false;
 
-extern "C" 
+extern "C"
 {
 
 const int CONFIG_IGNORE_ACSETUP = 0;
@@ -159,7 +159,7 @@ JNIEXPORT jboolean JNICALL
 
   ResetConfiguration();
 
-  return ReadConfiguration(ANDROID_CONFIG_FILENAME, true);
+  return ReadConfiguration((char*) ANDROID_CONFIG_FILENAME, true);
 }
 
 
@@ -177,7 +177,7 @@ JNIEXPORT jboolean JNICALL
     fprintf(config, "[controls]\n");
     fprintf(config, "mouse_method = %d\n", config_mouse_control_mode);
     fprintf(config, "mouse_longclick = %d\n", config_mouse_longclick);
-	
+
     fprintf(config, "[compatibility]\n");
 //    fprintf(config, "ignore_acsetup_cfg_file = %d\n", psp_ignore_acsetup_cfg_file);
     fprintf(config, "clear_cache_on_room_change = %d\n", psp_clear_cache_on_room_change);
@@ -187,7 +187,7 @@ JNIEXPORT jboolean JNICALL
     fprintf(config, "enabled = %d\n", psp_audio_enabled);
     fprintf(config, "threaded = %d\n", psp_audio_multithreaded);
     fprintf(config, "cache_size = %d\n", psp_audio_cachesize);
-    
+
     fprintf(config, "[midi]\n");
     fprintf(config, "enabled = %d\n", psp_midi_enabled);
     fprintf(config, "preload_patches = %d\n", psp_midi_preload_patches);
@@ -443,7 +443,7 @@ JNIEXPORT void JNICALL
 }
 
 
-JNIEXPORT jboolean JNICALL 
+JNIEXPORT jboolean JNICALL
   Java_com_bigbluecup_android_EngineGlue_startEngine(JNIEnv* env, jobject object, jclass stringclass, jstring filename, jstring directory, jstring appDirectory, jboolean loadLastSave)
 {
   // Get JNI interfaces.
@@ -456,7 +456,7 @@ JNIEXPORT jboolean JNICALL
   java_enableLongclick = java_environment->GetMethodID(java_class, "enableLongclick", "()V");
 
   // Initialize JNI for Allegro.
-  android_allegro_initialize_jni(java_environment, java_class, java_object);
+  //android_allegro_initialize_jni(java_environment, java_class, java_object);
 
   // Get the file to run from Java.
   const char* cpath = java_environment->GetStringUTFChars(filename, NULL);
@@ -478,7 +478,7 @@ JNIEXPORT jboolean JNICALL
   ResetConfiguration();
 
   // Read general configuration.
-  ReadConfiguration(ANDROID_CONFIG_FILENAME, true);
+  ReadConfiguration((char*) ANDROID_CONFIG_FILENAME, true);
 
   // Get the games path.
   char path[256];
@@ -490,11 +490,11 @@ JNIEXPORT jboolean JNICALL
     lastindex--;
   }
   chdir(path);
-  
+
   setenv("ULTRADIR", "..", 1);
 
   // Read game specific configuration.
-  ReadConfiguration(ANDROID_CONFIG_FILENAME, false);
+  ReadConfiguration((char*) ANDROID_CONFIG_FILENAME, false);
 
   // Set the screen rotation.
   if (psp_rotation > 0)
@@ -506,11 +506,11 @@ JNIEXPORT jboolean JNICALL
   psp_load_latest_savegame = loadLastSave;
 
   // Start the engine main function.
-  main(1, &psp_game_file_name_pointer);
-  
+//  main(1, &psp_game_file_name_pointer);
+
   // Explicitly quit here, otherwise the app will hang forever.
   exit(0);
-  
+
   return true;
 }
 
@@ -598,7 +598,7 @@ void ResetConfiguration()
 {
   reset_configuration = true;
 
-  ReadConfiguration(ANDROID_CONFIG_FILENAME, true);
+  ReadConfiguration((char*) ANDROID_CONFIG_FILENAME, true);
 
   reset_configuration = false;
 }
@@ -614,40 +614,40 @@ bool ReadConfiguration(char* filename, bool read_everything)
 
 //    ReadInteger((int*)&psp_return_to_menu, "misc", "return_to_menu", 0, 1, 1);
 
-    ReadString(&psp_translation[0], cfg, "misc", "translation", "default");
+    ReadString(&psp_translation[0], cfg, (char*) "misc", (char*) "translation", (char*) "default");
 
-    ReadInteger((int*)&psp_config_enabled, cfg, "misc", "config_enabled", 0, 1, 0);
+    ReadInteger((int*)&psp_config_enabled, cfg, (char*) "misc", (char*) "config_enabled", 0, 1, 0);
     if (!psp_config_enabled && !read_everything)
       return true;
 
-    ReadInteger(&psp_debug_write_to_logcat, cfg, "debug", "logging", 0, 1, 0);
-    ReadInteger(&display_fps, cfg, "debug", "show_fps", 0, 1, 0);
+    ReadInteger(&psp_debug_write_to_logcat, cfg, (char*) "debug", (char*) "logging", 0, 1, 0);
+    ReadInteger(&display_fps, cfg, (char*) "debug", (char*) "show_fps", 0, 1, 0);
     if (display_fps == 1)
       display_fps = 2;
 
-    ReadInteger((int*)&psp_rotation, cfg, "misc", "rotation", 0, 2, 0);
+    ReadInteger((int*)&psp_rotation, cfg, (char*) "misc", (char*) "rotation", 0, 2, 0);
 
 //    ReadInteger((int*)&psp_ignore_acsetup_cfg_file, "compatibility", "ignore_acsetup_cfg_file", 0, 1, 0);
-    ReadInteger((int*)&psp_clear_cache_on_room_change, cfg, "compatibility", "clear_cache_on_room_change", 0, 1, 0);
+    ReadInteger((int*)&psp_clear_cache_on_room_change, cfg, (char*) "compatibility", (char*) "clear_cache_on_room_change", 0, 1, 0);
 
-    ReadInteger((int*)&psp_audio_samplerate, cfg, "sound", "samplerate", 0, 44100, 44100);
-    ReadInteger((int*)&psp_audio_enabled, cfg, "sound", "enabled", 0, 1, 1);
-    ReadInteger((int*)&psp_audio_multithreaded, cfg, "sound", "threaded", 0, 1, 1);
-    ReadInteger((int*)&psp_audio_cachesize, cfg, "sound", "cache_size", 1, 50, 10);
+    ReadInteger((int*)&psp_audio_samplerate, cfg, (char*) "sound", (char*) "samplerate", 0, 44100, 44100);
+    ReadInteger((int*)&psp_audio_enabled, cfg, (char*) "sound", (char*) "enabled", 0, 1, 1);
+    ReadInteger((int*)&psp_audio_multithreaded, cfg, (char*) "sound", (char*) "threaded", 0, 1, 1);
+    ReadInteger((int*)&psp_audio_cachesize, cfg, (char*) "sound", (char*) "cache_size", 1, 50, 10);
 
-    ReadInteger((int*)&psp_midi_enabled, cfg, "midi", "enabled", 0, 1, 1);
-    ReadInteger((int*)&psp_midi_preload_patches, cfg, "midi", "preload_patches", 0, 1, 0);
+    ReadInteger((int*)&psp_midi_enabled, cfg, (char*) "midi", (char*) "enabled", 0, 1, 1);
+    ReadInteger((int*)&psp_midi_preload_patches, cfg, (char*) "midi", (char*) "preload_patches", 0, 1, 0);
 
-    ReadInteger((int*)&psp_video_framedrop, cfg, "video", "framedrop", 0, 1, 0);
+    ReadInteger((int*)&psp_video_framedrop, cfg, (char*) "video", (char*) "framedrop", 0, 1, 0);
 
-    ReadInteger((int*)&psp_gfx_renderer, cfg, "graphics", "renderer", 0, 2, 0);
-    ReadInteger((int*)&psp_gfx_smoothing, cfg, "graphics", "smoothing", 0, 1, 1);
-    ReadInteger((int*)&psp_gfx_scaling, cfg, "graphics", "scaling", 0, 2, 1);
-    ReadInteger((int*)&psp_gfx_super_sampling, cfg, "graphics", "super_sampling", 0, 1, 0);
-    ReadInteger((int*)&psp_gfx_smooth_sprites, cfg, "graphics", "smooth_sprites", 0, 1, 0);
+    ReadInteger((int*)&psp_gfx_renderer, cfg, (char*) "graphics", (char*) "renderer", 0, 2, 0);
+    ReadInteger((int*)&psp_gfx_smoothing, cfg, (char*) "graphics", (char*) "smoothing", 0, 1, 1);
+    ReadInteger((int*)&psp_gfx_scaling, cfg, (char*) "graphics", (char*) "scaling", 0, 2, 1);
+    ReadInteger((int*)&psp_gfx_super_sampling, cfg, (char*) "graphics", (char*) "super_sampling", 0, 1, 0);
+    ReadInteger((int*)&psp_gfx_smooth_sprites, cfg, (char*) "graphics", (char*) "smooth_sprites", 0, 1, 0);
 
-    ReadInteger((int*)&config_mouse_control_mode, cfg, "controls", "mouse_method", 0, 1, 0);
-    ReadInteger((int*)&config_mouse_longclick, cfg, "controls", "mouse_longclick", 0, 1, 1);
+    ReadInteger((int*)&config_mouse_control_mode, cfg, (char*) "controls", (char*) "mouse_method", 0, 1, 0);
+    ReadInteger((int*)&config_mouse_longclick, cfg, (char*) "controls", (char*) "mouse_longclick", 0, 1, 1);
 
     return true;
   }
@@ -671,7 +671,7 @@ void AGSAndroid::DisplayAlert(const char *text, ...) {
   // It is possible that this is called from a thread that is not yet known
   // to the Java VM. So attach it first before displaying the message.
   JNIEnv* thread_env;
-  android_jni_vm->AttachCurrentThread(&thread_env, NULL);
+//  android_jni_vm->AttachCurrentThread(&thread_env, NULL);
 
   __android_log_print(ANDROID_LOG_DEBUG, "AGSNative", "%s", displbuf);
 

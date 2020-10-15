@@ -34,22 +34,23 @@ extern void process_pending_events();
 #define GL_CLAMP GL_CLAMP_TO_EDGE
 
 // Defined in Allegro
-extern "C" 
+extern "C"
 {
-  void android_swap_buffers();
+//  void android_swap_buffers();
   void android_create_screen(int width, int height, int color_depth);
-  void android_mouse_setup(int left, int right, int top, int bottom, float scaling_x, float scaling_y);
+//  void android_mouse_setup(int left, int right, int top, int bottom, float scaling_x, float scaling_y);
 }
 
 extern "C" void android_debug_printf(char* format, ...);
 
-extern unsigned int android_screen_physical_width;
-extern unsigned int android_screen_physical_height;
-extern int android_screen_initialized;
+//extern unsigned int android_screen_physical_width;
+//extern unsigned int android_screen_physical_height;
+//extern int android_screen_initialized;
+int device_screen_initialized = 1;
 
-#define device_screen_initialized android_screen_initialized
-#define device_mouse_setup android_mouse_setup
-#define device_swap_buffers android_swap_buffers
+//#define device_screen_initialized android_screen_initialized
+//#define device_mouse_setup android_mouse_setup
+//#define device_swap_buffers android_swap_buffers
 
 const char* fbo_extension_string = "GL_OES_framebuffer_object";
 
@@ -70,13 +71,13 @@ const void (*glSwapIntervalEXT)(int) = NULL;
 
 #elif AGS_PLATFORM_OS_IOS
 
-extern "C" 
+extern "C"
 {
   void ios_swap_buffers();
   void ios_select_buffer();
   void ios_create_screen();
   float get_device_scale();
-  void ios_mouse_setup(int left, int right, int top, int bottom, float scaling_x, float scaling_y);  
+  void ios_mouse_setup(int left, int right, int top, int bottom, float scaling_x, float scaling_y);
 }
 
 #define glOrtho glOrthof
@@ -139,7 +140,7 @@ static int ogl_show_mouse(struct BITMAP *bmp, int x, int y) {
 static void ogl_hide_mouse() {
     SDL_ShowCursor(SDL_DISABLE);
 }
-    
+
 GFX_DRIVER gfx_opengl =
 {
    GFX_OPENGL,
@@ -148,7 +149,7 @@ GFX_DRIVER gfx_opengl =
    "OpenGL",
    nullptr,    // init
    nullptr,   // exit
-   nullptr,                        // AL_METHOD(int, scroll, (int x, int y)); 
+   nullptr,                        // AL_METHOD(int, scroll, (int x, int y));
    ogl_dummy_vsync,   // vsync
    nullptr,  // setpalette
    nullptr,                        // AL_METHOD(int, request_scroll, (int x, int y));
@@ -200,13 +201,13 @@ void OGLBitmap::Dispose()
 OGLGraphicsDriver::ShaderProgram::ShaderProgram() : Program(0), SamplerVar(0), ColorVar(0), AuxVar(0) {}
 
 
-OGLGraphicsDriver::OGLGraphicsDriver() 
+OGLGraphicsDriver::OGLGraphicsDriver()
 {
   device_screen_physical_width  = 0;
   device_screen_physical_height = 0;
 #if AGS_PLATFORM_OS_ANDROID
-  device_screen_physical_width  = android_screen_physical_width;
-  device_screen_physical_height = android_screen_physical_height;
+  device_screen_physical_width  = 0;
+  device_screen_physical_height = 0;
 #elif AGS_PLATFORM_OS_IOS
   device_screen_physical_width  = ios_screen_physical_width;
   device_screen_physical_height = ios_screen_physical_height;
@@ -255,29 +256,30 @@ void OGLGraphicsDriver::SetupDefaultVertices()
   defaultVertices[3].tv=1.0;
 }
 
-
+//#if !AGS_PLATFORM_OS_ANDROID
 void OGLGraphicsDriver::CreateDesktopScreen(int width, int height, int depth)
 {
   device_screen_physical_width = width;
   device_screen_physical_height = height;
 }
+//#endif
 
 
 void OGLGraphicsDriver::UpdateDeviceScreen(const Size &screenSize)
 {
     SDL_GL_GetDrawableSize(this->sdlWindow, &device_screen_physical_width, &device_screen_physical_height);
-        
+
     Debug::Printf("OGL: notified of device screen updated to %d x %d, resizing viewport", device_screen_physical_width, device_screen_physical_height);
-    
+
     _mode.Width = device_screen_physical_width;
     _mode.Height = device_screen_physical_height;
     InitGlParams(_mode);
-    
+
     if (_initSurfaceUpdateCallback)
         _initSurfaceUpdateCallback();
 }
 
-void OGLGraphicsDriver::Vsync() 
+void OGLGraphicsDriver::Vsync()
 {
   // do nothing on OpenGL
 }
@@ -305,7 +307,7 @@ bool OGLGraphicsDriver::IsModeSupported(const DisplayMode &mode)
   return true;
 }
 
-bool OGLGraphicsDriver::SupportsGammaControl() 
+bool OGLGraphicsDriver::SupportsGammaControl()
 {
   return false;
 }
@@ -337,7 +339,7 @@ void OGLGraphicsDriver::FirstTimeInit()
 
   // Initialize default sprite batch, it will be used when no other batch was activated
   OGLGraphicsDriver::InitSpriteBatch(0, _spriteBatchDesc[0]);
-  
+
   TestRenderToTexture();
   CreateShaders();
   _firstTimeInit = true;
@@ -345,14 +347,14 @@ void OGLGraphicsDriver::FirstTimeInit()
 
 bool OGLGraphicsDriver::InitGlScreen(const DisplayMode &mode)
 {
-#if AGS_PLATFORM_OS_ANDROID
-  android_create_screen(mode.Width, mode.Height, mode.ColorDepth);
-#elif AGS_PLATFORM_OS_IOS
+//#if AGS_PLATFORM_OS_ANDROID
+//  android_create_screen(mode.Width, mode.Height, mode.ColorDepth);
+#if AGS_PLATFORM_OS_IOS
   ios_create_screen();
   ios_select_buffer();
 
 
-#else 
+#else
 
     if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY) != 0) {
         SDL_LogWarn(SDL_LOG_CATEGORY_APPLICATION, "Error occured setting attribute SDL_GL_CONTEXT_PROFILE_MASK: %s", SDL_GetError());
@@ -361,20 +363,20 @@ bool OGLGraphicsDriver::InitGlScreen(const DisplayMode &mode)
     if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2) != 0) {
         SDL_LogWarn(SDL_LOG_CATEGORY_APPLICATION, "Error occured setting attribute SDL_GL_CONTEXT_MAJOR_VERSION: %s", SDL_GetError());
     }
-    
+
     if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1) != 0) {
         SDL_LogWarn(SDL_LOG_CATEGORY_APPLICATION, "Error occured setting attribute SDL_GL_CONTEXT_MINOR_VERSION: %s", SDL_GetError());
     }
-    
+
     if (SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1) != 0) {
         SDL_LogWarn(SDL_LOG_CATEGORY_APPLICATION, "Error occured setting attribute SDL_GL_DOUBLEBUFFER: %s", SDL_GetError());
     }
-    
+
     Uint32 createWindowFlags =  SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL;
     if (!mode.Windowed) {
         createWindowFlags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
     }
-    
+
     this->sdlWindow = SDL_CreateWindow(
                                   "AGS",
                                   SDL_WINDOWPOS_CENTERED,
@@ -382,21 +384,21 @@ bool OGLGraphicsDriver::InitGlScreen(const DisplayMode &mode)
                                   mode.Width, mode.Height,
                                   createWindowFlags
                                   );
-    
+
     if (this->sdlWindow == NULL) {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error opening window for OpenGL: %s", SDL_GetError());
         return false;
     }
-    
+
     this->sdlGlContext = SDL_GL_CreateContext(this->sdlWindow);
-    
+
     if (this->sdlGlContext == NULL) {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error creating OpenGL context: %s", SDL_GetError());
         SDL_DestroyWindow(this->sdlWindow);
         this->sdlWindow = NULL;
         return false;
     }
-    
+
     if (SDL_GL_MakeCurrent(this->sdlWindow, this->sdlGlContext) != 0) {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error setting current OpenGL context: %s", SDL_GetError());
         SDL_GL_DeleteContext(this->sdlGlContext);
@@ -406,15 +408,15 @@ bool OGLGraphicsDriver::InitGlScreen(const DisplayMode &mode)
         return false;
     }
 
-  if (!gladLoadGL()) {
-	  Debug::Printf(kDbgMsg_Error, "Failed to load GL.");
-	  return false;
-  }
+//  if (!gladLoadGL()) {
+//	  Debug::Printf(kDbgMsg_Error, "Failed to load GL.");
+//	  return false;
+//  }
 
   CreateDesktopScreen(mode.Width, mode.Height, mode.ColorDepth);
-    
+
     SDL_GL_GetDrawableSize(this->sdlWindow, &device_screen_physical_width, &device_screen_physical_height);
-    
+
    _rgb_r_shift_15 = 10;
    _rgb_g_shift_15 = 5;
    _rgb_b_shift_15 = 0;
@@ -428,10 +430,10 @@ bool OGLGraphicsDriver::InitGlScreen(const DisplayMode &mode)
    _rgb_b_shift_24 = 0;
 
    _rgb_a_shift_32 = 24;
-   _rgb_r_shift_32 = 16; 
-   _rgb_g_shift_32 = 8; 
+   _rgb_r_shift_32 = 16;
+   _rgb_g_shift_32 = 8;
    _rgb_b_shift_32 = 0;
-    
+
 #endif
 
   // Initialize default sprite batch, it will be used when no other batch was activated
@@ -473,22 +475,22 @@ void OGLGraphicsDriver::InitGlParams(const DisplayMode &mode)
   SDL_GL_SetSwapInterval(mode.Vsync ? 1 : 0);
 
 
-#if AGS_PLATFORM_OS_ANDROID || AGS_PLATFORM_OS_IOS
+#if AGS_PLATFORM_OS_IOS
   // Setup library mouse to have 1:1 coordinate transformation.
   // NOTE: cannot move this call to general mouse handling mode. Unfortunately, much of the setup and rendering
   // is duplicated in the Android/iOS ports' Allegro library patches, and is run when the Software renderer
   // is selected in AGS. This ugly situation causes trouble...
   float device_scale = 1.0f;
-  
+
   #if AGS_PLATFORM_OS_IOS
     device_scale = get_device_scale();
   #endif
-  
+
   device_mouse_setup(0, device_screen_physical_width - 1, 0, device_screen_physical_height - 1, device_scale, device_scale);
 #endif
 }
-    
-    
+
+
 void OGLGraphicsDriver::DeleteGlContext()
 {
 
@@ -555,7 +557,7 @@ void OGLGraphicsDriver::CreateShaders()
 
 void OGLGraphicsDriver::CreateTintShader()
 {
-  const char *fragment_shader_src = 
+  const char *fragment_shader_src =
     // NOTE: this shader emulates "historical" AGS software tinting; it is not
     // necessarily "proper" tinting in modern terms.
     // The RGB-HSV-RGB conversion found in the Internet (copyright unknown);
@@ -611,7 +613,7 @@ void OGLGraphicsDriver::CreateTintShader()
 
 void OGLGraphicsDriver::CreateLightShader()
 {
-  const char *fragment_shader_src = 
+  const char *fragment_shader_src =
     // NOTE: due to how the lighting works in AGS, this is combined MODULATE / ADD shader.
     // if the light is < 0, then MODULATE operation is used, otherwise ADD is used.
     // NOTE: it's been said that using branching in shaders produces inefficient code.
@@ -882,14 +884,14 @@ void OGLGraphicsDriver::ReleaseDisplayMode()
 
   SDL_DestroyWindow(this->sdlWindow);
   this->sdlWindow = nullptr;
-    
+
   gfx_driver = nullptr;
 
   if (platform->ExitFullscreenMode())
     platform->AdjustWindowStyleForWindowed();
 }
 
-void OGLGraphicsDriver::UnInit() 
+void OGLGraphicsDriver::UnInit()
 {
   OnUnInit();
   ReleaseDisplayMode();
@@ -971,6 +973,8 @@ bool OGLGraphicsDriver::GetCopyOfScreenIntoBitmap(Bitmap *destination, bool at_n
   {
 #if AGS_PLATFORM_OS_IOS
     ios_select_buffer();
+#elif AGS_PLATFORM_OS_ANDROID
+
 #else
     glReadBuffer(GL_FRONT);
 #endif
@@ -983,7 +987,11 @@ bool OGLGraphicsDriver::GetCopyOfScreenIntoBitmap(Bitmap *destination, bool at_n
   unsigned char* buffer = new unsigned char[bufferSize];
   if (buffer)
   {
+#if AGS_PLATFORM_OS_ANDROID
+    glReadPixels(retr_rect.Left, retr_rect.Top, retr_rect.GetWidth(), retr_rect.GetHeight(), GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+#else
     glReadPixels(retr_rect.Left, retr_rect.Top, retr_rect.GetWidth(), retr_rect.GetHeight(), GL_BGRA, GL_UNSIGNED_BYTE, buffer);
+#endif
 
     // wrap in an allegro buffer to blit
     auto *bufferBmp = wrapGlReadPixelsBuffer(retr_rect.GetWidth(), retr_rect.GetHeight(), buffer);
@@ -1280,9 +1288,9 @@ void OGLGraphicsDriver::_render(bool clearDrawListAfterwards)
 
   glFinish();
 
-#if AGS_PLATFORM_OS_ANDROID || AGS_PLATFORM_OS_IOS
+#if  AGS_PLATFORM_OS_IOS
   device_swap_buffers();
-#else 
+#else
   SDL_GL_SwapWindow(this->sdlWindow);
 #endif
 
@@ -1666,13 +1674,13 @@ IDriverDependantBitmap* OGLGraphicsDriver::CreateDDBFromBitmap(Bitmap *bitmap, b
       thisTile->y = y * tileHeight;
       thisTile->width = tileWidth;
       thisTile->height = tileHeight;
-      if (x == tilesAcross - 1) 
+      if (x == tilesAcross - 1)
       {
         thisTile->width += lastTileExtraWidth;
         thisAllocatedWidth = thisTile->width;
         AdjustSizeToNearestSupportedByCard(&thisAllocatedWidth, &thisAllocatedHeight);
       }
-      if (y == tilesDown - 1) 
+      if (y == tilesDown - 1)
       {
         thisTile->height += lastTileExtraHeight;
         thisAllocatedHeight = thisTile->height;
@@ -1714,7 +1722,11 @@ IDriverDependantBitmap* OGLGraphicsDriver::CreateDDBFromBitmap(Bitmap *bitmap, b
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
       // NOTE: pay attention that the texture format depends on the **display mode**'s format,
       // rather than source bitmap's color depth!
+#if AGS_PLATFORM_OS_ANDROID
+      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, thisAllocatedWidth, thisAllocatedHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+#else
       glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, thisAllocatedWidth, thisAllocatedHeight, 0, GL_BGRA, GL_UNSIGNED_BYTE, nullptr);
+#endif
     }
   }
 
@@ -1774,12 +1786,12 @@ void OGLGraphicsDriver::do_fade(bool fadingOut, int speed, int targetColourRed, 
   ResetFxPool();
 }
 
-void OGLGraphicsDriver::FadeOut(int speed, int targetColourRed, int targetColourGreen, int targetColourBlue) 
+void OGLGraphicsDriver::FadeOut(int speed, int targetColourRed, int targetColourGreen, int targetColourBlue)
 {
   do_fade(true, speed, targetColourRed, targetColourGreen, targetColourBlue);
 }
 
-void OGLGraphicsDriver::FadeIn(int speed, PALETTE p, int targetColourRed, int targetColourGreen, int targetColourBlue) 
+void OGLGraphicsDriver::FadeIn(int speed, PALETTE p, int targetColourRed, int targetColourGreen, int targetColourBlue)
 {
   do_fade(false, speed, targetColourRed, targetColourGreen, targetColourBlue);
 }
@@ -1814,7 +1826,7 @@ void OGLGraphicsDriver::BoxOutEffect(bool blackingOut, int speed, int delay)
   int boxWidth = speed;
   int boxHeight = yspeed;
 
-  // INNER GAME LOOP - opengl boxout 
+  // INNER GAME LOOP - opengl boxout
   while (boxWidth < _srcRect.GetWidth())
   {
     boxWidth += speed;
@@ -1836,7 +1848,7 @@ void OGLGraphicsDriver::BoxOutEffect(bool blackingOut, int speed, int delay)
       drawList[last    ].y = _srcRect.GetHeight() / 2 + boxHeight / 2;
       d3db->SetStretch(_srcRect.GetWidth(), _srcRect.GetHeight(), false);
     }
-    
+
     this->_render(false);
 
     process_pending_events();
@@ -1860,7 +1872,7 @@ void OGLGraphicsDriver::SetScreenFade(int red, int green, int blue)
 }
 
 void OGLGraphicsDriver::SetScreenTint(int red, int green, int blue)
-{ 
+{
     if (red == 0 && green == 0 && blue == 0) return;
     OGLBitmap *ddb = static_cast<OGLBitmap*>(MakeFx(red, green, blue));
     ddb->SetStretch(_spriteBatches[_actSpriteBatch].Viewport.GetWidth(),

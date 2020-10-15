@@ -276,7 +276,7 @@ Bitmap *AdjustBitmapForUseWithDisplayMode(Bitmap* bitmap, bool has_alpha)
     // (this adjustment is probably needed for DrawingSurface ops)
     if (game_col_depth == 32 && bmp_col_depth == 32)
     {
-        if (has_alpha) 
+        if (has_alpha)
             set_rgb_mask_using_alpha_channel(new_bitmap);
     }
     // In 32-bit game hicolor bitmaps must be converted to the true color
@@ -368,7 +368,7 @@ Bitmap *CopyScreenIntoBitmap(int width, int height, bool at_native_res)
 
 // Begin resolution system functions
 
-// Multiplies up the number of pixels depending on the current 
+// Multiplies up the number of pixels depending on the current
 // resolution, to give a relatively fixed size at any game res
 AGS_INLINE int get_fixed_pixel_size(int pixels)
 {
@@ -781,8 +781,8 @@ void render_to_screen()
             gfxDriver->Render(0, play.shake_screen_yoff, (GlobalFlipType)play.screen_flipped);
 
 #if AGS_PLATFORM_OS_ANDROID
-            if (game.color_depth == 1)
-                android_render();
+            //if (game.color_depth == 1)
+            //    android_render();
 #elif AGS_PLATFORM_OS_IOS
             if (game.color_depth == 1)
                 ios_render();
@@ -790,8 +790,8 @@ void render_to_screen()
 
             succeeded = true;
         }
-        catch (Ali3DFullscreenLostException) 
-        { 
+        catch (Ali3DFullscreenLostException)
+        {
             platform->Delay(500);
         }
     }
@@ -858,7 +858,7 @@ void draw_sprite_slot_support_alpha(Bitmap *ds, bool ds_has_alpha, int xpos, int
 IDriverDependantBitmap* recycle_ddb_bitmap(IDriverDependantBitmap *bimp, Bitmap *source, bool hasAlpha, bool opaque) {
     if (bimp != nullptr) {
         // same colour depth, width and height -> reuse
-        if (((bimp->GetColorDepth() + 1) / 8 == source->GetBPP()) && 
+        if (((bimp->GetColorDepth() + 1) / 8 == source->GetBPP()) &&
             (bimp->GetWidth() == source->GetWidth()) && (bimp->GetHeight() == source->GetHeight()))
         {
             gfxDriver->UpdateDDBFromBitmap(bimp, source, hasAlpha);
@@ -871,7 +871,7 @@ IDriverDependantBitmap* recycle_ddb_bitmap(IDriverDependantBitmap *bimp, Bitmap 
     return bimp;
 }
 
-void invalidate_cached_walkbehinds() 
+void invalidate_cached_walkbehinds()
 {
     memset(&actspswbcache[0], 0, sizeof(CachedActSpsData) * actSpsCount);
 }
@@ -1042,7 +1042,7 @@ void add_thing_to_draw(IDriverDependantBitmap* bmp, int x, int y, int trans, boo
     thingsToDrawList.push_back(sprite);
 }
 
-// the sprite list is an intermediate list used to order 
+// the sprite list is an intermediate list used to order
 // objects and characters by their baselines before everything
 // is added to the Thing To Draw List
 void clear_sprite_list() {
@@ -1082,11 +1082,11 @@ void repair_alpha_channel(Bitmap *dest, Bitmap *bgpic)
     // over it by the buttons, etc
     int theWid = (dest->GetWidth() < bgpic->GetWidth()) ? dest->GetWidth() : bgpic->GetWidth();
     int theHit = (dest->GetHeight() < bgpic->GetHeight()) ? dest->GetHeight() : bgpic->GetHeight();
-    for (int y = 0; y < theHit; y++) 
+    for (int y = 0; y < theHit; y++)
     {
         unsigned int *destination = ((unsigned int*)dest->GetScanLineForWriting(y));
         unsigned int *source = ((unsigned int*)bgpic->GetScanLineForWriting(y));
-        for (int x = 0; x < theWid; x++) 
+        for (int x = 0; x < theWid; x++)
         {
             destination[x] |= (source[x] & 0xff000000);
         }
@@ -1095,7 +1095,7 @@ void repair_alpha_channel(Bitmap *dest, Bitmap *bgpic)
 
 
 // used by GUI renderer to draw images
-void draw_gui_sprite(Bitmap *ds, int pic, int x, int y, bool use_alpha, BlendMode blend_mode) 
+void draw_gui_sprite(Bitmap *ds, int pic, int x, int y, bool use_alpha, BlendMode blend_mode)
 {
     Bitmap *sprite = spriteset[pic];
     const bool ds_has_alpha  = ds->GetColorDepth() == 32;
@@ -1128,8 +1128,8 @@ void draw_gui_sprite_v330(Bitmap *ds, int pic, int x, int y, bool use_alpha, Ble
 // function to sort the sprites into baseline order
 bool spritelistentry_less(const SpriteListEntry &e1, const SpriteListEntry &e2)
 {
-    if (e1.baseline == e2.baseline) 
-    { 
+    if (e1.baseline == e2.baseline)
+    {
         if (e1.takesPriorityIfEqual)
             return false;
         if (e2.takesPriorityIfEqual)
@@ -1296,7 +1296,7 @@ void apply_tint_or_light(int actspsindex, int light_level,
      Bitmap *oldwas;
      // if the caller supplied a source bitmap, ->Blit from it
      // (used as a speed optimisation where possible)
-     if (blitFrom) 
+     if (blitFrom)
          oldwas = blitFrom;
      // otherwise, make a new target bmp
      else {
@@ -1313,7 +1313,7 @@ void apply_tint_or_light(int actspsindex, int light_level,
          // the RGB values passed to set_trans_blender decide whether it will darken
          // or lighten sprites ( <128=darken, >128=lighten). The parameter passed
          // to LitBlendBlt defines how much it will be darkened/lightened by.
-         
+
          int lit_amnt;
          active_spr->FillTransparent();
          // It's a light level, not a tint
@@ -1388,7 +1388,7 @@ int scale_and_flip_sprite(int useindx, int coldept, int zoom_level,
 
       /*  AASTR2 version of code (doesn't work properly, gives black borders)
       if (IS_ANTIALIAS_SPRITES) {
-      int aa_mode = AA_MASKED; 
+      int aa_mode = AA_MASKED;
       if (game.spriteflags[sppic] & SPF_ALPHACHANNEL)
       aa_mode |= AA_ALPHA | AA_RAW_ALPHA;
       if (isMirrored)
@@ -1410,7 +1410,7 @@ int scale_and_flip_sprite(int useindx, int coldept, int zoom_level,
       if (in_new_room)
           unselect_palette();
 
-  } 
+  }
   else {
       // Not a scaled character, draw at normal size
 
@@ -1643,7 +1643,7 @@ void prepare_objects_for_drawing() {
                 usebasel += thisroom.Height;
             }
         }
-        else if (walkBehindMethod == DrawAsSeparateCharSprite) 
+        else if (walkBehindMethod == DrawAsSeparateCharSprite)
         {
             sort_out_char_sprite_walk_behind(useindx, atxp, atyp, usebasel, objs[aa].zoom, objs[aa].last_width, objs[aa].last_height);
         }
@@ -1834,19 +1834,19 @@ void prepare_characters_for_drawing() {
             (charcache[aa].tintbluwas == tint_blue) &&
             (charcache[aa].tintamntwas == tint_amount) &&
             (charcache[aa].tintlightwas == tint_light) &&
-            (charcache[aa].lightlevwas == light_level)) 
+            (charcache[aa].lightlevwas == light_level))
         {
             if (walkBehindMethod == DrawOverCharSprite)
             {
                 actsps[useindx] = recycle_bitmap(actsps[useindx], charcache[aa].image->GetColorDepth(), charcache[aa].image->GetWidth(), charcache[aa].image->GetHeight());
                 actsps[useindx]->Blit (charcache[aa].image, 0, 0, 0, 0, actsps[useindx]->GetWidth(), actsps[useindx]->GetHeight());
             }
-            else 
+            else
             {
                 usingCachedImage = true;
             }
         }
-        else if ((charcache[aa].inUse) && 
+        else if ((charcache[aa].inUse) &&
             (charcache[aa].sppic == specialpic) &&
             (gfxDriver->HasAcceleratedTransform()))
         {
@@ -1904,7 +1904,7 @@ void prepare_characters_for_drawing() {
                     useindx, coldept, zoom_level, sppic,
                     newwidth, newheight, isMirrored);
             }
-            else 
+            else
             {
                 // ensure actsps exists
                 actsps[useindx] = recycle_bitmap(actsps[useindx], coldept, game.SpriteInfos[sppic].Width, game.SpriteInfos[sppic].Height);
@@ -1951,7 +1951,7 @@ void prepare_characters_for_drawing() {
                 usebasel += thisroom.Height;
             }
         }
-        else if (walkBehindMethod == DrawAsSeparateCharSprite) 
+        else if (walkBehindMethod == DrawAsSeparateCharSprite)
         {
             sort_out_char_sprite_walk_behind(useindx, bgX, bgY, usebasel, charextra[aa].zoom, newwidth, newheight);
         }
@@ -1967,7 +1967,7 @@ void prepare_characters_for_drawing() {
             actspsbmp[useindx] = recycle_ddb_bitmap(actspsbmp[useindx], actsps[useindx], hasAlpha);
         }
 
-        if (gfxDriver->HasAcceleratedTransform()) 
+        if (gfxDriver->HasAcceleratedTransform())
         {
             actspsbmp[useindx]->SetStretch(newwidth, newheight);
             actspsbmp[useindx]->SetFlippedLeftRight(isMirrored != 0);
@@ -2106,7 +2106,7 @@ void draw_fps(const Rect &viewport)
         fpsDisplay = ReplaceBitmapWithSupportedFormat(fpsDisplay);
     }
     fpsDisplay->ClearTransparent();
-    
+
     color_t text_color = fpsDisplay->GetCompatibleColor(14);
 
     char base_buffer[20];
@@ -2185,7 +2185,7 @@ void draw_gui_and_overlays()
                 our_eip = 373;
 
                 bool isAlpha = false;
-                if (guis[aa].HasAlphaChannel()) 
+                if (guis[aa].HasAlphaChannel())
                 {
                     isAlpha = true;
 
@@ -2196,7 +2196,7 @@ void draw_gui_and_overlays()
                     }
                 }
 
-                if (guibgbmp[aa] != nullptr) 
+                if (guibgbmp[aa] != nullptr)
                 {
                     gfxDriver->UpdateDDBFromBitmap(guibgbmp[aa], guibg[aa], isAlpha);
                 }
@@ -2229,7 +2229,7 @@ void draw_gui_and_overlays()
     }
 
     // draw speech and portraits (so that they appear over GUIs)
-    for (const auto &over : screenover) 
+    for (const auto &over : screenover)
     {
         if (over.type == OVER_TEXTMSG || over.type == OVER_PICTURE)
         {
@@ -2258,7 +2258,7 @@ void put_sprite_list_on_screen(bool in_room)
             invalidate_sprite(thisThing->x, thisThing->y, thisThing->bmp, in_room);
         }
         else if ((thisThing->transparent != TRANS_RUN_PLUGIN) &&
-            (thisThing->bmp == nullptr)) 
+            (thisThing->bmp == nullptr))
         {
             quit("Null pointer added to draw list");
         }
@@ -2272,7 +2272,7 @@ void put_sprite_list_on_screen(bool in_room)
 
             gfxDriver->DrawSprite(thisThing->x, thisThing->y, thisThing->bmp);
         }
-        else if (thisThing->transparent == TRANS_RUN_PLUGIN) 
+        else if (thisThing->transparent == TRANS_RUN_PLUGIN)
         {
             // meta entry to run the plugin hook
             gfxDriver->DrawSprite(thisThing->x, thisThing->y, nullptr);
@@ -2524,7 +2524,7 @@ static void update_shakescreen()
     }
 }
 
-// Draw everything 
+// Draw everything
 void render_graphics(IDriverDependantBitmap *extraBitmap, int extraX, int extraY)
 {
     // Don't render if skipping cutscene
