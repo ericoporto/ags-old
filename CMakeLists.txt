@@ -12,7 +12,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/CMake")
 
 option(AGS_NO_MP3_PLAYER "Disable MP3" OFF)
 option(AGS_NO_VIDEO_PLAYER "Disable Video" OFF)
-option(AGS_BUILTIN_PLUGINS "Built in plugins" OFF)
+option(AGS_BUILTIN_PLUGINS "Built in plugins" ON)
 set(AGS_BUILD_STR "" CACHE STRING "Engine Build Information")
 
 # Tools like ninja don't have a pseudo-terminal so compilers assume no coloured output
