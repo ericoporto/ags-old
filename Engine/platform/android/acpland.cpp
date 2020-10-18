@@ -60,7 +60,7 @@ struct AGSAndroid : AGSPlatformDriver {
 
 
 //int psp_return_to_menu = 1;
-int psp_ignore_acsetup_cfg_file = 1;
+int psp_ignore_acsetup_cfg_file = 0;
 int psp_clear_cache_on_room_change = 0;
 int psp_rotation = 0;
 int psp_config_enabled = 0;
@@ -90,7 +90,7 @@ int psp_gfx_renderer = 0;
 int psp_gfx_super_sampling = 0;
 int psp_gfx_smooth_sprites = 0;
 
-int psp_debug_write_to_logcat = 0;
+int psp_debug_write_to_logcat = 1;
 
 int config_mouse_longclick = 0;
 

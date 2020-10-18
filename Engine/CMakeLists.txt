@@ -509,7 +509,7 @@ target_sources(engine
 )
 
 if(MACOS)
-    target_sources(engine PRIVATE 
+    target_sources(engine PRIVATE
         platform/osx/alplmac.mm
     )
 endif()
@@ -517,7 +517,7 @@ endif()
 if (AGS_BUILTIN_PLUGINS)
     target_compile_definitions(engine PRIVATE BUILTIN_PLUGINS)
 
-    target_sources(engine PRIVATE 
+    target_sources(engine PRIVATE
         ../Plugins/agsblend/AGSBlend.cpp
         ../Plugins/agsblend/agsblend.h
 
@@ -554,7 +554,7 @@ if (AGS_BUILTIN_PLUGINS)
     )
 endif()
 
-target_compile_definitions(engine PRIVATE 
+target_compile_definitions(engine PRIVATE
     $<$<CONFIG:DEBUG>:SOUND_CACHE_DEBUG>
     $<$<CONFIG:DEBUG>:DEBUG_MANAGED_OBJECTS>
 )
@@ -564,18 +564,32 @@ if (AGS_BUILD_STR)
 endif()
 
 
-target_link_libraries(engine PUBLIC 
-    AGS::Common 
-    ${CMAKE_DL_LIBS} 
-    Glad::Glad 
-    Threads::Threads 
+target_link_libraries(engine PUBLIC
+    AGS::Common
+    ${CMAKE_DL_LIBS}
+    Threads::Threads
     Allegro::Allegro
     HQ2X::hq2x
     Cda::Cda
     SDL2::SDL2
     SDL2_sound::SDL2_sound
     External::OpenAL
+    GLM::GLM
 )
+
+
+if (ANDROID)
+    target_link_libraries(engine PUBLIC
+        EGL
+        GLESv1_CM
+        GLESv2
+        Glad::GladGLES2
+    )
+else()
+    target_link_libraries(engine PUBLIC
+        Glad::Glad
+    )
+endif()
 
 # common has a circular dependency on engine
 # TODO: currently required for gcc support, will look into this.

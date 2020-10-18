@@ -83,7 +83,6 @@ public class AGSActivity extends SDLActivity {
         super.onCreate(savedInstanceState);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static String getFullPathFromContentUri(final Context context, final Uri uri) {
 
         final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
@@ -193,7 +192,6 @@ public class AGSActivity extends SDLActivity {
         onCreate(new Bundle());
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     protected void handleIntent(Intent intent) {
         Uri game = null;
 

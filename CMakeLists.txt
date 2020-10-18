@@ -154,9 +154,17 @@ add_subdirectory(Common/libsrc/freetype-2.1.3   EXCLUDE_FROM_ALL)
 add_subdirectory(Common                         EXCLUDE_FROM_ALL)
 
 add_subdirectory(Engine/libsrc/apeg-1.2.1       EXCLUDE_FROM_ALL)
-add_subdirectory(Engine/libsrc/glad             EXCLUDE_FROM_ALL)
+if (NOT ANDROID)
+    add_subdirectory(Engine/libsrc/glad             EXCLUDE_FROM_ALL)
+else()
+    add_subdirectory(Engine/libsrc/glad-gles2       EXCLUDE_FROM_ALL)
+endif()
 add_subdirectory(Engine/libsrc/hq2x             EXCLUDE_FROM_ALL)
 add_subdirectory(Engine/libsrc/libcda-0.5       EXCLUDE_FROM_ALL)
+
+SET(GLM_TEST_ENABLE OFF CACHE BOOL "GLM Build unit tests")
+add_subdirectory(Engine/libsrc/glm-0.9.9.6      EXCLUDE_FROM_ALL)
+add_library(GLM::GLM ALIAS glm_static)
 
 add_subdirectory(Engine)
 
