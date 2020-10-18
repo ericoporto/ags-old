@@ -644,7 +644,7 @@ static int _set_gfx_mode(int card, int w, int h, int v_w, int v_h, int allow_con
       gfx_virgin = FALSE;
    }
 
-   timer_simulate_retrace(FALSE);
+   //timer_simulate_retrace(FALSE);
    _screen_split_position = 0;
 
    /* close down any existing graphics driver */

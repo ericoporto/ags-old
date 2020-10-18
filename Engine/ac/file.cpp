@@ -12,6 +12,7 @@
 //
 //=============================================================================
 
+#include <cstdio>
 #include "ac/asset_helper.h"
 #include "ac/audiocliptype.h"
 #include "ac/file.h"

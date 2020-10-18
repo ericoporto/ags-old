@@ -252,7 +252,7 @@ bool SDLRendererGraphicsDriver::SetDisplayMode(const DisplayMode &mode, volatile
       case 32:
          break;
       default:
-         printf("unsupported colour depth\n");
+         Debug::Printf(kDbgMsg_Error, "unsupported colour depth\n");
          return false;
    }
 
@@ -283,10 +283,10 @@ bool SDLRendererGraphicsDriver::SetDisplayMode(const DisplayMode &mode, volatile
 
   SDL_RendererInfo rinfo {};
   if (SDL_GetRendererInfo(renderer, &rinfo) == 0) {
-    printf("Created Renderer: %s\n", rinfo.name);
-    printf("Available texture formats:\n");
+    Debug::Printf(kDbgMsg_Info, "Created Renderer: %s\n", rinfo.name);
+    Debug::Printf(kDbgMsg_Info,"Available texture formats:\n");
     for (int i = 0; i < rinfo.num_texture_formats; i++) {
-        printf(" - %s\n", SDL_GetPixelFormatName(rinfo.texture_formats[i]));
+        Debug::Printf(kDbgMsg_Info," - %s\n", SDL_GetPixelFormatName(rinfo.texture_formats[i]));
     }
   }
 

@@ -66,7 +66,7 @@ struct AGSLinux : AGSPlatformDriver {
 
 
 int AGSLinux::CDPlayerCommand(int cmdd, int datt) {
-  return cd_player_control(cmdd, datt);
+  return 0;// cd_player_control(cmdd, datt);
 }
 
 void AGSLinux::DisplayAlert(const char *text, ...) {
@@ -164,7 +164,7 @@ eScriptSystemOSID AGSLinux::GetSystemOSID() {
 }
 
 int AGSLinux::InitializeCDPlayer() {
-  return cd_player_init();
+  return 0;// cd_player_init();
 }
 
 void AGSLinux::PostAllegroExit() {
@@ -176,7 +176,7 @@ void AGSLinux::SetGameWindowIcon() {
 }
 
 void AGSLinux::ShutdownCDPlayer() {
-  cd_exit();
+  //cd_exit();
 }
 
 AGSPlatformDriver* AGSPlatformDriver::GetDriver() {
