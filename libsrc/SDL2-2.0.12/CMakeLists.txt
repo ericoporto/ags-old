@@ -1003,6 +1003,13 @@ if(ANDROID)
     list(APPEND EXTRA_LIBS ${ANDROID_DL_LIBRARY} ${ANDROID_LOG_LIBRARY} ${ANDROID_LIBRARY_LIBRARY})
     add_definitions(-DGL_GLEXT_PROTOTYPES)
 
+    add_library(cpufeatures STATIC ${ANDROID_NDK}/sources/android/cpufeatures/cpu-features.c)
+    target_include_directories(cpufeatures PUBLIC ${ANDROID_NDK}/sources/android/cpufeatures)
+    target_link_libraries(cpufeatures dl)
+    install(TARGETS cpufeatures EXPORT SDL2Targets)
+    install(FILES ${ANDROID_NDK}/sources/android/cpufeatures/cpufeatures.h DESTINATION include)
+    list(APPEND EXTRA_LIBS cpufeatures)
+
     if (HAVE_HIDAPI)
         list(APPEND EXTRA_LIBS hidapi)
     endif()

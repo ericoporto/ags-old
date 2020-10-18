@@ -130,12 +130,6 @@ else()
 
 endif()
 
-if (ANDROID)
-    # armeabi-v7a requires cpufeatures library
-    include(AndroidNdkModules)
-    android_ndk_import_module_cpufeatures()
-endif(ANDROID)
-
 find_package(PkgConfig)
 find_package(Threads)
 
