@@ -106,6 +106,6 @@
 #define AGS_HAS_DIRECT3D (0)
 #endif // ! AGS_HAS_DIRECT3D
 
-#define AGS_NO_VIDEO_PLAYER (1)
+//#define AGS_NO_VIDEO_PLAYER (1)
 
 #endif // __AC_PLATFORM_H

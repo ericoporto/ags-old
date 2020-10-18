@@ -16,6 +16,7 @@
 #include "gfx/ali3d_sdl_renderer.h"
 #include "gfx/gfxfilter_allegro.h"
 #include "gfx/ogl_support.h"
+#include "debug/out.h"
 
 #if AGS_OPENGL_DRIVER
 #include "gfx/ali3dogl.h"
@@ -28,6 +29,8 @@
 #endif
 
 #include "main/main_allegro.h"
+
+using namespace AGS::Common;
 
 namespace AGS
 {
@@ -47,6 +50,7 @@ void GetGfxDriverFactoryNames(StringV &ids)
 
 IGfxDriverFactory *GetGfxDriverFactory(const String id)
 {
+    Debug::Printf("GetGfxDriverFactory id: %s", id.GetCStr());
 #if AGS_HAS_DIRECT3D
     if (id.CompareNoCase("D3D9") == 0)
         return D3D::D3DGraphicsFactory::GetFactory();

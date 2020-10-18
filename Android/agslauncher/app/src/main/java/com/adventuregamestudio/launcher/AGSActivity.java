@@ -244,7 +244,21 @@ public class AGSActivity extends SDLActivity {
                             @Override
                             public boolean accept(File pathname) {
                                 String name = pathname.getName().toLowerCase();
-                                return name.endsWith(".vox") || name.endsWith(".ags") || name.endsWith(".exe") || name.endsWith(".cfg") && pathname.isFile();
+                                return name.endsWith(".vox") ||
+                                        name.endsWith(".ags") ||
+                                        name.endsWith(".exe") ||
+                                        name.endsWith(".tra") ||
+                                        name.endsWith(".ogv") ||
+                                        name.endsWith(".001") ||
+                                        name.endsWith(".002") ||
+                                        name.endsWith(".003") ||
+                                        name.endsWith(".004") ||
+                                        name.endsWith(".005") ||
+                                        name.endsWith(".006") ||
+                                        name.endsWith(".007") ||
+                                        name.endsWith(".008") ||
+                                        name.endsWith(".009") ||
+                                        name.endsWith(".cfg") && pathname.isFile();
                             }});
 
                         if(allFiles != null && allFiles.length > 0)
