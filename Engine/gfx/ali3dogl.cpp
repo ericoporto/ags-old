@@ -390,7 +390,7 @@ bool OGLGraphicsDriver::InitGlScreen(const DisplayMode &mode)
     if (SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1) != 0) {
         Debug::Printf(kDbgMsg_Warn, "Error occured setting attribute SDL_GL_DOUBLEBUFFER: %s", SDL_GetError());
     }
-    
+
     Uint32 createWindowFlags =  SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL;
     if (!mode.Windowed) {
         createWindowFlags |= SDL_WINDOW_FULLSCREEN_DESKTOP;

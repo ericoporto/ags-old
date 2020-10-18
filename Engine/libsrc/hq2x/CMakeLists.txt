@@ -10,8 +10,7 @@ target_include_directories(hq2x PUBLIC . )
 target_sources(hq2x 
     PRIVATE
     hq2x3x.cpp
+    hq2x3x.h
 )
-
-target_link_libraries(hq2x PUBLIC AGS::Common)
 
 add_library(HQ2X::hq2x ALIAS hq2x)
