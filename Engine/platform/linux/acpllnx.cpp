@@ -84,6 +84,10 @@ void AGSLinux::DisplayAlert(const char *text, ...) {
 size_t BuildXDGPath(char *destPath, size_t destSize)
 {
   // Check to see if XDG_DATA_HOME is set in the enviroment
+#if AGS_PLATFORM_OS_EMSCRIPTEN
+    return 0;
+#endif
+
   const char* home_dir = getenv("XDG_DATA_HOME");
   size_t l = 0;
   if (home_dir)
