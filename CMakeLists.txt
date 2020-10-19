@@ -47,6 +47,7 @@ message( "WIN32:" ${WIN32} )
 message( "LINUX:" ${LINUX} )
 message( "MACOS:" ${MACOS} )
 message( "ANDROID:" ${ANDROID} )
+message( "EMSCRIPTEN:" ${EMSCRIPTEN} )
 
 if (WIN32 AND NOT CMAKE_SIZEOF_VOID_P EQUAL 4)
 	message(FATAL_ERROR "Windows builds only support 32bit for now")
@@ -72,7 +73,15 @@ else()
     message(STATUS "Interprocedural optimisation (IPO/LTO) not supported: <${ipo_not_supported_reason}>")
 endif()
 
-
+if(EMSCRIPTEN)
+    add_compile_options(-sFORCE_FILESYSTEM=1)
+    add_compile_options(-fexceptions)
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} \
+		-s EXIT_RUNTIME=1 \
+        -s FORCE_FILESYSTEM=1 -lidbfs.js \
+        -s EXTRA_EXPORTED_RUNTIME_METHODS=['ccall'] \
+        -s DISABLE_EXCEPTION_CATCHING=0 ")
+endif(EMSCRIPTEN)
 add_compile_definitions("_FILE_OFFSET_BITS=64")
 
 add_compile_definitions("$<$<CONFIG:DEBUG>:_DEBUG>")
