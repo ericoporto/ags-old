@@ -60,6 +60,9 @@ IGfxDriverFactory *GetGfxDriverFactory(const String id)
         return OGL::OGLGraphicsFactory::GetFactory();
 #endif
     //if ((id.CompareNoCase("Software") == 0) || (id.CompareNoCase("DX5") == 0)) {
+#if AGS_PLATFORM_OS_EMSCRIPTEN
+    return SDLRenderer::SDLRendererGraphicsFactory::GetFactory();
+#endif
     if(id.CompareNoCase("OGL") != 0 || id.CompareNoCase("D3D9") != 0) {
         return SDLRenderer::SDLRendererGraphicsFactory::GetFactory();
     }

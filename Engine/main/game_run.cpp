@@ -58,6 +58,14 @@
 #include "ac/timer.h"
 #include "ac/keycode.h"
 
+
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#include <emscripten/html5.h>
+#include <stdio.h>
+#endif
+
+
 using namespace AGS::Common;
 
 extern AnimatingGUIButton animbuts[MAX_ANIMATING_BUTTONS];
@@ -965,13 +973,34 @@ void GameLoopUntilNoOverlay()
     GameLoopUntilEvent(UNTIL_NOOVERLAY, 0);
 }
 
-
 extern unsigned int load_new_game;
+#ifdef __EMSCRIPTEN__
+// Our "main loop" function. This callback receives the current time as
+// reported by the browser, and the user data we provide in the call to
+// emscripten_request_animation_frame_loop().
+EM_BOOL one_iter(double time, void* userData) {
+    GameTick();
+
+    if (load_new_game) {
+        RunAGSGame (nullptr, load_new_game, 0);
+        load_new_game = 0;
+    }
+    // Return true to keep the loop running.
+    return EM_TRUE;
+}
+#endif
+
 void RunGameUntilAborted()
 {
     // skip ticks to account for time spent starting game.
     skipMissedTicks();
 
+
+
+#ifdef __EMSCRIPTEN__
+    // Receives a function to call and some user data to provide it.
+  emscripten_request_animation_frame_loop(one_iter, 0);
+#else
     while (!abort_engine) {
         GameTick();
 
@@ -980,6 +1009,7 @@ void RunGameUntilAborted()
             load_new_game = 0;
         }
     }
+#endif
 }
 
 void update_polled_stuff_if_runtime()

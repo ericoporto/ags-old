@@ -77,7 +77,10 @@ if(EMSCRIPTEN)
     add_compile_options(-sFORCE_FILESYSTEM=1)
     add_compile_options(-fexceptions)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} \
+        --emit-symbol-map \
 		-s EXIT_RUNTIME=1 \
+		-s INITIAL_MEMORY=1073741824 \
+		-s ALLOW_MEMORY_GROWTH=0 \
         -s FORCE_FILESYSTEM=1 -lidbfs.js \
         -s EXTRA_EXPORTED_RUNTIME_METHODS=['ccall'] \
         -s DISABLE_EXCEPTION_CATCHING=0 ")
