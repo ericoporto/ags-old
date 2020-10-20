@@ -75,26 +75,22 @@ endif()
 
 if(EMSCRIPTEN)
     set(USE_FLAGS " -s USE_SDL=2  -s USE_FREETYPE=1  -s USE_VORBIS=1  -s USE_OGG=1 ")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${USE_FLAGS}")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${USE_FLAGS}")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${USE_FLAGS}")
+    set(EMSDK_FLAGS "  --emit-symbol-map  \
+        -s ASSERTIONS=1  \
+        -fsanitize=leak  \
+		-s EXIT_RUNTIME=1  \
+		-s ALLOW_MEMORY_GROWTH=1  \
+        -s FORCE_FILESYSTEM=1 -lidbfs.js  \
+        -s EXTRA_EXPORTED_RUNTIME_METHODS=['ccall']  \
+        -s DISABLE_EXCEPTION_CATCHING=0 ")
+
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${USE_FLAGS} ")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${USE_FLAGS} ")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${USE_FLAGS} ${EMSDK_FLAGS}")
 
     add_compile_definitions(DEBUG_MANAGED_OBJECTS)
     add_compile_options(-sFORCE_FILESYSTEM=1)
     add_compile_options(-fexceptions)
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}  \
-        --emit-symbol-map  \
-        --source-map-base  \
-        -g4  \
-        -O1  \
-        -s ASSERTIONS=1  \
-        -fsanitize=leak  \
-		-s EXIT_RUNTIME=1  \
-		-s INITIAL_MEMORY=1073741824  \
-		-s ALLOW_MEMORY_GROWTH=0  \
-        -s FORCE_FILESYSTEM=1 -lidbfs.js  \
-        -s EXTRA_EXPORTED_RUNTIME_METHODS=['ccall']  \
-        -s DISABLE_EXCEPTION_CATCHING=0 ")
 
     include_directories(${CMAKE_SOURCE_DIR}/include ${SDL2_INCLUDE_DIRS} ${FREETYPE_INCLUDE_DIRS} ${VORBIS_INCLUDE_DIRS} ${OGG_INCLUDE_DIRS})
 endif(EMSCRIPTEN)
