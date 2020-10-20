@@ -38,6 +38,10 @@ target_sources(apeg
 
 target_compile_definitions(apeg PRIVATE DISABLE_MPEG_AUDIO)
 
-target_link_libraries(apeg PUBLIC Allegro::Allegro Ogg::Ogg Vorbis::Vorbis Vorbis::VorbisFile Theora::TheoraDecoder External::OpenAL)
+if(NOT EMSCRIPTEN)
+    target_link_libraries(apeg PUBLIC Allegro::Allegro Ogg::Ogg Vorbis::Vorbis Vorbis::VorbisFile Theora::TheoraDecoder External::OpenAL)
+else()
+    target_link_libraries(apeg PUBLIC Allegro::Allegro ${OGG_LIBRARIES} ${VORBIS_LIBRARIES} Theora::TheoraDecoder External::OpenAL)
+endif()
 
 add_library(Apeg::Apeg ALIAS apeg)

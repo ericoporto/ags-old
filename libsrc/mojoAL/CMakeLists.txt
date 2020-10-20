@@ -14,7 +14,12 @@ target_sources(mojoal
         AL/alc.h
         )
 
-target_link_libraries(mojoal PUBLIC SDL2::SDL2)
+if(NOT EMSCRIPTEN)
+    target_link_libraries(mojoal PUBLIC SDL2::SDL2)
+else()
+    target_link_libraries(mojoal PUBLIC ${SDL2_LIBRARIES})
+endif()
+
 
 target_compile_definitions(mojoal PUBLIC AL_LIBTYPE_STATIC)
 

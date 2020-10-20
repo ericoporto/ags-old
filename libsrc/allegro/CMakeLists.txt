@@ -282,7 +282,11 @@ set_target_properties(allegro
     VERSION ${ALLEGRO_VERSION}
     )
 
-target_link_libraries(allegro SDL2::SDL2)
+if(NOT EMSCRIPTEN)
+    target_link_libraries(allegro SDL2::SDL2)
+else()
+    target_link_libraries(allegro ${SDL2_LIBRARIES})
+endif()
 
 # Search for C header files in these directories.
 

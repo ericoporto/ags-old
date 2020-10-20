@@ -565,17 +565,22 @@ endif()
 
 
 target_link_libraries(engine PUBLIC
-    AGS::Common
-    ${CMAKE_DL_LIBS}
-    Threads::Threads
-    Allegro::Allegro
-    HQ2X::hq2x
-    Cda::Cda
-    SDL2::SDL2
-    SDL2_sound::SDL2_sound
-    External::OpenAL
-    GLM::GLM
-)
+        AGS::Common
+        ${CMAKE_DL_LIBS}
+        Threads::Threads
+        Allegro::Allegro
+        HQ2X::hq2x
+        Cda::Cda
+        SDL2_sound::SDL2_sound
+        External::OpenAL
+        GLM::GLM
+        )
+
+if(NOT EMSCRIPTEN)
+    target_link_libraries(engine PUBLIC SDL2::SDL2)
+else()
+    target_link_libraries(engine PUBLIC ${SDL2_LIBRARIES})
+endif()
 
 
 if (ANDROID)
@@ -646,7 +651,11 @@ target_sources(ags
     main/main_sdl2.cpp
 )
 
-target_link_libraries(ags PRIVATE engine SDL2::SDL2main)
+if(NOT EMSCRIPTEN)
+    target_link_libraries(ags PRIVATE engine SDL2::SDL2main)
+else()
+    target_link_libraries(ags PRIVATE engine ${SDL2_LIBRARIES})
+endif()
 
 if (LINUX OR ANDROID)
     # We may override `allegro_icon` and `load_midi_pf` depending on the version

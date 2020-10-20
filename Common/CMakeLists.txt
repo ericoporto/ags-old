@@ -163,7 +163,11 @@ target_sources(common
     util/string_compat.h
 )
 
-target_link_libraries(common PUBLIC SDL2::SDL2  Allegro::Allegro AlFont::AlFont AAStr::AAStr)
+if(NOT EMSCRIPTEN)
+    target_link_libraries(common PUBLIC SDL2::SDL2  Allegro::Allegro AlFont::AlFont AAStr::AAStr)
+else()
+    target_link_libraries(common PUBLIC ${SDL2_LIBRARIES} Allegro::Allegro AlFont::AlFont AAStr::AAStr)
+endif()
 
 # NOTE: You can optionally create case sensitive filesystems on Macos and Windows now.
 if (LINUX)

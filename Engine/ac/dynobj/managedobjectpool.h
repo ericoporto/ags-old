@@ -80,7 +80,7 @@ public:
 extern ManagedObjectPool pool;
 
 #ifdef DEBUG_MANAGED_OBJECTS
-#define ManagedObjectLog(...) Debug::Printf(kDbgGroup_ManObj, kDbgMsg_Debug, __VA_ARGS__)
+#define ManagedObjectLog(...) Debug::Printf(kDbgMsg_Info,  __VA_ARGS__)
 #else
 #define ManagedObjectLog(...)
 #endif

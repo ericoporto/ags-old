@@ -49,7 +49,9 @@ endif()
 
 # find_package(SDL2 REQUIRED)
 # include_directories(${SDL2_INCLUDE_DIR})
-set(SDL2_LIBRARIES SDL2::SDL2)
+if(NOT EMSCRIPTEN)
+    set(SDL2_LIBRARIES SDL2::SDL2)
+endif()
 
 # Decoders ...
 # These are (mostly) on by default now, so these options are only useful for

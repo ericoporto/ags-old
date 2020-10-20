@@ -445,7 +445,9 @@ void engine_init_timer()
 
 void engine_init_audio()
 {
+#if AGS_PLATFORM_OS_EMSCRIPTEN
     usetup.audio_backend = 0;
+#endif
     if (usetup.audio_backend != 0)
     {
         Debug::Printf("Initializing audio");

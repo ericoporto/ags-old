@@ -974,7 +974,7 @@ void GameLoopUntilNoOverlay()
 }
 
 extern unsigned int load_new_game;
-#ifdef __EMSCRIPTEN__
+#if AGS_PLATFORM_OS_EMSCRIPTEN
 // Our "main loop" function. This callback receives the current time as
 // reported by the browser, and the user data we provide in the call to
 // emscripten_request_animation_frame_loop().
@@ -995,9 +995,7 @@ void RunGameUntilAborted()
     // skip ticks to account for time spent starting game.
     skipMissedTicks();
 
-
-
-#ifdef __EMSCRIPTEN__
+#if AGS_PLATFORM_OS_EMSCRIPTEN
     // Receives a function to call and some user data to provide it.
   emscripten_request_animation_frame_loop(one_iter, 0);
 #else

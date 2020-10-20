@@ -211,10 +211,13 @@ HError InitAndRegisterGUI()
     {
         scrGui[i].id = -1;
     }
+    Debug::Printf(kDbgMsg_Info, "ScriptGUI malloc OK");
 
     guiScriptObjNames.resize(game.numgui);
+    Debug::Printf(kDbgMsg_Info, "guiScriptObjNames resize OK");
     for (int i = 0; i < game.numgui; ++i)
     {
+        Debug::Printf(kDbgMsg_Info, "guiScriptObjNames [%d] ...", i);
         // link controls to their parent guis
         HError err = guis[i].RebuildArray();
         if (!err)
@@ -227,6 +230,7 @@ HError InitAndRegisterGUI()
         scrGui[i].id = i;
         ccAddExternalDynamicObject(guiScriptObjNames[i], &scrGui[i], &ccDynamicGUI);
         ccRegisterManagedObject(&scrGui[i], &ccDynamicGUI);
+        Debug::Printf(kDbgMsg_Info, "guiScriptObjNames [%d] OK", i);
     }
     return HError::None();
 }
@@ -236,12 +240,14 @@ void InitAndRegisterInvItems()
 {
     for (int i = 0; i < MAX_INV; ++i)
     {
+        Debug::Printf(kDbgMsg_Info, "scrInv [%d] ...", i);
         scrInv[i].id = i;
         scrInv[i].reserved = 0;
         ccRegisterManagedObject(&scrInv[i], &ccDynamicInv);
 
         if (!game.invScriptNames[i].IsEmpty())
             ccAddExternalDynamicObject(game.invScriptNames[i], &scrInv[i], &ccDynamicInv);
+        Debug::Printf(kDbgMsg_Info, "scrInv [%d] OK", i);
     }
 }
 
@@ -300,24 +306,36 @@ void RegisterStaticArrays()
 HError InitAndRegisterGameEntities()
 {
     InitAndRegisterAudioObjects();
+    Debug::Printf(kDbgMsg_Info, "InitAndRegisterAudioObjects OK");
     InitAndRegisterCharacters();
+    Debug::Printf(kDbgMsg_Info, "InitAndRegisterCharacters OK");
     InitAndRegisterDialogs();
+    Debug::Printf(kDbgMsg_Info, "InitAndRegisterDialogs OK");
     InitAndRegisterDialogOptions();
+    Debug::Printf(kDbgMsg_Info, "InitAndRegisterDialogOptions OK");
     HError err = InitAndRegisterGUI();
+    Debug::Printf(kDbgMsg_Info, "InitAndRegisterGUI OK");
     if (!err)
         return err;
     InitAndRegisterInvItems();
+    Debug::Printf(kDbgMsg_Info, "InitAndRegisterInvItems OK");
 
     InitAndRegisterHotspots();
+    Debug::Printf(kDbgMsg_Info, "InitAndRegisterHotspots OK");
     InitAndRegisterRegions();
+    Debug::Printf(kDbgMsg_Info, "InitAndRegisterRegions OK");
     InitAndRegisterRoomObjects();
+    Debug::Printf(kDbgMsg_Info, "InitAndRegisterRoomObjects OK");
     play.CreatePrimaryViewportAndCamera();
+    Debug::Printf(kDbgMsg_Info, "CreatePrimaryViewportAndCamera OK");
 
     RegisterStaticArrays();
+    Debug::Printf(kDbgMsg_Info, "RegisterStaticArrays OK");
 
     setup_player_character(game.playercharacter);
     if (loaded_game_file_version >= kGameVersion_270)
         ccAddExternalStaticObject("player", &_sc_PlayerCharPtr, &GlobalStaticManager);
+    Debug::Printf(kDbgMsg_Info, "setup_player_character OK");
     return HError::None();
 }
 
@@ -375,6 +393,7 @@ HGameInitError InitGameState(const LoadedGameEntities &ents, GameDataVersion dat
         return new GameInitError(kGameInitErr_NoFonts);
     if (game.audioClipTypes.size() > MAX_AUDIO_TYPES)
         return new GameInitError(kGameInitErr_TooManyAudioTypes, String::FromFormat("Required: %u, max: %d", game.audioClipTypes.size(), MAX_AUDIO_TYPES));
+    Debug::Printf(kDbgMsg_Info, "Game fonts and audio clip count OK");
 
     //
     // 2. Apply overriding config settings
@@ -395,19 +414,28 @@ HGameInitError InitGameState(const LoadedGameEntities &ents, GameDataVersion dat
         else if (game.GetResolutionType() == kGameResolution_320x240)
             game.SetGameResolution(kGameResolution_640x480);
     }
+    Debug::Printf(kDbgMsg_Info, "overriding config settings OK");
 
     //
     // 3. Allocate and init game objects
     //
     charextra = (CharacterExtras*)calloc(game.numcharacters, sizeof(CharacterExtras));
+    Debug::Printf(kDbgMsg_Info, "Allocate CharacterExtras OK");
     charcache = (CharacterCache*)calloc(1,sizeof(CharacterCache)*game.numcharacters+5);
+    Debug::Printf(kDbgMsg_Info, "Allocate CharacterCache OK");
     mls = (MoveList*)calloc(game.numcharacters + MAX_ROOM_OBJECTS + 1, sizeof(MoveList));
+    Debug::Printf(kDbgMsg_Info, "Allocate MoveList OK");
     actSpsCount = game.numcharacters + MAX_ROOM_OBJECTS + 2;
     actsps = (Bitmap **)calloc(actSpsCount, sizeof(Bitmap *));
+    Debug::Printf(kDbgMsg_Info, "Allocate actsps OK");
     actspsbmp = (IDriverDependantBitmap**)calloc(actSpsCount, sizeof(IDriverDependantBitmap*));
+    Debug::Printf(kDbgMsg_Info, "Allocate actspsbmp OK");
     actspswb = (Bitmap **)calloc(actSpsCount, sizeof(Bitmap *));
+    Debug::Printf(kDbgMsg_Info, "Allocate actSpsCount OK");
     actspswbbmp = (IDriverDependantBitmap**)calloc(actSpsCount, sizeof(IDriverDependantBitmap*));
+    Debug::Printf(kDbgMsg_Info, "Allocate actspswbbmp OK");
     actspswbcache = (CachedActSpsData*)calloc(actSpsCount, sizeof(CachedActSpsData));
+    Debug::Printf(kDbgMsg_Info, "Allocate actspswbcache OK");
     play.charProps.resize(game.numcharacters);
     old_dialog_scripts = ents.OldDialogScripts;
     old_speech_lines = ents.OldSpeechLines;
@@ -415,6 +443,7 @@ HGameInitError InitGameState(const LoadedGameEntities &ents, GameDataVersion dat
     if (!err)
         return new GameInitError(kGameInitErr_EntityInitFail, err);
     LoadFonts(data_ver);
+    Debug::Printf(kDbgMsg_Info, "Allocate and init game objects OK");
 
     //
     // 4. Initialize certain runtime variables
