@@ -75,7 +75,9 @@ endif()
 
 if(EMSCRIPTEN)
     set(USE_FLAGS " -s USE_SDL=2  -s USE_FREETYPE=1  -s USE_VORBIS=1  -s USE_OGG=1 ")
-    set(EMSDK_FLAGS "  --emit-symbol-map  \
+    set(EMSDK_FLAGS "\
+        -g4 \
+        --source-map-base http://0.0.0.0:8000/ \
         -s ASSERTIONS=1  \
         -fsanitize=leak  \
 		-s EXIT_RUNTIME=1  \

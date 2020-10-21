@@ -20,6 +20,10 @@
 #include "script/cc_error.h"
 #include "script/script_common.h"
 #include "util/stream.h"
+#include "core/platform.h"
+#if AGS_PLATFORM_OS_EMSCRIPTEN
+#include <emscripten.h>
+#endif
 
 using namespace AGS::Common;
 
@@ -38,7 +42,8 @@ int ManagedObjectPool::Remove(ManagedObject &o, bool force) {
     auto handle = o.handle;
     available_ids.push(o.handle);
 
-    handleByAddress.erase(o.addr);
+    //handleByAddress.erase(o.addr);
+    handleByAddress.erase(reinterpret_cast<uintptr_t>(o.addr));
     o = ManagedObject();
 
     ManagedObjectLog("Line %d Disposed managed object handle=%d", currentline, handle);
@@ -82,7 +87,8 @@ int32_t ManagedObjectPool::SubRef(int32_t handle) {
 
 int32_t ManagedObjectPool::AddressToHandle(const char *addr) {
     if (addr == nullptr) { return 0; }
-    auto it = handleByAddress.find(addr);
+    //auto it = handleByAddress.find(addr);
+    auto it = handleByAddress.find(reinterpret_cast<uintptr_t>(addr));
     if (it == handleByAddress.end()) { return 0; }
     return it->second;
 }
@@ -108,7 +114,8 @@ ScriptValueType ManagedObjectPool::HandleToAddressAndManager(int32_t handle, voi
 
 int ManagedObjectPool::RemoveObject(const char *address) {
     if (address == nullptr) { return 0; }
-    auto it = handleByAddress.find(address);
+    // auto it = handleByAddress.find(address);
+    auto it = handleByAddress.find(reinterpret_cast<uintptr_t>(address));
     if (it == handleByAddress.end()) { return 0; }
 
     auto & o = objects[it->second];
@@ -154,7 +161,11 @@ int ManagedObjectPool::AddObject(const char *address, ICCDynamicObject *callback
     o = ManagedObject(plugin_object ? kScValPluginObject : kScValDynamicObject, handle, address, callback);
     Debug::Printf(kDbgMsg_Info, "created a ManagedObject().");
 
-    std::pair<const char*, int32_t> address_handle (address, o.handle);
+    #if AGS_PLATFORM_OS_EMSCRIPTEN
+    //emscripten_debugger();
+    #endif
+    //std::pair<const char*, int32_t> address_handle (address, o.handle);
+    std::pair<uintptr_t , int32_t> address_handle (reinterpret_cast<uintptr_t>(address), o.handle);
     handleByAddress.insert(address_handle);
 
     objectCreationCounter++;
@@ -175,7 +186,9 @@ int ManagedObjectPool::AddUnserializedObject(const char *address, ICCDynamicObje
 
     o = ManagedObject(plugin_object ? kScValPluginObject : kScValDynamicObject, handle, address, callback);
 
-    handleByAddress.insert({address, o.handle});
+//    handleByAddress.insert({address, o.handle});
+    std::pair<uintptr_t , int32_t> address_handle (reinterpret_cast<uintptr_t>(address), o.handle);
+    handleByAddress.insert(address_handle);
     ManagedObjectLog("Allocated unserialized managed object handle=%d, type=%s", o.handle, callback->GetType());
     return o.handle;
 }
