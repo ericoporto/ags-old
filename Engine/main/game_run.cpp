@@ -975,18 +975,18 @@ void GameLoopUntilNoOverlay()
 
 extern unsigned int load_new_game;
 #if AGS_PLATFORM_OS_EMSCRIPTEN
-// Our "main loop" function. This callback receives the current time as
-// reported by the browser, and the user data we provide in the call to
-// emscripten_request_animation_frame_loop().
-EM_BOOL one_iter(double time, void* userData) {
+void one_iter(void* userData) {
     GameTick();
 
     if (load_new_game) {
         RunAGSGame (nullptr, load_new_game, 0);
         load_new_game = 0;
     }
-    // Return true to keep the loop running.
-    return EM_TRUE;
+
+    if(abort_engine) {
+        emscripten_cancel_main_loop();
+        return;
+    }
 }
 #endif
 
@@ -997,7 +997,9 @@ void RunGameUntilAborted()
 
 #if AGS_PLATFORM_OS_EMSCRIPTEN
     // Receives a function to call and some user data to provide it.
-  emscripten_request_animation_frame_loop(one_iter, 0);
+
+    emscripten_set_main_loop_arg(one_iter, nullptr, -1, 1);
+    //emscripten_request_animation_frame_loop(one_iter, 0);
 #else
     while (!abort_engine) {
         GameTick();
