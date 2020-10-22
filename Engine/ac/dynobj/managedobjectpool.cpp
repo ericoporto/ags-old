@@ -43,7 +43,7 @@ int ManagedObjectPool::Remove(ManagedObject &o, bool force) {
     available_ids.push(o.handle);
 
     //handleByAddress.erase(o.addr);
-    handleByAddress.erase(reinterpret_cast<uintptr_t>(o.addr));
+    //handleByAddress.erase(reinterpret_cast<uintptr_t>(o.addr));
     o = ManagedObject();
 
     ManagedObjectLog("Line %d Disposed managed object handle=%d", currentline, handle);
@@ -87,10 +87,15 @@ int32_t ManagedObjectPool::SubRef(int32_t handle) {
 
 int32_t ManagedObjectPool::AddressToHandle(const char *addr) {
     if (addr == nullptr) { return 0; }
+    for(int i=0; i<objects.size(); i++)
+    {
+        if(objects[i].addr == addr) return objects[i].handle;
+    }
+    return 0;
     //auto it = handleByAddress.find(addr);
-    auto it = handleByAddress.find(reinterpret_cast<uintptr_t>(addr));
-    if (it == handleByAddress.end()) { return 0; }
-    return it->second;
+    //auto it = handleByAddress.find(reinterpret_cast<uintptr_t>(addr));
+    //if (it == handleByAddress.end()) { return 0; }
+    //return it->second;
 }
 
 // this function is called often (whenever a pointer is used)
@@ -115,10 +120,17 @@ ScriptValueType ManagedObjectPool::HandleToAddressAndManager(int32_t handle, voi
 int ManagedObjectPool::RemoveObject(const char *address) {
     if (address == nullptr) { return 0; }
     // auto it = handleByAddress.find(address);
-    auto it = handleByAddress.find(reinterpret_cast<uintptr_t>(address));
-    if (it == handleByAddress.end()) { return 0; }
+    int i;
+    for(i=0; i<objects.size(); i++)
+    {
+        if(objects[i].addr == address) break;
+    }
 
-    auto & o = objects[it->second];
+   // auto it = handleByAddress.find(reinterpret_cast<uintptr_t>(address));
+    //if (it == handleByAddress.end()) { return 0; }
+    if(i==objects.size()) return 0;
+
+    auto & o = objects[objects[i].handle];
     return Remove(o, true);
 }
 
@@ -131,6 +143,7 @@ void ManagedObjectPool::RunGarbageCollectionIfAppropriate()
 
 void ManagedObjectPool::RunGarbageCollection()
 {
+    ManagedObjectLog("Running garbage collection...");
     for (int i = 1; i < nextHandle; i++) {
         auto & o = objects[i];
         if (!o.isUsed()) { continue; }
@@ -154,19 +167,17 @@ int ManagedObjectPool::AddObject(const char *address, ICCDynamicObject *callback
            objects.resize(handle + 1024, ManagedObject());
         }
     }
-    Debug::Printf(kDbgMsg_Info, "added a handle.");
+   // Debug::Printf(kDbgMsg_Info, "added a handle.");
     auto & o = objects[handle];
     if (o.isUsed()) { cc_error("used: %d", handle); return 0; }
 
     o = ManagedObject(plugin_object ? kScValPluginObject : kScValDynamicObject, handle, address, callback);
-    Debug::Printf(kDbgMsg_Info, "created a ManagedObject().");
+    //Debug::Printf(kDbgMsg_Info, "created a ManagedObject().");
 
-    #if AGS_PLATFORM_OS_EMSCRIPTEN
-    //emscripten_debugger();
-    #endif
+
     //std::pair<const char*, int32_t> address_handle (address, o.handle);
-    std::pair<uintptr_t , int32_t> address_handle (reinterpret_cast<uintptr_t>(address), o.handle);
-    handleByAddress.insert(address_handle);
+    //std::pair<uintptr_t , int32_t> address_handle (reinterpret_cast<uintptr_t>(address), o.handle);
+   // handleByAddress.insert(address_handle);
 
     objectCreationCounter++;
     ManagedObjectLog("Allocated managed object handle=%d, type=%s", handle, callback->GetType());
@@ -187,8 +198,8 @@ int ManagedObjectPool::AddUnserializedObject(const char *address, ICCDynamicObje
     o = ManagedObject(plugin_object ? kScValPluginObject : kScValDynamicObject, handle, address, callback);
 
 //    handleByAddress.insert({address, o.handle});
-    std::pair<uintptr_t , int32_t> address_handle (reinterpret_cast<uintptr_t>(address), o.handle);
-    handleByAddress.insert(address_handle);
+ //   std::pair<uintptr_t , int32_t> address_handle (reinterpret_cast<uintptr_t>(address), o.handle);
+   // handleByAddress.insert(address_handle);
     ManagedObjectLog("Allocated unserialized managed object handle=%d, type=%s", o.handle, callback->GetType());
     return o.handle;
 }
@@ -332,8 +343,8 @@ void ManagedObjectPool::reset() {
     nextHandle = 1;
 }
 
-ManagedObjectPool::ManagedObjectPool() : objectCreationCounter(0), nextHandle(1), available_ids(), objects(RESERVED_SIZE, ManagedObject()), handleByAddress() {
-    handleByAddress.reserve(RESERVED_SIZE);
+ManagedObjectPool::ManagedObjectPool() : objectCreationCounter(0), nextHandle(1), available_ids(), objects(RESERVED_SIZE, ManagedObject()) {
+//    handleByAddress.reserve(RESERVED_SIZE);
 }
 
 ManagedObjectPool pool;

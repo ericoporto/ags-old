@@ -76,21 +76,24 @@ endif()
 if(EMSCRIPTEN)
     set(USE_FLAGS " -s USE_SDL=2  -s USE_FREETYPE=1  -s USE_VORBIS=1  -s USE_OGG=1 ")
     set(EMSDK_FLAGS "\
-        -g4 \
-        --source-map-base http://0.0.0.0:8000/ \
+        -O3 \
         -s ASSERTIONS=1  \
         -fsanitize=leak  \
+        -s INVOKE_RUN=0 \
 		-s EXIT_RUNTIME=1  \
 		-s ALLOW_MEMORY_GROWTH=1  \
         -s FORCE_FILESYSTEM=1 -lidbfs.js  \
-        -s EXTRA_EXPORTED_RUNTIME_METHODS=['ccall']  \
+        -s EXPORTED_FUNCTIONS=['_main'] \
+        -s EXTRA_EXPORTED_RUNTIME_METHODS=['ccall','callMain']  \
         -s DISABLE_EXCEPTION_CATCHING=0 ")
 
+
+   ## SET(CMAKE_EXECUTABLE_SUFFIX ".html")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${USE_FLAGS} ")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${USE_FLAGS} ")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${USE_FLAGS} ${EMSDK_FLAGS}")
 
-    add_compile_definitions(DEBUG_MANAGED_OBJECTS)
+    #add_compile_definitions(DEBUG_MANAGED_OBJECTS)
     add_compile_options(-sFORCE_FILESYSTEM=1)
     add_compile_options(-fexceptions)
 

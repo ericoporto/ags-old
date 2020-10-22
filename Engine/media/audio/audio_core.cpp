@@ -186,6 +186,7 @@ void audio_core_slot_seek_ms(int slot_handle, float pos_ms)
 
 void audio_core_set_master_volume(float newvol) 
 {
+    return;
     alListenerf(AL_GAIN, newvol*GlobalGainScaling);
     dump_al_errors();
 }

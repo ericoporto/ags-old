@@ -34,41 +34,38 @@ using namespace AGS::Common;
 
 namespace AGS
 {
-namespace Engine
-{
+    namespace Engine
+    {
 
-void GetGfxDriverFactoryNames(StringV &ids)
-{
+        void GetGfxDriverFactoryNames(StringV &ids)
+        {
 #if AGS_HAS_DIRECT3D
-    ids.push_back("D3D9");
+            ids.push_back("D3D9");
 #endif
 #if AGS_OPENGL_DRIVER
-    ids.push_back("OGL");
+            ids.push_back("OGL");
 #endif
-    ids.push_back("Software");
-}
+            ids.push_back("Software");
+        }
 
-IGfxDriverFactory *GetGfxDriverFactory(const String id)
-{
-    Debug::Printf("GetGfxDriverFactory id: %s", id.GetCStr());
+        IGfxDriverFactory *GetGfxDriverFactory(const String id)
+        {
+            Debug::Printf("GetGfxDriverFactory id: %s", id.GetCStr());
 #if AGS_HAS_DIRECT3D
-    if (id.CompareNoCase("D3D9") == 0)
+            if (id.CompareNoCase("D3D9") == 0)
         return D3D::D3DGraphicsFactory::GetFactory();
 #endif
 #if AGS_OPENGL_DRIVER
-    if (id.CompareNoCase("OGL") == 0 || id.CompareNoCase("D3D9") == 0)
-        return OGL::OGLGraphicsFactory::GetFactory();
+            if (id.CompareNoCase("OGL") == 0 || id.CompareNoCase("D3D9") == 0)
+                return OGL::OGLGraphicsFactory::GetFactory();
 #endif
-    //if ((id.CompareNoCase("Software") == 0) || (id.CompareNoCase("DX5") == 0)) {
-#if AGS_PLATFORM_OS_EMSCRIPTEN
-    return SDLRenderer::SDLRendererGraphicsFactory::GetFactory();
-#endif
-    if(id.CompareNoCase("OGL") != 0 || id.CompareNoCase("D3D9") != 0) {
-        return SDLRenderer::SDLRendererGraphicsFactory::GetFactory();
-    }
-    set_allegro_error("No graphics factory with such id: %s", id.GetCStr());
-    return nullptr;
-}
+            //if ((id.CompareNoCase("Software") == 0) || (id.CompareNoCase("DX5") == 0)) {
+            if(id.CompareNoCase("OGL") != 0 || id.CompareNoCase("D3D9") != 0) {
+                return SDLRenderer::SDLRendererGraphicsFactory::GetFactory();
+            }
+            set_allegro_error("No graphics factory with such id: %s", id.GetCStr());
+            return nullptr;
+        }
 
-} // namespace Engine
+    } // namespace Engine
 } // namespace AGS
