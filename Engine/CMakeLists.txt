@@ -494,6 +494,7 @@ target_sources(engine
 
     platform/ios/acplios.cpp
 
+    platform/emscripten/acpemscripten.cpp
 
     platform/windows/win_ex_handling.cpp
     platform/windows/win_ex_handling.h

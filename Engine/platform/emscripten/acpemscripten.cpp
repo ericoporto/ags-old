@@ -14,14 +14,13 @@
 
 #include "core/platform.h"
 
-#if AGS_PLATFORM_OS_LINUX && !AGS_PLATFORM_OS_EMSCRIPTEN
+#if AGS_PLATFORM_OS_EMSCRIPTEN
 
-// ********* LINUX PLACEHOLDER DRIVER *********
+// ********* EMSCRIPTEN PLACEHOLDER DRIVER *********
 
 #include <stdio.h>
 #include <allegro.h>
 #include "SDL.h"
-//#include <xalleg.h>
 #include "ac/runtime_defines.h"
 #include "gfx/gfxdefines.h"
 #include "platform/base/agsplatformdriver.h"
@@ -34,15 +33,10 @@
 
 using AGS::Common::String;
 
-
-// Replace the default Allegro icon. The original defintion is in the
-// Allegro 4.4 source under "src/x/xwin.c".
-#include "icon.xpm"
-void* allegro_icon = icon_xpm;
 String CommonDataDirectory;
 String UserDataDirectory;
 
-struct AGSLinux : AGSPlatformDriver {
+struct AGSEmscripten : AGSPlatformDriver {
 
   int  CDPlayerCommand(int cmdd, int datt) override;
   void DisplayAlert(const char*, ...) override;
@@ -61,15 +55,14 @@ struct AGSLinux : AGSPlatformDriver {
   void ShutdownCDPlayer() override;
   bool LockMouseToWindow() override;
   void UnlockMouse() override;
-//  void GetSystemDisplayModes(std::vector<Engine::DisplayMode> &dms) override;
 };
 
 
-int AGSLinux::CDPlayerCommand(int cmdd, int datt) {
-  return 0;// cd_player_control(cmdd, datt);
+int AGSEmscripten::CDPlayerCommand(int cmdd, int datt) {
+  return 0;
 }
 
-void AGSLinux::DisplayAlert(const char *text, ...) {
+void AGSEmscripten::DisplayAlert(const char *text, ...) {
   char displbuf[2000];
   va_list ap;
   va_start(ap, text);
@@ -81,126 +74,93 @@ void AGSLinux::DisplayAlert(const char *text, ...) {
     fprintf(stdout, "%s\n", displbuf);
 }
 
-size_t BuildXDGPath(char *destPath, size_t destSize)
-{
-  // Check to see if XDG_DATA_HOME is set in the enviroment
-#if AGS_PLATFORM_OS_EMSCRIPTEN
-    return 0;
-#endif
-
-  const char* home_dir = getenv("XDG_DATA_HOME");
-  size_t l = 0;
-  if (home_dir)
-  {
-    l = snprintf(destPath, destSize, "%s", home_dir);
-  }
-  else
-  {
-    // No evironment variable, so we fall back to home dir in /etc/passwd
-    struct passwd *p = getpwuid(getuid());
-    l = snprintf(destPath, destSize, "%s/.local", p->pw_dir);
-    if (mkdir(destPath, 0755) != 0 && errno != EEXIST)
-      return 0;
-    l += snprintf(destPath + l, destSize - l, "/share");
-    if (mkdir(destPath, 0755) != 0 && errno != EEXIST)
-      return 0;
-  }
-  return l;
-}
-
 void DetermineDataDirectories()
 {
   if (!UserDataDirectory.IsEmpty())
     return;
-  char xdg_path[256];
-  if (BuildXDGPath(xdg_path, sizeof(xdg_path)) == 0)
-    sprintf(xdg_path, "%s", "/tmp");
-  UserDataDirectory.Format("%s/ags", xdg_path);
+
+  UserDataDirectory.Format("/home/web_user/ags");
   mkdir(UserDataDirectory.GetCStr(), 0755);
-  CommonDataDirectory.Format("%s/ags-common", xdg_path);
+  CommonDataDirectory.Format("/home/web_user/common");
   mkdir(CommonDataDirectory.GetCStr(), 0755);
 }
 
-const char *AGSLinux::GetAllUsersDataDirectory()
+const char *AGSEmscripten::GetAllUsersDataDirectory()
 {
   DetermineDataDirectories();
   return CommonDataDirectory;
 }
 
-const char *AGSLinux::GetUserSavedgamesDirectory()
+const char *AGSEmscripten::GetUserSavedgamesDirectory()
 {
   DetermineDataDirectories();
   return UserDataDirectory;
 }
 
-const char *AGSLinux::GetUserConfigDirectory()
+const char *AGSEmscripten::GetUserConfigDirectory()
 {
   return GetUserSavedgamesDirectory();
 }
 
-const char *AGSLinux::GetUserGlobalConfigDirectory()
+const char *AGSEmscripten::GetUserGlobalConfigDirectory()
 {
   return GetUserSavedgamesDirectory();
 }
 
-const char *AGSLinux::GetAppOutputDirectory()
+const char *AGSEmscripten::GetAppOutputDirectory()
 {
   DetermineDataDirectories();
   return UserDataDirectory;
 }
 
-unsigned long AGSLinux::GetDiskFreeSpaceMB() {
+unsigned long AGSEmscripten::GetDiskFreeSpaceMB() {
   // placeholder
   return 100;
 }
 
-const char* AGSLinux::GetNoMouseErrorString() {
+const char* AGSEmscripten::GetNoMouseErrorString() {
   return "This game requires a mouse. You need to configure and setup your mouse to play this game.\n";
 }
 
-const char* AGSLinux::GetAllegroFailUserHint()
+const char* AGSEmscripten::GetAllegroFailUserHint()
 {
   return "Make sure you have latest version of Allegro 4 libraries installed, and X server is running.";
 }
 
-eScriptSystemOSID AGSLinux::GetSystemOSID() {
+eScriptSystemOSID AGSEmscripten::GetSystemOSID() {
   return eOS_Linux;
 }
 
-int AGSLinux::InitializeCDPlayer() {
-  return 0;// cd_player_init();
+int AGSEmscripten::InitializeCDPlayer() {
+  return 0;
 }
 
-void AGSLinux::PostAllegroExit() {
+void AGSEmscripten::PostAllegroExit() {
   // do nothing
 }
 
-void AGSLinux::SetGameWindowIcon() {
+void AGSEmscripten::SetGameWindowIcon() {
   // do nothing
 }
 
-void AGSLinux::ShutdownCDPlayer() {
-  //cd_exit();
+void AGSEmscripten::ShutdownCDPlayer() {
+
 }
 
 AGSPlatformDriver* AGSPlatformDriver::GetDriver() {
   if (instance == nullptr)
-    instance = new AGSLinux();
+    instance = new AGSEmscripten();
   return instance;
 }
 
-bool AGSLinux::LockMouseToWindow()
+bool AGSEmscripten::LockMouseToWindow()
 {
     return SDL_SetRelativeMouseMode(SDL_TRUE) == 0;
-//    return XGrabPointer(_xwin.display, _xwin.window, False,
-  //      PointerMotionMask | ButtonPressMask | ButtonReleaseMask,
-//        GrabModeAsync, GrabModeAsync, _xwin.window, None, CurrentTime) == GrabSuccess;
 }
 
-void AGSLinux::UnlockMouse()
+void AGSEmscripten::UnlockMouse()
 {
     SDL_SetRelativeMouseMode(SDL_FALSE);
-  //  XUngrabPointer(_xwin.display, CurrentTime);
 }
 
 

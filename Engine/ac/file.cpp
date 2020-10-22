@@ -297,12 +297,14 @@ bool ResolveScriptPath(const String &orig_sc_path, bool read_only, ResolvedPath 
     String alt_path;
     if (sc_path.CompareLeft(GameInstallRootToken, GameInstallRootToken.GetLength()) == 0)
     {
+#if !AGS_PLATFORM_OS_EMSCRIPTEN
         if (!read_only)
         {
             debug_script_warn("Attempt to access file '%s' denied (cannot write to game installation directory)",
                 sc_path.GetCStr());
             return false;
         }
+#endif
         parent_dir = get_install_dir();
         parent_dir.AppendChar('/');
         child_path = sc_path.Mid(GameInstallRootToken.GetLength());
@@ -354,8 +356,10 @@ bool ResolveScriptPath(const String &orig_sc_path, bool read_only, ResolvedPath 
     {
         if (!Path::IsSameOrSubDir(parent_dir, full_path))
         {
+#if !AGS_PLATFORM_OS_EMSCRIPTEN
             debug_script_warn("Attempt to access file '%s' denied (outside of game directory)", sc_path.GetCStr());
             return false;
+#endif
         }
     }
     rp.BaseDir = parent_dir;
