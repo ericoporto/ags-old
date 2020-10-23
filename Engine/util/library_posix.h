@@ -81,6 +81,7 @@ public:
   {
     Unload();
 
+#if !AGS_PLATFORM_OS_EMSCRIPTEN
     // Try rpath first
     _library = dlopen(BuildPath(nullptr, libraryName).GetCStr(), RTLD_LAZY);
     AGS::Common::Debug::Printf("dlopen returned: %s", dlerror());
@@ -108,7 +109,7 @@ public:
 
       AGS::Common::Debug::Printf("dlopen returned: %s", dlerror());
     }
-
+#endif
     return (_library != nullptr);
   }
 
