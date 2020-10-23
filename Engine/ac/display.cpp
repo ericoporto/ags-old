@@ -47,6 +47,9 @@
 #include "media/audio/audio_system.h"
 #include "ac/timer.h"
 #include "device/mousew32.h"
+#if AGS_PLATFORM_OS_EMSCRIPTEN
+#include "emscripten.h"
+#endif
 
 using namespace AGS::Common;
 using namespace AGS::Common::BitmapHelper;
@@ -68,6 +71,7 @@ struct DisplayVars
     int linespacing;   // font's line spacing
     int fulltxtheight; // total height of all the text
 } disp;
+
 
 // Pass yy = -1 to find Y co-ord automatically
 // allowShrink = 0 for none, 1 for leftwards, 2 for rightwards
@@ -326,6 +330,7 @@ int _display_main(int xx, int yy, int wii, const char *text, int disp_type, int 
             if ((countdown < 1) && (play.fast_forward))
                 break;
         }
+
         if (!play.mouse_cursor_hidden)
             ags_domouse(DOMOUSE_DISABLE);
         remove_screen_overlay(OVER_TEXTMSG);

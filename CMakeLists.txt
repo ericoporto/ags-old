@@ -78,8 +78,10 @@ if(EMSCRIPTEN)
     set(EMSDK_FLAGS "\
         -s ASSERTIONS=1  \
         -fsanitize=leak  \
+        -s ASYNCIFY \
+        -O3 \
         -s ALLOW_TABLE_GROWTH=1 \
-        -s WASM=2 \
+        -s WASM=1 \
         -s INVOKE_RUN=0 \
 		-s EXIT_RUNTIME=1  \
 		-s ALLOW_MEMORY_GROWTH=1  \

@@ -22,6 +22,7 @@
 #include <unistd.h>
 #endif
 #include <thread>
+#include "SDL.h"
 #include "platform/base/agsplatformdriver.h"
 
 namespace {
@@ -76,7 +77,8 @@ void WaitForNextFrame()
 
     auto frame_time_remaining = next_frame_timestamp - now;
     if (frame_time_remaining > std::chrono::milliseconds::zero()) {
-        std::this_thread::sleep_for(frame_time_remaining);
+        SDL_Delay(std::chrono::duration_cast<std::chrono::milliseconds>(frame_time_remaining).count());
+        //std::this_thread::sleep_for(frame_time_remaining);
     }
     
     next_frame_timestamp += frameDuration;

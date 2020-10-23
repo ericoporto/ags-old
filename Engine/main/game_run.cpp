@@ -59,7 +59,7 @@
 #include "ac/keycode.h"
 
 
-#ifdef __EMSCRIPTEN__
+#if AGS_PLATFORM_OS_EMSCRIPTEN
 #include <emscripten.h>
 #include <emscripten/html5.h>
 #include <stdio.h>
@@ -892,6 +892,7 @@ static int GameTick()
     our_eip=76;
 
     int res = UpdateWaitMode();
+
     if (res == RETURN_CONTINUE) { return 0; } // continue looping 
     return res;
 }
@@ -924,7 +925,9 @@ static void GameLoopUntilEvent(int untilwhat,const void* daaa) {
   auto cached_user_disabled_for = user_disabled_for;
 
   SetupLoopParameters(untilwhat,daaa);
+
   while (GameTick()==0);
+
 
   our_eip = 78;
 
@@ -974,33 +977,12 @@ void GameLoopUntilNoOverlay()
 }
 
 extern unsigned int load_new_game;
-#if AGS_PLATFORM_OS_EMSCRIPTEN
-void one_iter(void* userData) {
-    GameTick();
-
-    if (load_new_game) {
-        RunAGSGame (nullptr, load_new_game, 0);
-        load_new_game = 0;
-    }
-
-    if(abort_engine) {
-        emscripten_cancel_main_loop();
-        return;
-    }
-}
-#endif
 
 void RunGameUntilAborted()
 {
     // skip ticks to account for time spent starting game.
     skipMissedTicks();
 
-#if AGS_PLATFORM_OS_EMSCRIPTEN
-    // Receives a function to call and some user data to provide it.
-
-    emscripten_set_main_loop_arg(one_iter, nullptr, -1, 1);
-    //emscripten_request_animation_frame_loop(one_iter, 0);
-#else
     while (!abort_engine) {
         GameTick();
 
@@ -1009,7 +991,6 @@ void RunGameUntilAborted()
             load_new_game = 0;
         }
     }
-#endif
 }
 
 void update_polled_stuff_if_runtime()
