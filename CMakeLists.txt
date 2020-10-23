@@ -76,15 +76,15 @@ endif()
 if(EMSCRIPTEN)
     set(USE_FLAGS " -s USE_SDL=2  -s USE_FREETYPE=1  -s USE_VORBIS=1  -s USE_OGG=1 ")
     set(EMSDK_FLAGS "\
-        -s ASSERTIONS=1  \
-        -fsanitize=leak  \
         -s ASYNCIFY \
         -O3 \
+        -pthread \
         -s ALLOW_TABLE_GROWTH=1 \
         -s WASM=1 \
         -s INVOKE_RUN=0 \
 		-s EXIT_RUNTIME=1  \
-		-s ALLOW_MEMORY_GROWTH=1  \
+		-s EMULATE_FUNCTION_POINTER_CASTS=1 \
+		-s INITIAL_MEMORY=536870912 \
         -s DISABLE_EXCEPTION_CATCHING=0 ")
 
     set(EMSDK_LINKER_FLAGS "\
@@ -93,7 +93,7 @@ if(EMSCRIPTEN)
         -s EXTRA_EXPORTED_RUNTIME_METHODS=['ccall','callMain']")
 
 
-    SET(CMAKE_EXECUTABLE_SUFFIX ".html")
+    #SET(CMAKE_EXECUTABLE_SUFFIX ".html")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${USE_FLAGS} ${EMSDK_FLAGS}")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${USE_FLAGS} ${EMSDK_FLAGS}")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${USE_FLAGS} ${EMSDK_FLAGS} ${EMSDK_LINKER_FLAGS}")
