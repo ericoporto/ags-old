@@ -59,12 +59,6 @@
 #include "ac/keycode.h"
 
 
-#if AGS_PLATFORM_OS_EMSCRIPTEN
-#include <emscripten.h>
-#include <emscripten/html5.h>
-#include <stdio.h>
-#endif
-
 
 using namespace AGS::Common;
 

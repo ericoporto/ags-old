@@ -44,9 +44,4 @@ float get_current_fps();
 // and no more processing required, otherwise returns true and provides current keycode and key shifts.
 bool run_service_key_controls(SDL_Event kgn);
 
-
-#if AGS_PLATFORM_OS_EMSCRIPTEN
-void agsems_one_iter(void* userData);
-#endif
-
 #endif // __AGS_EE_MAIN__GAMERUN_H

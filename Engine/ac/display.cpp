@@ -47,9 +47,6 @@
 #include "media/audio/audio_system.h"
 #include "ac/timer.h"
 #include "device/mousew32.h"
-#if AGS_PLATFORM_OS_EMSCRIPTEN
-#include "emscripten.h"
-#endif
 
 using namespace AGS::Common;
 using namespace AGS::Common::BitmapHelper;
