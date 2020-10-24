@@ -510,7 +510,7 @@ target_sources(engine
 )
 
 if(MACOS)
-    target_sources(engine PRIVATE
+    target_sources(engine PRIVATE 
         platform/osx/alplmac.mm
     )
 endif()
@@ -518,7 +518,7 @@ endif()
 if (AGS_BUILTIN_PLUGINS)
     target_compile_definitions(engine PRIVATE BUILTIN_PLUGINS)
 
-    target_sources(engine PRIVATE
+    target_sources(engine PRIVATE 
         ../Plugins/agsblend/AGSBlend.cpp
         ../Plugins/agsblend/agsblend.h
 
@@ -555,7 +555,7 @@ if (AGS_BUILTIN_PLUGINS)
     )
 endif()
 
-target_compile_definitions(engine PRIVATE
+target_compile_definitions(engine PRIVATE 
     $<$<CONFIG:DEBUG>:SOUND_CACHE_DEBUG>
     $<$<CONFIG:DEBUG>:DEBUG_MANAGED_OBJECTS>
 )
@@ -676,11 +676,10 @@ if (WIN32)
 endif()
 
 
-
 # macOS App Bundle
 # -----------------------------------------------------------------------------
 
-if (MACOS AND NOT ANDROID)
+if (MACOS)
     add_executable(ags-app)
 
     set_target_properties(ags-app PROPERTIES

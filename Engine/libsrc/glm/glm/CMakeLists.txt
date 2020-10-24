@@ -44,7 +44,7 @@ source_group("SIMD Files" FILES ${SIMD_HEADER})
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/..)
 
-if(BUILD_STATIC_LIBS)
+if(BUILD_STATIC_GLM)
 add_library(glm_static STATIC ${ROOT_TEXT} ${ROOT_MD} ${ROOT_NAT}
 	${ROOT_SOURCE}    ${ROOT_INLINE}    ${ROOT_HEADER}
 	${CORE_SOURCE}    ${CORE_INLINE}    ${CORE_HEADER}
@@ -55,7 +55,7 @@ add_library(glm_static STATIC ${ROOT_TEXT} ${ROOT_MD} ${ROOT_NAT}
 target_include_directories(glm_static PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/..)
 endif()
 
-if(BUILD_SHARED_LIBS)
+if(BUILD_SHARED_GLM)
 add_library(glm_shared SHARED ${ROOT_TEXT} ${ROOT_MD} ${ROOT_NAT}
 	${ROOT_SOURCE}    ${ROOT_INLINE}    ${ROOT_HEADER}
 	${CORE_SOURCE}    ${CORE_INLINE}    ${CORE_HEADER}

@@ -15,6 +15,4 @@ elseif(WIN32 OR LINUX OR MACOS)
     add_subdirectory(libsrc/SDL2-2.0.12 EXCLUDE_FROM_ALL)
     add_library(SDL2::SDL2 ALIAS SDL2-static)
     add_library(SDL2::SDL2main ALIAS SDL2main)
-elseif(EMSCRIPTEN)
-
 endif()
