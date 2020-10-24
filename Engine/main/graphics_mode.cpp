@@ -38,6 +38,7 @@
 #include "emscripten.h"
 EM_JS(int, get_canvas_width, (), { return canvas.width; });
 EM_JS(int, get_canvas_height, (), { return canvas.height; });
+EM_JS(void, do_resize_after_time, (), {setInterval(function(){window.dispatchEvent(new Event('resize'));},200)});
 #endif
 
 using namespace AGS::Common;
@@ -285,6 +286,7 @@ bool graphics_mode_update_render_frame()
     if(dm.Windowed && String::Wrapper(gfxDriver->GetDriverID()) != "Software")
     {
         screen_size = Size(get_canvas_width(),  get_canvas_height());
+        do_resize_after_time();
     }
 #endif
     Size native_size = gfxDriver->GetNativeSize();

@@ -51,7 +51,6 @@ private:
     std::queue<int32_t> available_ids;
     std::vector<ManagedObject> objects;
     //std::unordered_map<const char *, int32_t> handleByAddress;
-    //std::map<uintptr_t , int32_t> handleByAddress;
 
     void Init(int32_t theHandle, const char *theAddress, ICCDynamicObject *theCallback, ScriptValueType objType);
     int Remove(ManagedObject &o, bool force = false); 

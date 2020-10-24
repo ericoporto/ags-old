@@ -30,8 +30,7 @@ using namespace AGS::Common;
 const auto OBJECT_CACHE_MAGIC_NUMBER = 0xa30b;
 const auto SERIALIZE_BUFFER_SIZE = 10240;
 const auto GARBAGE_COLLECTION_INTERVAL = 1024;
-const auto RESERVED_SIZE = 4096;
-//const auto RESERVED_SIZE = 2048;
+const auto RESERVED_SIZE = 2048;
 
 int ManagedObjectPool::Remove(ManagedObject &o, bool force) {
     if (!o.isUsed()) { return 1; } // already removed
@@ -143,7 +142,6 @@ void ManagedObjectPool::RunGarbageCollectionIfAppropriate()
 
 void ManagedObjectPool::RunGarbageCollection()
 {
-    ManagedObjectLog("Running garbage collection...");
     for (int i = 1; i < nextHandle; i++) {
         auto & o = objects[i];
         if (!o.isUsed()) { continue; }
@@ -167,12 +165,11 @@ int ManagedObjectPool::AddObject(const char *address, ICCDynamicObject *callback
            objects.resize(handle + 1024, ManagedObject());
         }
     }
-   // Debug::Printf(kDbgMsg_Info, "added a handle.");
+
     auto & o = objects[handle];
     if (o.isUsed()) { cc_error("used: %d", handle); return 0; }
 
     o = ManagedObject(plugin_object ? kScValPluginObject : kScValDynamicObject, handle, address, callback);
-    //Debug::Printf(kDbgMsg_Info, "created a ManagedObject().");
 
 
     //std::pair<const char*, int32_t> address_handle (address, o.handle);

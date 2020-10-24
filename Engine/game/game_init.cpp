@@ -375,7 +375,6 @@ HGameInitError InitGameState(const LoadedGameEntities &ents, GameDataVersion dat
         return new GameInitError(kGameInitErr_NoFonts);
     if (game.audioClipTypes.size() > MAX_AUDIO_TYPES)
         return new GameInitError(kGameInitErr_TooManyAudioTypes, String::FromFormat("Required: %u, max: %d", game.audioClipTypes.size(), MAX_AUDIO_TYPES));
-    Debug::Printf(kDbgMsg_Info, "Game fonts and audio clip count OK");
 
     //
     // 2. Apply overriding config settings
@@ -396,7 +395,6 @@ HGameInitError InitGameState(const LoadedGameEntities &ents, GameDataVersion dat
         else if (game.GetResolutionType() == kGameResolution_320x240)
             game.SetGameResolution(kGameResolution_640x480);
     }
-    Debug::Printf(kDbgMsg_Info, "overriding config settings OK");
 
     //
     // 3. Allocate and init game objects
