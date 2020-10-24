@@ -34,6 +34,12 @@
 #include "main/main_allegro.h"
 #include "platform/base/agsplatformdriver.h"
 
+#if AGS_PLATFORM_OS_EMSCRIPTEN
+#include "emscripten.h"
+EM_JS(int, get_canvas_width, (), { return canvas.width; });
+EM_JS(int, get_canvas_height, (), { return canvas.height; });
+#endif
+
 using namespace AGS::Common;
 using namespace AGS::Engine;
 
@@ -271,7 +277,16 @@ bool graphics_mode_update_render_frame()
     if (!gfxDriver->IsNativeSizeValid()) { return false; }
 
     DisplayMode dm = gfxDriver->GetDisplayMode();
+
     Size screen_size = Size(dm.Width, dm.Height);
+
+
+#if AGS_PLATFORM_OS_EMSCRIPTEN
+    if(dm.Windowed && String::Wrapper(gfxDriver->GetDriverID()) != "Software")
+    {
+        screen_size = Size(get_canvas_width(),  get_canvas_height());
+    }
+#endif
     Size native_size = gfxDriver->GetNativeSize();
 
     GameFrameSetup CurFrameSetup = dm.Windowed ? WindowedFrame : FullscreenFrame;

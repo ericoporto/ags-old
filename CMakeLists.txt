@@ -93,13 +93,11 @@ if(EMSCRIPTEN)
         -s EXPORTED_FUNCTIONS=['_main'] \
         -s EXTRA_EXPORTED_RUNTIME_METHODS=['ccall','callMain']")
 
-
     #SET(CMAKE_EXECUTABLE_SUFFIX ".html")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${USE_FLAGS} ${EMSDK_FLAGS}")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${USE_FLAGS} ${EMSDK_FLAGS}")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${USE_FLAGS} ${EMSDK_FLAGS} ${EMSDK_LINKER_FLAGS}")
 
-    #add_compile_definitions(DEBUG_MANAGED_OBJECTS)
     add_compile_options(-sFORCE_FILESYSTEM=1)
     add_compile_options(-fexceptions)
 
