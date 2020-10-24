@@ -14,7 +14,7 @@
 
 #include "core/platform.h"
 
-#if AGS_PLATFORM_OS_LINUX && !AGS_PLATFORM_OS_EMSCRIPTEN
+#if AGS_PLATFORM_OS_LINUX
 
 // ********* LINUX PLACEHOLDER DRIVER *********
 

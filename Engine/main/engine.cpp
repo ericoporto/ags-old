@@ -420,22 +420,6 @@ void engine_locate_audio_pak()
     }
 }
 
-#ifdef AGS_DELETE_FOR_3_6
-
-void engine_init_keyboard()
-{
-#ifdef ALLEGRO_KEYBOARD_HANDLER
-    Debug::Printf(kDbgMsg_Info, "Initializing keyboard");
-
-    install_keyboard();
-#endif
-#if AGS_PLATFORM_OS_LINUX
-    setlocale(LC_NUMERIC, "C"); // needed in X platform because install keyboard affects locale of printfs
-#endif
-}
-
-#endif
-
 void engine_init_timer()
 {
     Debug::Printf(kDbgMsg_Info, "Install timer");
@@ -1017,7 +1001,7 @@ void allegro_bitmap_test_init()
 // Only allow searching around for game data on desktop systems;
 // otherwise use explicit argument either from program wrapper, command-line
 // or read from default config.
-#if AGS_PLATFORM_OS_WINDOWS || AGS_PLATFORM_OS_LINUX || AGS_PLATFORM_OS_MACOS
+#if AGS_PLATFORM_OS_WINDOWS || AGS_PLATFORM_OS_LINUX || AGS_PLATFORM_OS_MACOS || AGS_PLATFORM_OS_EMSCRIPTEN
     #define AGS_SEARCH_FOR_GAME_ON_LAUNCH
 #endif
 

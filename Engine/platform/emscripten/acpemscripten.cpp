@@ -128,7 +128,7 @@ const char* AGSEmscripten::GetAllegroFailUserHint()
 }
 
 eScriptSystemOSID AGSEmscripten::GetSystemOSID() {
-  return eOS_Linux;
+  return eOS_Web;
 }
 
 int AGSEmscripten::InitializeCDPlayer() {
