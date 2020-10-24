@@ -319,9 +319,13 @@ private:
     // Configure backbuffer texture, that is used in render-to-texture mode
     void SetupBackbufferTexture();
     void DeleteBackbufferTexture();
-#if AGS_PLATFORM_OS_WINDOWS || AGS_PLATFORM_OS_LINUX || AGS_PLATFORM_OS_MACOS || AGS_PLATFORM_OS_ANDROID
+#if AGS_PLATFORM_OS_WINDOWS \
+    || AGS_PLATFORM_OS_LINUX \
+    || AGS_PLATFORM_OS_MACOS \
+    || AGS_PLATFORM_OS_ANDROID \
+    || AGS_PLATFORM_OS_EMSCRIPTEN
     void CreateDesktopScreen(int width, int height, int depth);
-#elif AGS_PLATFORM_OS_ANDROID || AGS_PLATFORM_OS_IOS
+#elif  AGS_PLATFORM_OS_IOS
     void UpdateDeviceScreen();
 #endif
     // Unset parameters and release resources related to the display mode

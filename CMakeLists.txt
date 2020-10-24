@@ -88,6 +88,7 @@ if(EMSCRIPTEN)
         -s DISABLE_EXCEPTION_CATCHING=0 ")
 
     set(EMSDK_LINKER_FLAGS "\
+        -s FULL_ES2=1 \
         -s FORCE_FILESYSTEM=1 -lidbfs.js  \
         -s EXPORTED_FUNCTIONS=['_main'] \
         -s EXTRA_EXPORTED_RUNTIME_METHODS=['ccall','callMain']")
@@ -192,10 +193,10 @@ add_subdirectory(Common/libsrc/freetype-2.1.3   EXCLUDE_FROM_ALL)
 add_subdirectory(Common                         EXCLUDE_FROM_ALL)
 
 add_subdirectory(Engine/libsrc/apeg-1.2.1       EXCLUDE_FROM_ALL)
-if (NOT ANDROID)
-    add_subdirectory(Engine/libsrc/glad             EXCLUDE_FROM_ALL)
-else()
+if (ANDROID OR EMSCRIPTEN)
     add_subdirectory(Engine/libsrc/glad-gles2       EXCLUDE_FROM_ALL)
+else()
+    add_subdirectory(Engine/libsrc/glad             EXCLUDE_FROM_ALL)
 endif()
 add_subdirectory(Engine/libsrc/hq2x             EXCLUDE_FROM_ALL)
 add_subdirectory(Engine/libsrc/libcda-0.5       EXCLUDE_FROM_ALL)

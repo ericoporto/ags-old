@@ -584,10 +584,10 @@ else()
 endif()
 
 
-if (ANDROID)
+if (ANDROID OR EMSCRIPTEN)
     target_link_libraries(engine PUBLIC
         EGL
-        GLESv1_CM
+    #    GLESv1_CM
         GLESv2
         Glad::GladGLES2
     )

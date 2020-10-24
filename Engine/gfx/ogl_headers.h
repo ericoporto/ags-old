@@ -43,7 +43,7 @@
 
 #include "glad/glad.h"
 
-#elif AGS_PLATFORM_OS_ANDROID
+#elif AGS_PLATFORM_OS_ANDROID || AGS_PLATFORM_OS_EMSCRIPTEN
 #include "SDL.h"
 #include <EGL/egl.h>
 #include "glad/glad.h"

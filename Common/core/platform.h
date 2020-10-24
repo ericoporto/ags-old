@@ -70,7 +70,7 @@
     #define AGS_PLATFORM_OS_EMSCRIPTEN (0)
 #elif defined(__EMSCRIPTEN__)
     #define AGS_PLATFORM_OS_WINDOWS    (0)
-    #define AGS_PLATFORM_OS_LINUX      (1)
+    #define AGS_PLATFORM_OS_LINUX      (0)
     #define AGS_PLATFORM_OS_MACOS      (0)
     #define AGS_PLATFORM_OS_ANDROID    (0)
     #define AGS_PLATFORM_OS_IOS        (0)

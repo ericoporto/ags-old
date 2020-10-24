@@ -34,28 +34,13 @@
 
 extern void process_pending_events();
 
-#if AGS_PLATFORM_OS_ANDROID
+#define AGS_OPENGL_ES2 ((AGS_PLATFORM_OS_ANDROID || AGS_PLATFORM_OS_EMSCRIPTEN))
+
+#if AGS_OPENGL_ES2
 
 #define GL_CLAMP GL_CLAMP_TO_EDGE
 
-// Defined in Allegro
-extern "C"
-{
-//  void android_swap_buffers();
-  void android_create_screen(int width, int height, int color_depth);
-//  void android_mouse_setup(int left, int right, int top, int bottom, float scaling_x, float scaling_y);
-}
-
-extern "C" void android_debug_printf(char* format, ...);
-
-//extern unsigned int android_screen_physical_width;
-//extern unsigned int android_screen_physical_height;
-//extern int android_screen_initialized;
 int device_screen_initialized = 1;
-
-//#define device_screen_initialized android_screen_initialized
-//#define device_mouse_setup android_mouse_setup
-//#define device_swap_buffers android_swap_buffers
 
 const char* fbo_extension_string = "GL_OES_framebuffer_object";
 
@@ -208,10 +193,7 @@ OGLGraphicsDriver::OGLGraphicsDriver()
 {
   device_screen_physical_width  = 0;
   device_screen_physical_height = 0;
-#if AGS_PLATFORM_OS_ANDROID
-  device_screen_physical_width  = 0;
-  device_screen_physical_height = 0;
-#elif AGS_PLATFORM_OS_IOS
+#if AGS_PLATFORM_OS_IOS
   device_screen_physical_width  = ios_screen_physical_width;
   device_screen_physical_height = ios_screen_physical_height;
 #endif
@@ -259,13 +241,11 @@ void OGLGraphicsDriver::SetupDefaultVertices()
   defaultVertices[3].tv=1.0;
 }
 
-//#if !AGS_PLATFORM_OS_ANDROID
 void OGLGraphicsDriver::CreateDesktopScreen(int width, int height, int depth)
 {
   device_screen_physical_width = width;
   device_screen_physical_height = height;
 }
-//#endif
 
 
 void OGLGraphicsDriver::UpdateDeviceScreen(const Size &screenSize)
@@ -359,7 +339,7 @@ bool OGLGraphicsDriver::InitGlScreen(const DisplayMode &mode)
         Debug::Printf(kDbgMsg_Warn, "Error occured setting attribute SDL_GL_CONTEXT_MAJOR_VERSION: %s", SDL_GetError());
     }
 
-#if AGS_PLATFORM_OS_ANDROID
+#if AGS_OPENGL_ES2
     if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0) != 0) {
         Debug::Printf(kDbgMsg_Warn,  "Error occured setting attribute SDL_GL_CONTEXT_MINOR_VERSION: %s", SDL_GetError());
     }
@@ -369,7 +349,7 @@ bool OGLGraphicsDriver::InitGlScreen(const DisplayMode &mode)
     }
 #endif
 
-#if AGS_PLATFORM_OS_ANDROID
+#if AGS_OPENGL_ES2
     if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES) != 0) {
         Debug::Printf(kDbgMsg_Warn, "Error occured setting attribute SDL_GL_CONTEXT_PROFILE_MASK: %s", SDL_GetError());
     }
@@ -411,7 +391,7 @@ bool OGLGraphicsDriver::InitGlScreen(const DisplayMode &mode)
 
     this->sdlGlContext = SDL_GL_CreateContext(this->sdlWindow);
 
-#if AGS_PLATFORM_OS_ANDROID
+#if AGS_OPENGL_ES2
     if (!gladLoadGLES2Loader((GLADloadproc) SDL_GL_GetProcAddress)) {
         Debug::Printf(kDbgMsg_Error, "Failed to load glad with gladLoadGLES2Loader");
     }
@@ -433,10 +413,12 @@ bool OGLGraphicsDriver::InitGlScreen(const DisplayMode &mode)
         return false;
     }
 
-//  if (!gladLoadGL()) {
-//	  Debug::Printf(kDbgMsg_Error, "Failed to load GL.");
-//	  return false;
-//  }
+#if !AGS_OPENGL_ES2
+    if (!gladLoadGL()) {
+ 	  Debug::Printf(kDbgMsg_Error, "Failed to load GL.");
+ 	  return false;
+    }
+#endif
 
   CreateDesktopScreen(mode.Width, mode.Height, mode.ColorDepth);
 
@@ -520,7 +502,7 @@ void OGLGraphicsDriver::DeleteGlContext()
 
 inline bool CanDoFrameBuffer()
 {
-#if AGS_PLATFORM_OS_ANDROID
+#if AGS_OPENGL_ES2
   return true;
 #elif AGS_PLATFORM_OS_IOS
   const char* fbo_extension_string = "GL_OES_framebuffer_object";
@@ -1091,7 +1073,7 @@ bool OGLGraphicsDriver::GetCopyOfScreenIntoBitmap(Bitmap *destination, bool at_n
   {
 #if AGS_PLATFORM_OS_IOS
     ios_select_buffer();
-#elif AGS_PLATFORM_OS_ANDROID
+#elif AGS_OPENGL_ES2
 
 #else
     glReadBuffer(GL_FRONT);
@@ -1105,7 +1087,7 @@ bool OGLGraphicsDriver::GetCopyOfScreenIntoBitmap(Bitmap *destination, bool at_n
   unsigned char* buffer = new unsigned char[bufferSize];
   if (buffer)
   {
-#if AGS_PLATFORM_OS_ANDROID
+#if AGS_OPENGL_ES2
     glReadPixels(retr_rect.Left, retr_rect.Top, retr_rect.GetWidth(), retr_rect.GetHeight(), GL_RGBA, GL_UNSIGNED_BYTE, buffer);
 #else
     glReadPixels(retr_rect.Left, retr_rect.Top, retr_rect.GetWidth(), retr_rect.GetHeight(), GL_BGRA, GL_UNSIGNED_BYTE, buffer);
@@ -1888,7 +1870,7 @@ IDriverDependantBitmap* OGLGraphicsDriver::CreateDDBFromBitmap(Bitmap *bitmap, b
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
       // NOTE: pay attention that the texture format depends on the **display mode**'s format,
       // rather than source bitmap's color depth!
-#if AGS_PLATFORM_OS_ANDROID
+#if AGS_OPENGL_ES2
       glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, thisAllocatedWidth, thisAllocatedHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 #else
       glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, thisAllocatedWidth, thisAllocatedHeight, 0, GL_BGRA, GL_UNSIGNED_BYTE, nullptr);
