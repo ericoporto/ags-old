@@ -21,6 +21,7 @@
 
 #include "script/runtimescriptvalue.h"
 #include "ac/dynobj/cc_dynamicobject.h"   // ICCDynamicObject
+#include "core/platform.h"
 
 namespace AGS { namespace Common { class Stream; }}
 using namespace AGS; // FIXME later
@@ -50,8 +51,9 @@ private:
     int32_t nextHandle {}; // TODO: manage nextHandle's going over INT32_MAX !
     std::queue<int32_t> available_ids;
     std::vector<ManagedObject> objects;
-    //std::unordered_map<const char *, int32_t> handleByAddress;
-
+#if !AGS_PLATFORM_OS_EMSCRIPTEN
+    std::unordered_map<const char *, int32_t> handleByAddress;
+#endif
     void Init(int32_t theHandle, const char *theAddress, ICCDynamicObject *theCallback, ScriptValueType objType);
     int Remove(ManagedObject &o, bool force = false); 
 

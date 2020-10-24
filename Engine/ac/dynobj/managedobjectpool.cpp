@@ -20,11 +20,8 @@
 #include "script/cc_error.h"
 #include "script/script_common.h"
 #include "util/stream.h"
-#include "core/platform.h"
-#if AGS_PLATFORM_OS_EMSCRIPTEN
-#include <emscripten.h>
-#endif
 
+// Emscripten fails twice here, it doesn't run the constructor and it uses hundreds of megabytes to allocate the unordered_map
 using namespace AGS::Common;
 
 const auto OBJECT_CACHE_MAGIC_NUMBER = 0xa30b;
@@ -41,8 +38,9 @@ int ManagedObjectPool::Remove(ManagedObject &o, bool force) {
     auto handle = o.handle;
     available_ids.push(o.handle);
 
-    //handleByAddress.erase(o.addr);
-    //handleByAddress.erase(reinterpret_cast<uintptr_t>(o.addr));
+#if !AGS_PLATFORM_OS_EMSCRIPTEN
+    handleByAddress.erase(o.addr);
+#endif
     o = ManagedObject();
 
     ManagedObjectLog("Line %d Disposed managed object handle=%d", currentline, handle);
@@ -86,15 +84,17 @@ int32_t ManagedObjectPool::SubRef(int32_t handle) {
 
 int32_t ManagedObjectPool::AddressToHandle(const char *addr) {
     if (addr == nullptr) { return 0; }
+#if AGS_PLATFORM_OS_EMSCRIPTEN
     for(int i=0; i<objects.size(); i++)
     {
         if(objects[i].addr == addr) return objects[i].handle;
     }
     return 0;
-    //auto it = handleByAddress.find(addr);
-    //auto it = handleByAddress.find(reinterpret_cast<uintptr_t>(addr));
-    //if (it == handleByAddress.end()) { return 0; }
-    //return it->second;
+#else
+    auto it = handleByAddress.find(addr);
+    if (it == handleByAddress.end()) { return 0; }
+    return it->second;
+#endif
 }
 
 // this function is called often (whenever a pointer is used)
@@ -118,18 +118,20 @@ ScriptValueType ManagedObjectPool::HandleToAddressAndManager(int32_t handle, voi
 
 int ManagedObjectPool::RemoveObject(const char *address) {
     if (address == nullptr) { return 0; }
-    // auto it = handleByAddress.find(address);
+#if AGS_PLATFORM_OS_EMSCRIPTEN
     int i;
     for(i=0; i<objects.size(); i++)
     {
         if(objects[i].addr == address) break;
     }
-
-   // auto it = handleByAddress.find(reinterpret_cast<uintptr_t>(address));
-    //if (it == handleByAddress.end()) { return 0; }
     if(i==objects.size()) return 0;
+    auto & o = objects[i];
+#else
+    auto it = handleByAddress.find(address);
+    if (it == handleByAddress.end()) { return 0; }
 
-    auto & o = objects[objects[i].handle];
+    auto & o = objects[it->second];
+#endif
     return Remove(o, true);
 }
 
@@ -155,6 +157,14 @@ void ManagedObjectPool::RunGarbageCollection()
 int ManagedObjectPool::AddObject(const char *address, ICCDynamicObject *callback, bool plugin_object) 
 {
     int32_t handle;
+#if AGS_PLATFORM_OS_EMSCRIPTEN
+    if(nextHandle == 0)
+    {
+        objectCreationCounter = 0;
+        nextHandle =1;
+        objects.reserve(RESERVED_SIZE);
+    }
+#endif
 
     if (!available_ids.empty()) {
         handle = available_ids.front();
@@ -171,11 +181,9 @@ int ManagedObjectPool::AddObject(const char *address, ICCDynamicObject *callback
 
     o = ManagedObject(plugin_object ? kScValPluginObject : kScValDynamicObject, handle, address, callback);
 
-
-    //std::pair<const char*, int32_t> address_handle (address, o.handle);
-    //std::pair<uintptr_t , int32_t> address_handle (reinterpret_cast<uintptr_t>(address), o.handle);
-   // handleByAddress.insert(address_handle);
-
+#if !AGS_PLATFORM_OS_EMSCRIPTEN
+    handleByAddress.insert({address, o.handle});
+#endif
     objectCreationCounter++;
     ManagedObjectLog("Allocated managed object handle=%d, type=%s", handle, callback->GetType());
     return o.handle;
@@ -194,9 +202,9 @@ int ManagedObjectPool::AddUnserializedObject(const char *address, ICCDynamicObje
 
     o = ManagedObject(plugin_object ? kScValPluginObject : kScValDynamicObject, handle, address, callback);
 
-//    handleByAddress.insert({address, o.handle});
- //   std::pair<uintptr_t , int32_t> address_handle (reinterpret_cast<uintptr_t>(address), o.handle);
-   // handleByAddress.insert(address_handle);
+#if !AGS_PLATFORM_OS_EMSCRIPTEN
+    handleByAddress.insert({address, o.handle});
+#endif
     ManagedObjectLog("Allocated unserialized managed object handle=%d, type=%s", o.handle, callback->GetType());
     return o.handle;
 }
@@ -340,8 +348,15 @@ void ManagedObjectPool::reset() {
     nextHandle = 1;
 }
 
+
+
+#if AGS_PLATFORM_OS_EMSCRIPTEN
 ManagedObjectPool::ManagedObjectPool() : objectCreationCounter(0), nextHandle(1), available_ids(), objects(RESERVED_SIZE, ManagedObject()) {
-//    handleByAddress.reserve(RESERVED_SIZE);
+nextHandle = 1;
+#else
+ManagedObjectPool::ManagedObjectPool() : objectCreationCounter(0), nextHandle(1), available_ids(), objects(RESERVED_SIZE, ManagedObject()), handleByAddress() {
+    handleByAddress.reserve(RESERVED_SIZE);
+#endif
 }
 
 ManagedObjectPool pool;
