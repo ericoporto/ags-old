@@ -88,13 +88,21 @@ if(EMSCRIPTEN)
 		-s INITIAL_MEMORY=536870912 \
         -s DISABLE_EXCEPTION_CATCHING=0 ")
 
+#    set(EMSDK_FLAGS "${EMSDK_FLAGS} \
+#        -g4 \
+#        -fsanitize=null -fsanitize-minimal-runtime \
+#        --emit-symbol-map \
+#        --source-map-base http://0.0.0.0:8000/../ ")
+
     set(EMSDK_LINKER_FLAGS "\
         -s FULL_ES2=1 \
         -s FORCE_FILESYSTEM=1 -lidbfs.js  \
         -s EXPORTED_FUNCTIONS=['_main'] \
         -s EXTRA_EXPORTED_RUNTIME_METHODS=['ccall','callMain']")
 
-    #SET(CMAKE_EXECUTABLE_SUFFIX ".html")
+    set(EMSDK_LINKER_FLAGS "${EMSDK_LINKER_FLAGS} --shell-file ${CMAKE_SOURCE_DIR}/Emscripten/launcher_index.html ")
+
+    SET(CMAKE_EXECUTABLE_SUFFIX ".html")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${USE_FLAGS} ${EMSDK_FLAGS}")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${USE_FLAGS} ${EMSDK_FLAGS}")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${USE_FLAGS} ${EMSDK_FLAGS} ${EMSDK_LINKER_FLAGS}")
