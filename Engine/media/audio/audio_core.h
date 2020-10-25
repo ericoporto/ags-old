@@ -57,4 +57,8 @@ float audio_core_slot_get_pos_ms(int slot_handle);
 // Calculate sound clip length in milliseconds
 float audio_core_get_sound_length_ms(const std::vector<char> &data, const char *extension_hint);
 
+#if defined(AGS_DISABLE_THREADS)
+void audio_core_threadless_poll();
+#endif
+
 #endif // __AGS_EE_MEDIA__AUDIOCORE_H

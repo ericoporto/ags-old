@@ -24,6 +24,9 @@
 #include <thread>
 #include "SDL.h"
 #include "platform/base/agsplatformdriver.h"
+#if defined(AGS_DISABLE_THREADS)
+#include "media/audio/audio_core.h"
+#endif
 
 namespace {
 
@@ -69,6 +72,9 @@ void WaitForNextFrame()
         next_frame_timestamp = now;
         return;
     }
+#if defined(AGS_DISABLE_THREADS)
+    audio_core_threadless_poll();
+#endif
 
     // jump ahead if we're lagging
     if (next_frame_timestamp < (now - MAXIMUM_FALL_BEHIND*frameDuration)) {

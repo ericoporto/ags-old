@@ -76,16 +76,25 @@ endif()
 
 if(EMSCRIPTEN)
     set(USE_FLAGS " -s USE_SDL=2  -s USE_FREETYPE=1  -s USE_VORBIS=1  -s USE_OGG=1 ")
-    set(EMSDK_FLAGS "\
+    set(AGS_DISABLE_THREADS TRUE)
+    if(AGS_DISABLE_THREADS)
+        add_compile_definitions("AGS_DISABLE_THREADS=1")
+        set(EMSDK_FLAGS "\
+        -s ALLOW_MEMORY_GROWTH=1 ")
+    else()
+        set(EMSDK_FLAGS "\
+        -pthread \
+		-s INITIAL_MEMORY=536870912 ")
+    endif()
+
+    set(EMSDK_FLAGS "${EMSDK_FLAGS} \
         -s ASYNCIFY \
         -O3 \
-        -pthread \
         -s ALLOW_TABLE_GROWTH=1 \
         -s WASM=1 \
         -s INVOKE_RUN=0 \
 		-s EXIT_RUNTIME=1  \
 		-s EMULATE_FUNCTION_POINTER_CASTS=1 \
-		-s INITIAL_MEMORY=536870912 \
         -s DISABLE_EXCEPTION_CATCHING=0 ")
 
 #    set(EMSDK_FLAGS "${EMSDK_FLAGS} \

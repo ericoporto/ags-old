@@ -92,13 +92,17 @@ void audio_core_init()
     Sound_Init();
 
     g_acore.audio_core_thread_running = true;
+#if !defined(AGS_DISABLE_THREADS)
     g_acore.audio_core_thread = std::thread(audio_core_entry);
+#endif
 }
 
 void audio_core_shutdown()
 {
     g_acore.audio_core_thread_running = false;
+#if !defined(AGS_DISABLE_THREADS)
     g_acore.audio_core_thread.join();
+#endif
 
     // SDL_Sound
     Sound_Quit();
@@ -243,6 +247,24 @@ AudioCorePlayState audio_core_slot_get_play_state(int slot_handle)
 // -------------------------------------------------------------------------------------------------
 // AUDIO PROCESSING
 // -------------------------------------------------------------------------------------------------
+
+#if defined(AGS_DISABLE_THREADS)
+void audio_core_threadless_poll()
+{
+   // if(!g_acore.audio_core_thread_running) return;
+    dump_al_errors();
+
+    for (auto &entry : g_acore.slots_) {
+        auto &slot = entry.second;
+
+        try {
+            slot->decoder_.Poll();
+        } catch (const std::exception& e) {
+            agsdbg::Printf(ags::kDbgMsg_Error, "OpenALDecoder poll exception %s", e.what());
+        }
+    }
+}
+#endif
 
 static void audio_core_entry()
 {
