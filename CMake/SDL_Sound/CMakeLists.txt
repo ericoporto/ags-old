@@ -27,7 +27,7 @@ if(CMAKE_C_COMPILER_ID STREQUAL "SunPro")
     add_definitions(-xldscope=hidden)
 endif()
 
-find_package(SDL2 REQUIRED)
+#find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})
 
 
