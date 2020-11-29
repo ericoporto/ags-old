@@ -68,7 +68,7 @@ RUN curl -fLsS "https://www.libsdl.org/release/SDL2-$SDL2_VERSION.tar.gz" | tar 
   rm -r /tmp/SDL2-$SDL2_VERSION
 
 # Build and install SDL_sound
-RUN pushd /tmp && \
+RUN cd /tmp && \
   curl -fLsS "https://hg.icculus.org/icculus/SDL_sound/archive/9262f9205898.tar.gz" --output SDL_sound.tar.gz && \
   tar -xvzf SDL_sound.tar.gz && \
   mv SDL_sound-9262f9205898 SDL_sound &&  \
