@@ -75,5 +75,5 @@ RUN cd /tmp && \
   cd /tmp/SDL_sound  && \
   mkdir /tmp/SDL_sound/build && \
   cd /tmp/SDL_sound/build && \
-  cmake .. && make && make install && \
+  cmake .. -DC_STANDARD=99 && make && make install && \
   rm -r /tmp/SDL_sound
