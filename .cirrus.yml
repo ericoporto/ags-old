@@ -304,11 +304,11 @@ compiler_tests_task:
 make_release_task:
   depends_on:
     - compiler_tests
-#    - build_android
     - build_linux_debian
     - editor_packaging
     - linux_packaging
     - pdb_packaging
+#    - build_android
   container:
     image: alpine:3.10
   env:
