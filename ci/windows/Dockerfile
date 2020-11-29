@@ -55,6 +55,20 @@ ARG SDL_VERSION=2.0.12
 RUN mkdir Lib\SDL2 && \
   curl -fLSs "https://www.libsdl.org/release/SDL2-devel-%SDL_VERSION%-VC.zip" | tar -f - -xvzC Lib\SDL2\ --strip-components 1 
 
+# temporarily keep allegro libs here until we can build the one that comes with the engine
+ARG ALLEGRO_REPO=adventuregamestudio/lib-allegro
+ARG ALLEGRO_RELEASES=v4.4.3.1-agspatch-2
+RUN for %a in (%ALLEGRO_RELEASES%) do \
+  mkdir Source\Allegro\%a && \
+  curl -fLSs "https://github.com/%ALLEGRO_REPO%/archive/%a.tar.gz" | tar -f - -xvzC Source\Allegro\%a --strip-components 1 && \
+  mkdir Lib\Allegro\%a && \
+  pushd Lib\Allegro\%a && \
+  curl -fLOJ https://github.com/%ALLEGRO_REPO%/releases/download/%a/alleg-debug-static-mt.lib & \
+  curl -fLOJ https://github.com/%ALLEGRO_REPO%/releases/download/%a/alleg-debug-static.lib & \
+  curl -fLOJ https://github.com/%ALLEGRO_REPO%/releases/download/%a/alleg-static-mt.lib & \
+  curl -fLOJ https://github.com/%ALLEGRO_REPO%/releases/download/%a/alleg-static.lib & \
+  popd
+
 # delete all temp Files
 RUN mkdir empty && \
   robocopy empty %TEMP% /MIR > nul & \
