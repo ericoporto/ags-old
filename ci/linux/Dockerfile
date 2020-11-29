@@ -63,12 +63,15 @@ RUN curl -fLsS "https://github.com/Kitware/CMake/releases/download/v$CMAKE_VERSI
 # Build and install SDL2
 ARG SDL2_VERSION=2.0.12
 RUN curl -fLsS "https://www.libsdl.org/release/SDL2-$SDL2_VERSION.tar.gz" | tar -f - -xvzC /tmp && \
-  cd /tmp/sdl2-$SDL2_VERSION && \
+  cd /tmp/SDL2-$SDL2_VERSION && \
   ./configure make && make install && \
-  rm -r /tmp/sdl2-$SDL2_VERSION
+  rm -r /tmp/SDL2-$SDL2_VERSION
 
 # Build and install SDL_sound
-RUN curl -fLsS "https://hg.icculus.org/icculus/SDL_sound/archive/9262f9205898.tar.gz" | tar -f - -xvzC /tmp && \
+RUN pushd /tmp && \
+  curl -fLsS "https://hg.icculus.org/icculus/SDL_sound/archive/9262f9205898.tar.gz" --output SDL_sound.tar.gz && \
+  tar -xvzf SDL_sound.tar.gz && \
+  mv SDL_sound-9262f9205898 SDL_sound &&  \
   cd /tmp/SDL_sound  && \
   ./configure make && make install && \
   rm -r /tmp/SDL_sound
