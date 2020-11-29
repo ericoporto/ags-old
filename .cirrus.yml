@@ -337,13 +337,13 @@ make_release_task:
       "pdb_packaging/archive/AGS-${version}-pdb.zip" \
       "build_linux_debian/debian_packages/ags_${version}_i386.deb" \
       "build_linux_debian/debian_packages/ags_${version}_amd64.deb" 
-#      "build_android/apks/Android/launcher_list/bin/AGS-${version}-debug.apk" \
-#      "build_android/libs/AGS-${version}-android-libs.zip"
     do
       url="$baseurl/$download"
       echo "Downloading $url"
       curl -fLOJ "$url"
     done
+#      "build_android/apks/Android/launcher_list/bin/AGS-${version}-debug.apk" \
+#      "build_android/libs/AGS-${version}-android-libs.zip"
   create_checksums_script: >
     cd /tmp/github_release &&
     sha256 -r * | sed -E "s/[[:blank:]]+/  /" | tee /tmp/checksums.sha256 &&
