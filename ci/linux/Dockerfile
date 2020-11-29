@@ -15,7 +15,7 @@ APT::Get::Install-Suggests "false";\n' > /etc/apt/apt.conf.d/$APT_CONF_LOCAL
 RUN apt-get update && apt-get upgrade
 
 # Get curl and ssl for cmake fetches
-RUN apt-get install curl libcurl4-openssl-dev
+RUN apt-get install curl libcurl4-openssl-dev libssl-dev
 
 # Get build dependencies
 RUN apt-get install \
@@ -33,5 +33,5 @@ RUN apt-get install \
 ARG CMAKE_VERSION=3.14.5
 RUN curl -fLsS "https://github.com/Kitware/CMake/releases/download/v$CMAKE_VERSION/cmake-$CMAKE_VERSION.tar.gz" | tar -f - -xvzC /tmp && \
   cd /tmp/cmake-$CMAKE_VERSION && \
-  ./configure && make && make install && \
+  ./configure --system-curl && make && make install && \
   rm -r /tmp/cmake-$CMAKE_VERSION
