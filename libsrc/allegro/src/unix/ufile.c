@@ -48,6 +48,9 @@
 
 #define PREFIX_I "al-unix INFO: "
 
+#ifndef _WIN32
+#include <unistd.h>
+#endif
 
 /* _al_file_isok:
  *  Helper function to check if it is safe to access a file on a floppy
