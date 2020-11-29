@@ -64,7 +64,7 @@ RUN curl -fLsS "https://github.com/Kitware/CMake/releases/download/v$CMAKE_VERSI
 ARG SDL2_VERSION=2.0.12
 RUN curl -fLsS "https://www.libsdl.org/release/SDL2-$SDL2_VERSION.tar.gz" | tar -f - -xvzC /tmp && \
   cd /tmp/SDL2-$SDL2_VERSION && \
-  ./configure make && make install && \
+  ./configure && make && make install && \
   rm -r /tmp/SDL2-$SDL2_VERSION
 
 # Build and install SDL_sound
@@ -73,5 +73,5 @@ RUN pushd /tmp && \
   tar -xvzf SDL_sound.tar.gz && \
   mv SDL_sound-9262f9205898 SDL_sound &&  \
   cd /tmp/SDL_sound  && \
-  ./configure make && make install && \
+  ./configure && make && make install && \
   rm -r /tmp/SDL_sound
