@@ -73,5 +73,7 @@ RUN cd /tmp && \
   tar -xvzf SDL_sound.tar.gz && \
   mv SDL_sound-9262f9205898 SDL_sound &&  \
   cd /tmp/SDL_sound  && \
-  ./configure && make && make install && \
+  mkdir /tmp/SDL_sound/build && \
+  cd /tmp/SDL_sound/build && \
+  cmake .. && make && make install && \
   rm -r /tmp/SDL_sound
