@@ -14,8 +14,8 @@ APT::Get::Install-Suggests "false";\n' > /etc/apt/apt.conf.d/$APT_CONF_LOCAL
 # Upgrade existing packages
 RUN apt-get update && apt-get upgrade
 
-# Get curl
-RUN apt-get install curl
+# Get curl and ssl for cmake fetches
+RUN apt-get install curl libcurl4-openssl-dev
 
 # Get build dependencies
 RUN apt-get install \
