@@ -51,18 +51,9 @@ RUN mkdir Redist && \
   cd Redist && \
   curl -fLOJ https://download.microsoft.com/download/6/A/A/6AA4EDFF-645B-48C5-81CC-ED5963AEAD48/vc_redist.x86.exe
 
-ARG ALLEGRO_REPO=adventuregamestudio/lib-allegro
-ARG ALLEGRO_RELEASES=v4.4.3.1-agspatch-3
-RUN for %a in (%ALLEGRO_RELEASES%) do \
-  mkdir Source\Allegro\%a && \
-  curl -fLSs "https://github.com/%ALLEGRO_REPO%/archive/%a.tar.gz" | tar -f - -xvzC Source\Allegro\%a --strip-components 1 && \
-  mkdir Lib\Allegro\%a && \
-  pushd Lib\Allegro\%a && \
-  curl -fLOJ https://github.com/%ALLEGRO_REPO%/releases/download/%a/alleg-debug-static-mt.lib & \
-  curl -fLOJ https://github.com/%ALLEGRO_REPO%/releases/download/%a/alleg-debug-static.lib & \
-  curl -fLOJ https://github.com/%ALLEGRO_REPO%/releases/download/%a/alleg-static-mt.lib & \
-  curl -fLOJ https://github.com/%ALLEGRO_REPO%/releases/download/%a/alleg-static.lib & \
-  popd
+ARG SDL_VERSION=2.0.12
+RUN mkdir Lib\SDL2 && \
+  curl -fLSs "https://www.libsdl.org/release/SDL2-devel-%SDL_VERSION%-VC.zip" | tar -f - -xvzC Lib\SDL2\ --strip-components 1 
 
 # delete all temp Files
 RUN mkdir empty && \
