@@ -24,10 +24,34 @@ RUN apt-get install \
   git \
   libaldmb1-dev \
   libogg-dev \
-  libsdl2-dev \
   libtheora-dev \
   libvorbis-dev \
   pkg-config
+
+# Get SDL2 build dependencies
+RUN apt-get install \
+  libasound2-dev \
+  libdbus-1-dev \
+  libegl1-mesa-dev \
+  libgl1-mesa-dev \
+  libgles2-mesa-dev \
+  libglu1-mesa-dev \
+  libibus-1.0-dev \
+  libpulse-dev \
+  libsndio-dev \
+  libudev-dev \
+  libwayland-dev \
+  libx11-dev \
+  libxcursor-dev \
+  libxext-dev \
+  libxi-dev \
+  libxinerama-dev \
+  libxkbcommon-dev \
+  libxrandr-dev \
+  libxss-dev \
+  libxt-dev \
+  libxv-dev \
+  libxxf86vm-dev
 
 # Build and install CMake
 ARG CMAKE_VERSION=3.14.5
@@ -35,3 +59,16 @@ RUN curl -fLsS "https://github.com/Kitware/CMake/releases/download/v$CMAKE_VERSI
   cd /tmp/cmake-$CMAKE_VERSION && \
   ./configure --system-curl && make && make install && \
   rm -r /tmp/cmake-$CMAKE_VERSION
+
+# Build and install SDL2
+ARG SDL2_VERSION=3.14.5
+RUN curl -fLsS "https://www.libsdl.org/release/SDL2-$SDL2_VERSION.tar.gz" | tar -f - -xvzC /tmp && \
+  cd /tmp/sdl2-$SDL2_VERSION && \
+  ./configure make && make install && \
+  rm -r /tmp/sdl2-$SDL2_VERSION
+
+# Build and install SDL_sound
+RUN curl -fLsS "https://hg.icculus.org/icculus/SDL_sound/archive/9262f9205898.tar.gz" | tar -f - -xvzC /tmp && \
+  cd /tmp/SDL_sound  && \
+  ./configure make && make install && \
+  rm -r /tmp/SDL_sound 
