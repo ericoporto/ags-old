@@ -76,6 +76,6 @@ RUN cd /tmp && \
   cd /tmp/SDL_sound  && \
   mkdir /tmp/SDL_sound/build && \
   cd /tmp/SDL_sound/build && \
-  sed -i 's/^install\(FILES SDL_sound.h DESTINATION include\)*/install\(FILES src/SDL_sound.h DESTINATION include\)/' /tmp/SDL_sound/CMakeLists.txt && \
+  sed -i 's/^install\(FILES SDL_sound.h DESTINATION include\)*/install\(FILES src\/SDL_sound.h DESTINATION include\)/' /tmp/SDL_sound/CMakeLists.txt && \
   cmake .. -DCMAKE_C_FLAGS="-std=gnu99" && make && make install && \
   rm -r /tmp/SDL_sound
