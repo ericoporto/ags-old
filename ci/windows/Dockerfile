@@ -54,6 +54,16 @@ RUN mkdir Redist && \
 ARG SDL_VERSION=2.0.12
 RUN mkdir Lib\SDL2 && \
   curl -fLSs "https://www.libsdl.org/release/SDL2-devel-%SDL_VERSION%-VC.zip" | tar -f - -xvzC Lib\SDL2\ --strip-components 1 
+ 
+ARG SDL_SOUND_VERSION=9262f9205898 
+ARG SDL_DIR=Lib\SDL2\SDL2-%SDL_VERSION%
+RUN mkdir Lib\SDL_sound && \ 
+  curl -fLSs "https://hg.icculus.org/icculus/SDL_sound/archive/%SDL_SOUND_VERSION%.zip" | tar -f - -xvzC Lib\ --strip-components 1 && \
+  RENAME "Lib\%SDL_SOUND_VERSION%" Lib\SDL_sound && \
+  pushd Lib\SDL_sound\ && \
+  cmake --build . --config Release
+  
+  
 
 # temporarily keep allegro libs here until we can build the one that comes with the engine
 ARG ALLEGRO_REPO=adventuregamestudio/lib-allegro
