@@ -57,11 +57,11 @@ RUN mkdir Lib\SDL2 && \
  
 ARG SDL_SOUND_VERSION=9262f9205898 
 ARG SDL_DIR=Lib\SDL2\SDL2-%SDL_VERSION%
-RUN mkdir Lib\SDL_sound && \ 
-  curl -fLSs "https://hg.icculus.org/icculus/SDL_sound/archive/%SDL_SOUND_VERSION%.zip" | tar -f - -xvzC Lib\ --strip-components 1 && \
+RUN curl -fLSs "https://hg.icculus.org/icculus/SDL_sound/archive/%SDL_SOUND_VERSION%.zip" | tar -f - -xvzC Lib\ --strip-components 1 && \
   RENAME "Lib\%SDL_SOUND_VERSION%" Lib\SDL_sound && \
   pushd Lib\SDL_sound\ && \
-  cmake --build . --config Release
+  mkdir Lib\SDL_sound\build  && \
+  cmake --build .. --config Release
   
   
 
