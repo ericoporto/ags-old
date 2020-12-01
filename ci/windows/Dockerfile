@@ -58,27 +58,11 @@ RUN mkdir Lib\SDL2 && \
 ARG SDL_SOUND_VERSION=9262f9205898 
 ARG SDL_DIR=Lib\SDL2\SDL2-%SDL_VERSION%
 RUN curl -fLSs "https://hg.icculus.org/icculus/SDL_sound/archive/%SDL_SOUND_VERSION%.zip" | tar -f - -xvzC Lib\ --strip-components 1 && \
-  RENAME "Lib\%SDL_SOUND_VERSION%" Lib\SDL_sound && \
-  pushd Lib\SDL_sound\ && \
-  mkdir Lib\SDL_sound\build  && \
+  pushd Lib\%SDL_SOUND_VERSION%\ && \
+  mkdir Lib\%SDL_SOUND_VERSION%\build  && \
+  cd Lib\%SDL_SOUND_VERSION%\build  && \
   cmake --build .. --config Release
   
-  
-
-# temporarily keep allegro libs here until we can build the one that comes with the engine
-ARG ALLEGRO_REPO=adventuregamestudio/lib-allegro
-ARG ALLEGRO_RELEASES=v4.4.3.1-agspatch-2
-RUN for %a in (%ALLEGRO_RELEASES%) do \
-  mkdir Source\Allegro\%a && \
-  curl -fLSs "https://github.com/%ALLEGRO_REPO%/archive/%a.tar.gz" | tar -f - -xvzC Source\Allegro\%a --strip-components 1 && \
-  mkdir Lib\Allegro\%a && \
-  pushd Lib\Allegro\%a && \
-  curl -fLOJ https://github.com/%ALLEGRO_REPO%/releases/download/%a/alleg-debug-static-mt.lib & \
-  curl -fLOJ https://github.com/%ALLEGRO_REPO%/releases/download/%a/alleg-debug-static.lib & \
-  curl -fLOJ https://github.com/%ALLEGRO_REPO%/releases/download/%a/alleg-static-mt.lib & \
-  curl -fLOJ https://github.com/%ALLEGRO_REPO%/releases/download/%a/alleg-static.lib & \
-  popd
-
 # delete all temp Files
 RUN mkdir empty && \
   robocopy empty %TEMP% /MIR > nul & \
