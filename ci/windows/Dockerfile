@@ -4,7 +4,7 @@ FROM cirrusci/windowsservercore:2019
 # no temp folder exists by default
 RUN mkdir %TEMP%
 
-RUN cinst -y --no-progress visualstudio2019community
+RUN cinst -y --no-progress visualstudio2019-workload-nativedesktop
 
 ARG VISUALCPP_BUILD_TOOLS_VERSION=14.0.25420.1
 RUN cinst visualcpp-build-tools --version %VISUALCPP_BUILD_TOOLS_VERSION% -y
