@@ -1,8 +1,16 @@
 # base will already have Chocolatey installed
 FROM cirrusci/windowsservercore:2019
 
+# Microsoft .NET Framework 4.8 4.8.0.20190930 is broken and causes the
+# installation of visualstudio2019-workload-vctools to fail. To workaround
+# the issue request Microsoft .NET Framework 4.7.2.20180712 instead, which
+# is already installed and thus speeds up installation as well.
+# this is just to prevent visualstudio2019 to force a reset in the machine
 RUN powershell -NoLogo -NoProfile -Command \
-    choco install -y --no-progress visualstudio2019buildtools visualstudio2019-workload-vctools visualstudio2019-workload-nativedesktop || echo "ignore reboot request"
+    choco install -y --no-progress dotnetfx --version 4.7.2.20180712
+
+RUN powershell -NoLogo -NoProfile -Command \
+    choco install -y --no-progress visualstudio2019buildtools visualstudio2019-workload-vctools
 
 # no temp folder exists by default
 RUN mkdir %TEMP%
