@@ -7,10 +7,16 @@ FROM cirrusci/windowsservercore:2019
 # is already installed and thus speeds up installation as well.
 # this is just to prevent visualstudio2019 to force a reset in the machine
 RUN powershell -NoLogo -NoProfile -Command \
-    choco install -y --no-progress dotnetfx --version 4.7.2.20180712
+    cinst -y --no-progress dotnetfx --version=4.7.2.20180712
 
 RUN powershell -NoLogo -NoProfile -Command \
-    choco install -y --no-progress visualstudio2019buildtools visualstudio2019-workload-vctools
+    cinst -y --no-progress --version=16.8.2.0 visualstudio2019buildtools 
+    
+RUN powershell -NoLogo -NoProfile -Command \
+    cinst -y --no-progress --version=1.0.0 visualstudio2019-workload-vctools 
+    
+RUN powershell -NoLogo -NoProfile -Command \
+    cinst -y --no-progress --version=1.0.0 visualstudio2019-workload-nativedesktop || echo "ignore reboot request"
 
 # no temp folder exists by default
 RUN mkdir %TEMP%
