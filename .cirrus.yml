@@ -39,7 +39,7 @@ build_linux_cmake_task:
     arch=$(dpkg --print-architecture)
     filename=${BUILD_TYPE}_$arch
     mkdir build_$filename && cd build_$filename
-    cmake -DCMAKE_C_FLAGS="-std=gnu11" -DSDLSOUND_DECODER_FLAC=0 -DCMAKE_BUILD_TYPE=$BUILD_TYPE .. && make
+    cmake -DCMAKE_C_FLAGS="-std=gnu11" -DSDLSOUND_DECODER_FLAC=0 -DCMAKE_EXE_LINKER_FLAGS="-lm" -DCMAKE_BUILD_TYPE=$BUILD_TYPE .. && make
   binaries_artifacts:
     path: build_*/ags
 
