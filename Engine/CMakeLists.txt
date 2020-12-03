@@ -584,7 +584,7 @@ endif()
 if (WIN32)
     target_link_libraries(engine PUBLIC DirectX::Direct3D9 shlwapi)
 elseif (LINUX)
-    target_link_libraries(engine PUBLIC X11::X11)
+    target_link_libraries(engine PUBLIC X11::X11 m)
 endif()
 
 get_target_property(ENGINE_SOURCES engine SOURCES)
