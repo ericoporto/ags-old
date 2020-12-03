@@ -11,6 +11,8 @@ endif ()
 set_target_properties(engine PROPERTIES
     CXX_STANDARD 11
     CXX_EXTENSIONS NO
+    C_STANDARD 11
+    C_EXTENSIONS YES
 )
 
 target_include_directories(engine PUBLIC .)
