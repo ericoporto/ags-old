@@ -76,8 +76,11 @@ RUN echo   set^(SDL2_LIBRARIES "${CMAKE_CURRENT_LIST_DIR}/lib/x86/SDL2.lib;${CMA
 RUN echo endif ^(^)  >> "Lib\SDL2\sdl2-config.cmake"
 RUN echo string^(STRIP "${SDL2_LIBRARIES}" SDL2_LIBRARIES^) >> "Lib\SDL2\sdl2-config.cmake"
  
+RUN dir Lib\SDL2
+RUN type Lib\SDL2\sdl2-config.cmake
+
 ARG SDL_SOUND_VERSION=9262f9205898 
-ARG SDL_DIR=Lib\SDL2\SDL2-%SDL_VERSION%
+ARG SDL_DIR=Lib\SDL2\
 RUN mkdir Lib\SDL_sound && \
     mkdir Lib\SDL_sound\build  && \	
   curl -fLSs "https://hg.icculus.org/icculus/SDL_sound/archive/%SDL_SOUND_VERSION%.tar.gz" | tar -f - -xvzC Lib\SDL_sound --strip-components 1 
