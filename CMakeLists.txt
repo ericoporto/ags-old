@@ -65,6 +65,22 @@ if(LINUX)
     endif ()
 endif (LINUX)
 
+if (UNIX AND NOT APPLE)
+  # Let's check if --no-as-needed is supported by the linker.
+  INCLUDE(CheckCCompilerFlag)
+  SET(_CMAKE_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
+  SET(CMAKE_REQUIRED_FLAGS "-Wl,--no-as-needed")
+  CHECK_C_COMPILER_FLAG("" HAS_NO_AS_NEEDED)
+  SET(CMAKE_REQUIRED_FLAGS ${_CMAKE_REQUIRED_FLAGS})
+  IF(NOT HAS_NO_AS_NEEDED)
+    MESSAGE(SEND_ERROR "Your linker doesn't support a required --no-as-needed flag")
+  ENDIF()
+
+  # This is a template library, so some dependent libraries are only used from
+  # header files, so we'd like to force them to be linked.
+  SET(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-as-needed")
+endif (UNIX AND NOT APPLE)
+
 
 include(CheckIPOSupported)
 check_ipo_supported(RESULT ipo_supported OUTPUT ipo_not_supported_reason)
