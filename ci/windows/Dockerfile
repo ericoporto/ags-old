@@ -65,8 +65,10 @@ RUN mkdir Redist && \
 
 ARG SDL_VERSION=2.0.12
 RUN mkdir Lib\SDL2 && \
-  curl -fLSs "https://www.libsdl.org/release/SDL2-devel-%SDL_VERSION%-VC.zip" | tar -f - -xvzC Lib\SDL2\ --strip-components 1 
-  
+  curl -fLOJ "https://www.libsdl.org/release/SDL2-devel-%SDL_VERSION%-VC.zip" && \
+  tar -f SDL2-devel-%SDL_VERSION%-VC.zip -xvzC Lib\SDL2\ --strip-components 1  && \
+  del /f SDL2-devel-%SDL_VERSION%-VC.zip
+    
 RUN echo set^(SDL2_INCLUDE_DIRS "${CMAKE_CURRENT_LIST_DIR}/include"^) > "Lib\SDL2\sdl2-config.cmake"
 RUN echo # Support both 32 and 64 bit builds >> "Lib\SDL2\sdl2-config.cmake"
 RUN echo if ^(${CMAKE_SIZEOF_VOID_P} MATCHES 8^) >> "Lib\SDL2\sdl2-config.cmake"
@@ -81,16 +83,16 @@ RUN type Lib\SDL2\sdl2-config.cmake
 
 ARG SDL_SOUND_VERSION=9262f9205898 
 RUN mkdir Lib\SDL_sound && \
-    mkdir Lib\SDL_sound\build  && \	
+  mkdir Lib\SDL_sound\build  && \	
   curl -fLSs "https://hg.icculus.org/icculus/SDL_sound/archive/%SDL_SOUND_VERSION%.tar.gz" | tar -f - -xvzC Lib\SDL_sound --strip-components 1 
   
 RUN set SDL2_DIR=%cd%\Lib\SDL2 && \
-    cmake -S Lib\SDL_sound -B Lib\SDL_sound\build -G "Visual Studio 16 2019" -A Win32 -DCMAKE_PREFIX_PATH=Lib\SDL2  
+  cmake -S Lib\SDL_sound -B Lib\SDL_sound\build -G "Visual Studio 16 2019" -A Win32 -DCMAKE_PREFIX_PATH=Lib\SDL2  
 
 ENV VC_SCRIPT_PATH "C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\VC\\vcvarsall.bat"
 RUN ${VC_SCRIPT_PATH} x86 && \
-    cd Lib\SDL_sound\build && \
-    msbuild SDL_sound.sln /p:PlatformToolset=v140 /p:Configuration=Release /p:Platform=Win32 /maxcpucount /nologo
+  cd Lib\SDL_sound\build && \
+  msbuild SDL_sound.sln /p:PlatformToolset=v140 /p:Configuration=Release /p:Platform=Win32 /maxcpucount /nologo
 
 RUN echo "ok!"
   
