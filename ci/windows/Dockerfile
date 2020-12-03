@@ -15,7 +15,7 @@ RUN cinst -y --no-progress --version=1.0.0 visualstudio2019-workload-vctools
 RUN cinst -y --no-progress --version=1.0.0 visualstudio2019-workload-nativedesktop || echo "ignore reboot request"
 
 # no temp folder exists by default
-RUN mkdir %TEMP%
+RUN IF exist %TEMP% () ELSE (mkdir %TEMP%)
 
 ARG VISUALCPP_BUILD_TOOLS_VERSION=14.0.25420.1
 RUN cinst visualcpp-build-tools --version %VISUALCPP_BUILD_TOOLS_VERSION% -y
