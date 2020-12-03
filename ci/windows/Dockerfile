@@ -10,9 +10,7 @@ FROM cirrusci/windowsservercore:cmake
 #RUN cinst -y --no-progress dotnetfx --version=4.7.2.20180712
 
 #RUN cinst -y --no-progress --version=16.8.2.0 visualstudio2019buildtools 
-    
 #RUN cinst -y --no-progress --version=1.0.0 visualstudio2019-workload-vctools 
-    
 #RUN cinst -y --no-progress --version=1.0.0 visualstudio2019-workload-nativedesktop || echo "ignore reboot request"
 
 # no temp folder exists by default
@@ -72,10 +70,7 @@ RUN mkdir Lib\SDL2 && \
 ARG SDL_SOUND_VERSION=9262f9205898 
 ARG SDL_DIR=Lib\SDL2\SDL2-%SDL_VERSION%
 RUN curl -fLSs "https://hg.icculus.org/icculus/SDL_sound/archive/%SDL_SOUND_VERSION%.zip" | tar -f - -xvzC Lib\ --strip-components 1 && \
-  pushd Lib\%SDL_SOUND_VERSION%\ && \
-  mkdir Lib\%SDL_SOUND_VERSION%\build  && \
-  pushd Lib\%SDL_SOUND_VERSION%\build  && \
-  cmake --build .. --config Release && popd && popd
+  dir Lib \
   
 # delete all temp Files
 RUN mkdir empty && \
