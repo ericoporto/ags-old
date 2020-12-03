@@ -67,16 +67,14 @@ ARG SDL_VERSION=2.0.12
 RUN mkdir Lib\SDL2 && \
   curl -fLSs "https://www.libsdl.org/release/SDL2-devel-%SDL_VERSION%-VC.zip" | tar -f - -xvzC Lib\SDL2\ --strip-components 1 
   
-RUN cd  Lib\SDL2 && (
-  echo set^(SDL2_INCLUDE_DIRS "${CMAKE_CURRENT_LIST_DIR}/include"^)
-  echo # Support both 32 and 64 bit builds
-  echo if ^(${CMAKE_SIZEOF_VOID_P} MATCHES 8^)
-  echo   set^(SDL2_LIBRARIES "${CMAKE_CURRENT_LIST_DIR}/lib/x64/SDL2.lib;${CMAKE_CURRENT_LIST_DIR}/lib/x64/SDL2main.lib"^) 
-  echo else ^(^) 
-  echo   set^(SDL2_LIBRARIES "${CMAKE_CURRENT_LIST_DIR}/lib/x86/SDL2.lib;${CMAKE_CURRENT_LIST_DIR}/lib/x86/SDL2main.lib"^)
-  echo endif ^(^) 
-  echo string^(STRIP "${SDL2_LIBRARIES}" SDL2_LIBRARIES^)
-  )>"sdl2-config.cmake"
+RUN echo set^(SDL2_INCLUDE_DIRS "${CMAKE_CURRENT_LIST_DIR}/include"^) > "Lib\SDL2\sdl2-config.cmake"
+RUN echo # Support both 32 and 64 bit builds >> "Lib\SDL2\sdl2-config.cmake"
+RUN echo if ^(${CMAKE_SIZEOF_VOID_P} MATCHES 8^) >> "Lib\SDL2\sdl2-config.cmake"
+RUN echo   set^(SDL2_LIBRARIES "${CMAKE_CURRENT_LIST_DIR}/lib/x64/SDL2.lib;${CMAKE_CURRENT_LIST_DIR}/lib/x64/SDL2main.lib"^)  >> "Lib\SDL2\sdl2-config.cmake"
+RUN echo else ^(^)  >> "Lib\SDL2\sdl2-config.cmake"
+RUN echo   set^(SDL2_LIBRARIES "${CMAKE_CURRENT_LIST_DIR}/lib/x86/SDL2.lib;${CMAKE_CURRENT_LIST_DIR}/lib/x86/SDL2main.lib"^) >> "Lib\SDL2\sdl2-config.cmake"
+RUN echo endif ^(^)  >> "Lib\SDL2\sdl2-config.cmake"
+RUN echo string^(STRIP "${SDL2_LIBRARIES}" SDL2_LIBRARIES^) >> "Lib\SDL2\sdl2-config.cmake"
  
 ARG SDL_SOUND_VERSION=9262f9205898 
 ARG SDL_DIR=Lib\SDL2\SDL2-%SDL_VERSION%
