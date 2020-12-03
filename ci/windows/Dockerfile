@@ -32,8 +32,8 @@ RUN cinst nuget.commandline --version %NUGET_VERSION% -y
 ARG INNO_SETUP_VERSION=6.0.5
 RUN cinst innosetup --version %INNO_SETUP_VERSION% -y
 
-ARG CMAKE_VERSION=3.18.4
-RUN cinst cmake --version %CMAKE_VERSION% --installargs ADD_CMAKE_TO_PATH=System -y
+# ARG CMAKE_VERSION=3.18.4
+# RUN cinst cmake --version %CMAKE_VERSION% --installargs ADD_CMAKE_TO_PATH=System -y
 
 RUN pushd %TEMP% && \
   git clone https://github.com/Microsoft/vcpkg.git && \
