@@ -82,7 +82,7 @@ RUN mkdir Lib\SDL_sound && \
     mkdir Lib\SDL_sound\build  && \	
   curl -fLSs "https://hg.icculus.org/icculus/SDL_sound/archive/%SDL_SOUND_VERSION%.tar.gz" | tar -f - -xvzC Lib\SDL_sound --strip-components 1 
   
-RUN cmake -S Lib\SDL_sound -B Lib\SDL_sound\build -G "Visual Studio 15 2017" -A Win32 -DCMAKE_PREFIX_PATH=Lib\SDL2  
+RUN cmake -S Lib\SDL_sound -B Lib\SDL_sound\build -G "Visual Studio 16 2019" -A Win32 -DCMAKE_PREFIX_PATH=Lib\SDL2  
 
 RUN echo "ok!"
   
