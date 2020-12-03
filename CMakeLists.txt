@@ -50,7 +50,7 @@ endif()
 if(LINUX)
     if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
         if (CMAKE_COMPILER_IS_GNUCC)
-	    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lm")
+	    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lm -lc")
             if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 9.0)
                 # without no-pie we can't double-click run ags in Nautilus
                 # this should only be needed in newer gcc versions
