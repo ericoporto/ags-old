@@ -47,10 +47,12 @@ if (WIN32 AND NOT CMAKE_SIZEOF_VOID_P EQUAL 4)
 	message(FATAL_ERROR "Windows builds only support 32bit for now")
 endif()
 
+set(LIBM "")
+
 if(LINUX)
+    set(LIBM "m")
     if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
         if (CMAKE_COMPILER_IS_GNUCC)
-	    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lm -lc")
             if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 9.0)
                 # without no-pie we can't double-click run ags in Nautilus
                 # this should only be needed in newer gcc versions
