@@ -552,6 +552,7 @@ if (AGS_BUILD_STR)
     target_compile_definitions(engine PUBLIC BUILD_STR=\"${AGS_BUILD_STR}\")
 endif()
 
+message("Engine LIBM: ${LIBM}")
 
 target_link_libraries(engine PUBLIC 
     AGS::Common 
@@ -562,7 +563,8 @@ target_link_libraries(engine PUBLIC
     SDL2_sound::SDL2_sound
     External::OpenAL
     SDL2::SDL2
-    Glad::Glad 
+    Glad::Glad
+    ${LIBM}
 )
 
 # common has a circular dependency on engine
@@ -584,7 +586,7 @@ endif()
 if (WIN32)
     target_link_libraries(engine PUBLIC DirectX::Direct3D9 shlwapi)
 elseif (LINUX)
-    target_link_libraries(engine PUBLIC X11::X11 m)
+    target_link_libraries(engine PUBLIC X11::X11)
 endif()
 
 get_target_property(ENGINE_SOURCES engine SOURCES)

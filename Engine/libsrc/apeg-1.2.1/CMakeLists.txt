@@ -7,6 +7,8 @@ set_target_properties(apeg PROPERTIES
 
 target_include_directories(apeg PUBLIC . )
 
+message("Apeg LIBM: ${LIBM}")
+
 target_sources(apeg 
     PRIVATE
     adisplay.c
@@ -38,6 +40,6 @@ target_sources(apeg
 
 target_compile_definitions(apeg PRIVATE DISABLE_MPEG_AUDIO)
 
-target_link_libraries(apeg PUBLIC SDL2::SDL2 Allegro::Allegro Ogg::Ogg Vorbis::Vorbis Vorbis::VorbisFile Theora::TheoraDecoder External::OpenAL)
+target_link_libraries(apeg PUBLIC SDL2::SDL2 Allegro::Allegro Ogg::Ogg Vorbis::Vorbis Vorbis::VorbisFile Theora::TheoraDecoder External::OpenAL ${LIBM})
 
 add_library(Apeg::Apeg ALIAS apeg)
