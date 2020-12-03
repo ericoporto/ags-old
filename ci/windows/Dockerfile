@@ -66,6 +66,17 @@ RUN mkdir Redist && \
 ARG SDL_VERSION=2.0.12
 RUN mkdir Lib\SDL2 && \
   curl -fLSs "https://www.libsdl.org/release/SDL2-devel-%SDL_VERSION%-VC.zip" | tar -f - -xvzC Lib\SDL2\ --strip-components 1 
+  
+RUN cd  Lib\SDL2 && (
+  echo set^(SDL2_INCLUDE_DIRS "${CMAKE_CURRENT_LIST_DIR}/include"^)
+  echo # Support both 32 and 64 bit builds
+  echo if ^(${CMAKE_SIZEOF_VOID_P} MATCHES 8^)
+  echo   set^(SDL2_LIBRARIES "${CMAKE_CURRENT_LIST_DIR}/lib/x64/SDL2.lib;${CMAKE_CURRENT_LIST_DIR}/lib/x64/SDL2main.lib"^) 
+  echo else ^(^) 
+  echo   set^(SDL2_LIBRARIES "${CMAKE_CURRENT_LIST_DIR}/lib/x86/SDL2.lib;${CMAKE_CURRENT_LIST_DIR}/lib/x86/SDL2main.lib"^)
+  echo endif ^(^) 
+  echo string^(STRIP "${SDL2_LIBRARIES}" SDL2_LIBRARIES^)
+  )>"sdl2-config.cmake"
  
 ARG SDL_SOUND_VERSION=9262f9205898 
 ARG SDL_DIR=Lib\SDL2\SDL2-%SDL_VERSION%
@@ -73,7 +84,7 @@ RUN mkdir Lib\SDL_sound && \
     mkdir Lib\SDL_sound\build  && \	
   curl -fLSs "https://hg.icculus.org/icculus/SDL_sound/archive/%SDL_SOUND_VERSION%.tar.gz" | tar -f - -xvzC Lib\SDL_sound --strip-components 1 
   
-RUN cmake -S Lib\SDL_sound\ -B Lib\SDL_sound\build --build --config Release 
+RUN cmake -S Lib\SDL_sound -B Lib\SDL_sound\build -G "Visual Studio 15 2017" -A Win32 -DCMAKE_PREFIX_PATH=Lib\SDL2\
   
 # delete all temp Files
 RUN mkdir empty && \
