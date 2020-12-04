@@ -90,7 +90,7 @@ RUN echo "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\BuildTools\\VC
 RUN type vcbars.bat
 
 RUN set SDL2_DIR=%cd%\Lib\SDL2 && \
-  cmake -S Lib\SDL_sound -B Lib\SDL_sound\build -G "Visual Studio 16 2019" -T v140 -A Win32 -DCMAKE_PREFIX_PATH=Lib\SDL2 && \
+  cmake -DC_STANDARD=11 -S Lib\SDL_sound -B Lib\SDL_sound\build -G "Visual Studio 16 2019" -T v140 -A Win32 -DCMAKE_PREFIX_PATH=Lib\SDL2 && \
   vcbars.bat
 
 RUN echo "ok!"
