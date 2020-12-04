@@ -81,7 +81,7 @@ RUN echo string^(STRIP "${SDL2_LIBRARIES}" SDL2_LIBRARIES^) >> "Lib\SDL2\sdl2-co
 RUN dir Lib\SDL2
 RUN type Lib\SDL2\sdl2-config.cmake
 
-ARG SDL_SOUND_VERSION=9262f9205898 
+ARG SDL_SOUND_VERSION=997e90562b35 
 RUN mkdir Lib\SDL_sound && \
   mkdir Lib\SDL_sound\build  && \	
   curl -fLSs "https://hg.icculus.org/icculus/SDL_sound/archive/%SDL_SOUND_VERSION%.tar.gz" | tar -f - -xvzC Lib\SDL_sound --strip-components 1 
