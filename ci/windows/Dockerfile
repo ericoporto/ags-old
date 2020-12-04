@@ -89,10 +89,11 @@ RUN mkdir Lib\SDL_sound && \
 RUN set SDL2_DIR=%cd%\Lib\SDL2 && \
   cmake -S Lib\SDL_sound -B Lib\SDL_sound\build -G "Visual Studio 16 2019" -A Win32 -DCMAKE_PREFIX_PATH=Lib\SDL2  
 
-RUN echo "C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\VC\\vcvarsall.bat" x86 > vcbars.bat
-RUN echo cd Lib\SDL_sound\build >> vcbars.bat
+RUN echo "C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\VC\\vcvarsall.bat" x86 ^&^& \\ > vcbars.bat
+RUN echo cd Lib\SDL_sound\build ^&^& \\ >> vcbars.bat
 RUN echo msbuild SDL_sound.sln /p:PlatformToolset=v140 /p:Configuration=Release /p:Platform=Win32 /maxcpucount /nologo >> vcbars.bat
 
+RUN type vcbars.bat
 RUN vcbars.bat
 
 RUN echo "ok!"
