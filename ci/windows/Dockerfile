@@ -86,7 +86,7 @@ RUN mkdir Lib\SDL_sound && \
   mkdir Lib\SDL_sound\build  && \	
   curl -fLSs "https://hg.icculus.org/icculus/SDL_sound/archive/%SDL_SOUND_VERSION%.tar.gz" | tar -f - -xvzC Lib\SDL_sound --strip-components 1 
   
-RUN echo "C:\\Program Files (x86)\\Microsoft Visual Studio 16.0\\VC\\vcvarsall.bat" x86 ^&^& cd Lib\SDL_sound\build ^&^& msbuild SDL_sound.sln /p:PlatformToolset=v140 /p:Configuration=Release /p:Platform=Win32 /maxcpucount /nologo > vcbars.bat
+RUN echo "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\BuildTools\\VC\\Auxiliary\\Build\\vcvarsall.bat" x86 ^&^& cd Lib\SDL_sound\build ^&^& msbuild SDL_sound.sln /p:PlatformToolset=v140 /p:Configuration=Release /p:Platform=Win32 /maxcpucount /nologo > vcbars.bat
 RUN type vcbars.bat
 
 RUN set SDL2_DIR=%cd%\Lib\SDL2 && \
