@@ -93,8 +93,8 @@ RUN set SDL2_DIR=%cd%\Lib\SDL2 && \
   cmake -DC_STANDARD=99 -S Lib\SDL_sound -B Lib\SDL_sound\build -G "Visual Studio 14 2015" -T v140 -A Win32 -DCMAKE_PREFIX_PATH=Lib\SDL2 && \
   cd Lib\SDL_sound\build && \
   cmake --build . --config Release
-
-RUN echo "ok!"
+  
+RUN copy Lib\SDL_sound\build\Release\SDL2_sound-static.lib Lib\SDL_sound\build\Release\SDL_sound.lib 
   
 # delete all temp Files
 RUN mkdir empty && \
