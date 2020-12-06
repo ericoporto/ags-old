@@ -78,15 +78,15 @@ RUN echo   set^(SDL2_LIBRARIES "${CMAKE_CURRENT_LIST_DIR}/lib/x86/SDL2.lib;${CMA
 RUN echo endif ^(^)  >> "Lib\SDL2\sdl2-config.cmake"
 RUN echo string^(STRIP "${SDL2_LIBRARIES}" SDL2_LIBRARIES^) >> "Lib\SDL2\sdl2-config.cmake"
  
+RUN echo "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86 ^&^& pushd Lib\SDL_sound\build ^&^& msbuild SDL_sound.sln /p:PlatformToolset=v140 /p:Configuration=Release /p:Platform=Win32 /maxcpucount /nologo ^&^& popd > vcbuild.bat
+ 
 ARG SDL_SOUND_VERSION=997e90562b35 
 RUN mkdir Lib\SDL_sound && \
   mkdir Lib\SDL_sound\build  && \	
   curl -fLSs "https://hg.icculus.org/icculus/SDL_sound/archive/%SDL_SOUND_VERSION%.tar.gz" | tar -f - -xvzC Lib\SDL_sound --strip-components 1 && \
   set SDL2_DIR=%cd%\Lib\SDL2 && \
   cmake -DCMAKE_SYSTEM_VERSION=8.1 -S Lib\SDL_sound -B Lib\SDL_sound\build -G "Visual Studio 14 2015" -T"v140" -A"Win32" -DCMAKE_PREFIX_PATH=Lib\SDL2 && \
-  pushd Lib\SDL_sound\build && \
-  cmake --build . --config Release && \
-  popd && \
+  vcbuild.bat && \
   copy Lib\SDL_sound\build\Release\SDL2_sound-static.lib Lib\SDL_sound\build\Release\SDL_sound.lib 
   
 # delete all temp Files
