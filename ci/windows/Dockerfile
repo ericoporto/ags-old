@@ -23,11 +23,16 @@ RUN pushd %TEMP% && \
   mkdir Lib\Xiph && \
   pushd Lib\Xiph && \
   nuget install ericoporto.xiph-for-ags -Version 2020.12.12.1 && \
-  copy ericoporto.xiph-for-ags.2020.12.12.1\native\lib\libogg_static.lib libogg_static.lib && \
-  copy ericoporto.xiph-for-ags.2020.12.12.1\native\lib\libtheora_static.lib libtheora_static.lib && \
-  copy ericoporto.xiph-for-ags.2020.12.12.1\native\lib\libvorbis_static.lib libvorbis_static.lib && \
-  copy ericoporto.xiph-for-ags.2020.12.12.1\native\lib\libvorbisfile_static.lib libvorbisfile_static.lib && \
-  popd 
+  popd && \
+  popd && \
+  mkdir Lib\Xiph && \
+  pushd Lib\Xiph && \
+  copy %TEMP%\Lib\Xiph\ericoporto.xiph-for-ags.2020.12.12.1\native\lib\libogg_static.lib libogg_static.lib && \
+  copy %TEMP%\Lib\Xiph\ericoporto.xiph-for-ags.2020.12.12.1\native\lib\libtheora_static.lib libtheora_static.lib && \
+  copy %TEMP%\Lib\Xiph\ericoporto.xiph-for-ags.2020.12.12.1\native\lib\libvorbis_static.lib libvorbis_static.lib && \
+  copy %TEMP%\Lib\Xiph\ericoporto.xiph-for-ags.2020.12.12.1\native\lib\libvorbisfile_static.lib libvorbisfile_static.lib && \
+  popd && \
+  rd /s /q %TEMP%\Lib
 
 ARG IRRKLANG_VERSION=1.6.0
 RUN curl -fLSs http://www.ambiera.at/downloads/irrKlang-32bit-%IRRKLANG_VERSION%.zip | tar -f - -xvzC %TEMP% irrKlang-%IRRKLANG_VERSION%/bin/dotnet-4/*.dll && \
