@@ -38,7 +38,7 @@ SDL2_CFLAGS = $(shell sdl2-config --cflags)
 SDL2_LIBS = $(shell sdl2-config --libs)
 
 CFLAGS += $(SDL2_CFLAGS)
-LIBS += $(SDL2_LIBS) -lSDL2_sound
+LIBS += $(SDL2_LIBS) -Wl,-Bstatic -lSDL2_sound -Wl,-Bdynamic 
 
 ifdef BUILD_STR
   CFLAGS += -DBUILD_STR=\"$(BUILD_STR)\"
