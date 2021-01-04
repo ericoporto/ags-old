@@ -11,12 +11,14 @@ build_windows_task:
     AGS_LIBOGG_LIB: C:\Lib\Xiph
     AGS_LIBTHEORA_LIB: C:\Lib\Xiph
     AGS_LIBVORBIS_LIB: C:\Lib\Xiph
+  get_submodule_script: git submodule update --init Common/libsrc/googletest
   build_script: >
     "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86 &&
     set "AGS_ALLEGRO_INCLUDE=C:\Source\Allegro\%ALLEGRO_RELEASE%\include;C:\Source\Allegro\%ALLEGRO_RELEASE%\build\VS2015\include" &&
     set "AGS_ALLEGRO_LIB=C:\Lib\Allegro\%ALLEGRO_RELEASE%" &&
     cd Solutions &&
     msbuild Engine.sln /p:PlatformToolset=v140 /p:Configuration=%BUILD_CONFIG% /p:Platform=Win32 /maxcpucount /nologo
+  run_tests_script: Solutions\.test\%BUILD_CONFIG%\Engine.Lib.Test.exe
   engine_pdb_artifacts:
     path: Solutions/.build/*/*.pdb
   delete_engine_pdb_script: >
