@@ -15,8 +15,8 @@
 #include "core/platform.h"
 #ifdef AGS_RUN_TESTS
 
+#include "gtest/gtest.h"
 #include <string.h>
-#include "debug/assert.h"
 #include "util/alignedstream.h"
 #include "util/file.h"
 
@@ -49,7 +49,7 @@ struct TTrickyAlignedData
     char    final;
 };
 
-void Test_File()
+TEST(File,FileMethods)
 {
     //-----------------------------------------------------
     // Operations
@@ -180,14 +180,14 @@ void Test_File()
 
     //-----------------------------------------------------
     // Assertions
-    assert(int16val == 10);
-    assert(int64val == -20202);
-    assert(strcmp(str1, "test.tmp") == 0);
-    assert(strcmp(str2, very_long_string) == 0);
-    assert(memcmp(&tricky_data_in, &tricky_data_out, sizeof(TTrickyAlignedData)) == 0);
-    assert(int32val == 20);
+    ASSERT_TRUE(int16val == 10);
+    ASSERT_TRUE(int64val == -20202);
+    ASSERT_TRUE(strcmp(str1, "test.tmp") == 0);
+    ASSERT_TRUE(strcmp(str2, very_long_string) == 0);
+    ASSERT_TRUE(memcmp(&tricky_data_in, &tricky_data_out, sizeof(TTrickyAlignedData)) == 0);
+    ASSERT_TRUE(int32val == 20);
 
-    assert(!File::TestReadFile("test.tmp"));
+    ASSERT_TRUE(!File::TestReadFile("test.tmp"));
 }
 
 #endif // AGS_RUN_TESTS

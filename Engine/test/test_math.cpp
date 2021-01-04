@@ -15,7 +15,7 @@
 #include "core/platform.h"
 #ifdef AGS_RUN_TESTS
 
-#include "debug/assert.h"
+#include "gtest/gtest.h"
 #include "util/scaling.h"
 
 using namespace AGS::Common;
@@ -27,14 +27,14 @@ void Test_Scaling(int src, int dst)
     AxisScaling sc;
     sc.Init(src, dst);
     x = sc.ScalePt(0);
-    assert(x == 0);
+    ASSERT_TRUE(x == 0);
     x = sc.ScalePt(src);
-    assert(x == dst);
+    ASSERT_TRUE(x == dst);
     x = sc.UnScalePt(dst);
-    assert(x == src);
+    ASSERT_TRUE(x == src);
 }
 
-void Test_Math()
+TEST(Math,Scaling)
 {
     {
         Test_Scaling(100, 100);

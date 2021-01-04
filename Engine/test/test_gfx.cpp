@@ -15,13 +15,13 @@
 #include "core/platform.h"
 #ifdef AGS_RUN_TESTS
 
+#include "gtest/gtest.h"
 #include <stdlib.h>
 #include "gfx/gfx_def.h"
-#include "debug/assert.h"
 
 namespace GfxDef = AGS::Common::GfxDef;
 
-void Test_Gfx()
+TEST(Gfx,Transparency)
 {
     // Test that every transparency which is a multiple of 10 is converted
     // forth and back without loosing precision
@@ -34,7 +34,7 @@ void Test_Gfx()
     {
         trans255[i] = GfxDef::Trans100ToLegacyTrans255(trans100[i]);
         trans100_back[i] = GfxDef::LegacyTrans255ToTrans100(trans255[i]);
-        assert(trans100[i] == trans100_back[i]);
+        ASSERT_TRUE(trans100[i] == trans100_back[i]);
     }
 }
 

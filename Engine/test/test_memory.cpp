@@ -15,37 +15,37 @@
 #include "core/platform.h"
 #ifdef AGS_RUN_TESTS
 
+#include "gtest/gtest.h"
 #include "util/memory.h"
-#include "debug/assert.h"
 
 using namespace AGS::Common;
 
-void Test_Memory()
+TEST(Memory,MemoryMethods)
 {
     int16_t i16 = (int16_t)0xABCD;
     int32_t i32 = (int32_t)0xABCDEF12;
     int64_t i64 = (int64_t)0xABCDEF1234567890;
 
-    assert(BBOp::SwapBytesInt16(i16) == (int16_t)0xCDAB);
-    assert(BBOp::SwapBytesInt32(i32) == (int32_t)0x12EFCDABu);
-    assert(BBOp::SwapBytesInt64(i64) == (int64_t)0x9078563412EFCDABul);
+    ASSERT_TRUE(BBOp::SwapBytesInt16(i16) == (int16_t)0xCDAB);
+    ASSERT_TRUE(BBOp::SwapBytesInt32(i32) == (int32_t)0x12EFCDABu);
+    ASSERT_TRUE(BBOp::SwapBytesInt64(i64) == (int64_t)0x9078563412EFCDABul);
 
 #if defined (BITBYTE_BIG_ENDIAN)
-    assert(BBOp::Int16FromLE(i16) == (int16_t)0xCDAB);
-    assert(BBOp::Int32FromLE(i32) == (int32_t)0x12EFCDABu);
-    assert(BBOp::Int64FromLE(i64) == (int64_t)0x9078563412EFCDABul);
+    ASSERT_TRUE(BBOp::Int16FromLE(i16) == (int16_t)0xCDAB);
+    ASSERT_TRUE(BBOp::Int32FromLE(i32) == (int32_t)0x12EFCDABu);
+    ASSERT_TRUE(BBOp::Int64FromLE(i64) == (int64_t)0x9078563412EFCDABul);
 
-    assert(BBOp::Int16FromBE(i16) == (int16_t)0xABCD);
-    assert(BBOp::Int32FromBE(i32) == (int32_t)0xABCDEF12);
-    assert(BBOp::Int64FromBE(i64) == (int64_t)0xABCDEF1234567890);
+    ASSERT_TRUE(BBOp::Int16FromBE(i16) == (int16_t)0xABCD);
+    ASSERT_TRUE(BBOp::Int32FromBE(i32) == (int32_t)0xABCDEF12);
+    ASSERT_TRUE(BBOp::Int64FromBE(i64) == (int64_t)0xABCDEF1234567890);
 #else
-    assert(BBOp::Int16FromLE(i16) == (int16_t)0xABCD);
-    assert(BBOp::Int32FromLE(i32) == (int32_t)0xABCDEF12);
-    assert(BBOp::Int64FromLE(i64) == (int64_t)0xABCDEF1234567890);
+    ASSERT_TRUE(BBOp::Int16FromLE(i16) == (int16_t)0xABCD);
+    ASSERT_TRUE(BBOp::Int32FromLE(i32) == (int32_t)0xABCDEF12);
+    ASSERT_TRUE(BBOp::Int64FromLE(i64) == (int64_t)0xABCDEF1234567890);
 
-    assert(BBOp::Int16FromBE(i16) == (int16_t)0xCDAB);
-    assert(BBOp::Int32FromBE(i32) == (int32_t)0x12EFCDABu);
-    assert(BBOp::Int64FromBE(i64) == (int64_t)0x9078563412EFCDABul);
+    ASSERT_TRUE(BBOp::Int16FromBE(i16) == (int16_t)0xCDAB);
+    ASSERT_TRUE(BBOp::Int32FromBE(i32) == (int32_t)0x12EFCDABu);
+    ASSERT_TRUE(BBOp::Int64FromBE(i64) == (int64_t)0x9078563412EFCDABul);
 #endif
 
     int16_t dst_i16 = (int16_t)0xABCD;
@@ -61,9 +61,9 @@ void Test_Memory()
     dst_i64 = BBOp::SwapBytesInt64(dst_i64);
 #endif
 
-    assert(Memory::ReadInt16(p_i16) == (int16_t)0xABCD);
-    assert(Memory::ReadInt32(p_i32) == (int32_t)0xABCDEF12);
-    assert(Memory::ReadInt64(p_i64) == (int64_t)0xABCDEF1234567890);
+    ASSERT_TRUE(Memory::ReadInt16(p_i16) == (int16_t)0xABCD);
+    ASSERT_TRUE(Memory::ReadInt32(p_i32) == (int32_t)0xABCDEF12);
+    ASSERT_TRUE(Memory::ReadInt64(p_i64) == (int64_t)0xABCDEF1234567890);
 
     Memory::WriteInt16(p_i16, (int16_t)0xCDAB);
     Memory::WriteInt32(p_i32, (int32_t)0x12EFCDAB);
@@ -75,9 +75,9 @@ void Test_Memory()
     dst_i64 = BBOp::SwapBytesInt64(dst_i64);
 #endif
 
-    assert(dst_i16 == (int16_t)0xCDAB);
-    assert(dst_i32 == (int32_t)0x12EFCDAB);
-    assert(dst_i64 == (int64_t)0x9078563412EFCDAB);
+    ASSERT_TRUE(dst_i16 == (int16_t)0xCDAB);
+    ASSERT_TRUE(dst_i32 == (int32_t)0x12EFCDAB);
+    ASSERT_TRUE(dst_i64 == (int64_t)0x9078563412EFCDAB);
 }
 
 #endif // AGS_RUN_TESTS
