@@ -15,7 +15,7 @@ namespace AGS.Editor
         /// </summary>
         /// <param name="bmp">The image to get the color depth from.</param>
         /// <returns>An integer with the color depth.</returns>
-        public static int GetColorDepth(this Bitmap bmp) => Image.GetPixelFormatSize(bmp.PixelFormat);
+        public static int GetColorDepth(this Bitmap bmp) =>  8; // Image.GetPixelFormatSize(bmp.PixelFormat);
 
         /// <summary>
         /// Gives a scaled deep copy of the input image.
