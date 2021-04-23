@@ -33,6 +33,13 @@
 #include "platform/base/agsplatformdriver.h"
 #include "platform/base/sys_main.h"
 
+#if AGS_PLATFORM_OS_EMSCRIPTEN
+#include "emscripten.h"
+EM_JS(int, get_canvas_width, (), { return canvas.width; });
+EM_JS(int, get_canvas_height, (), { return canvas.height; });
+EM_JS(void, do_resize_after_time, (), {setInterval(function(){window.dispatchEvent(new Event('resize'));},200)});
+#endif
+
 // Don't try to figure out the window size on the mac because the port resizes itself.
 #if AGS_PLATFORM_OS_MACOS || defined(ALLEGRO_SDL2) || AGS_PLATFORM_OS_IOS || AGS_PLATFORM_OS_ANDROID
 #define USE_SIMPLE_GFX_INIT
@@ -586,6 +593,15 @@ bool graphics_mode_update_render_frame()
 
     DisplayMode dm = gfxDriver->GetDisplayMode();
     Size screen_size = Size(dm.Width, dm.Height);
+
+#if AGS_PLATFORM_OS_EMSCRIPTEN
+    if(dm.Windowed && String::Wrapper(gfxDriver->GetDriverID()) != "Software")
+    {
+        screen_size = Size(get_canvas_width(),  get_canvas_height());
+        do_resize_after_time();
+    }
+#endif
+
     Size native_size = gfxDriver->GetNativeSize();
     Size frame_size = set_game_frame_after_screen_size(native_size, screen_size, CurFrameSetup);
     Rect render_frame = CenterInRect(RectWH(screen_size), RectWH(frame_size));
