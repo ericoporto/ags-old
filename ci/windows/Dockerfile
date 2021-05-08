@@ -1,5 +1,5 @@
 # base will already have Chocolatey installed
-FROM cirrusci/windowsservercore:2019
+FROM cirrusci/windowsservercore:visualstudio2019
 
 # if no temp folder exists by default, create it
 RUN IF exist %TEMP%\nul ( echo %TEMP% ) ELSE ( mkdir %TEMP% )
