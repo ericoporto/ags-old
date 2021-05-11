@@ -74,7 +74,7 @@ using namespace AGS::Engine;
 
 extern GameSetup usetup;
 extern GameSetupStruct game;
-extern GameState &play;
+extern GameState play;
 extern RoomStatus*croom;
 extern RoomStatus troom;    // used for non-saveable rooms, eg. intro
 extern int displayed_room;
@@ -152,7 +152,15 @@ ScriptDrawingSurface* Room_GetDrawingSurfaceForMask(RoomAreaMask mask)
         quit("!Room_GetDrawingSurfaceForMask: no room is currently loaded");
     ScriptDrawingSurface *surface = new ScriptDrawingSurface();
     surface->roomMaskType = mask;
-    ccRegisterManagedObject(surface, surface);
+
+    ManagedObjectInfo objinfo;
+    objinfo.obj_type = kScValDynamicObject;
+    objinfo.object_manager = surface;
+    objinfo.address = surface;
+    objinfo.buffer = nullptr;
+    objinfo.buffer_size = 0;
+    int handl =  ccRegisterManagedObject2(objinfo);   // NO DATA
+
     return surface;
 }
 
@@ -234,9 +242,7 @@ bool Room_Exists(int room)
 void save_room_data_segment () {
     croom->FreeScriptData();
 
-    const char *globaldata;
-    int globaldatasize;
-    auto roomdata = roominst->GetGlobalData(globaldata, globaldatasize);
+    auto roomdata = roominst->GetGlobalData();
 
     croom->tsdatasize = roomdata.size();
     if (croom->tsdatasize > 0) {

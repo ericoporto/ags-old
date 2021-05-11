@@ -276,7 +276,7 @@ void *Viewport_ScreenToRoomPoint(ScriptViewport *scv, int scrx, int scry, bool c
     VpPoint vpt = play.GetRoomViewport(scv->GetID())->ScreenToRoom(scrx, scry, clipViewport);
     if (vpt.second < 0)
         return nullptr;
-    return ScriptStructHelpers::CreatePoint(vpt.first.X, vpt.first.Y);
+    return ScriptStructHelpers::CreatePoint(vpt.first.X, vpt.first.Y).second;
 }
 
 void *Viewport_RoomToScreenPoint(ScriptViewport *scv, int roomx, int roomy, bool clipViewport)
@@ -285,7 +285,7 @@ void *Viewport_RoomToScreenPoint(ScriptViewport *scv, int roomx, int roomy, bool
     Point pt = play.RoomToScreen(roomx, roomy);
     if (clipViewport && !play.GetRoomViewport(scv->GetID())->GetRect().IsInside(pt.X, pt.Y))
         return nullptr;
-    return ScriptStructHelpers::CreatePoint(pt.X, pt.Y);
+    return ScriptStructHelpers::CreatePoint(pt.X, pt.Y).second;
 }
 
 

@@ -50,7 +50,7 @@
 using namespace AGS::Common;
 using namespace AGS::Common::BitmapHelper;
 
-extern GameState &play;
+extern GameState play;
 extern GameSetupStruct game;
 extern int longestline;
 extern AGSPlatformDriver *platform;

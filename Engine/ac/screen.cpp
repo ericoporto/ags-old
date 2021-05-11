@@ -32,7 +32,7 @@ using namespace AGS::Common;
 using namespace AGS::Engine;
 
 extern GameSetupStruct game;
-extern GameState &play;
+extern GameState play;
 extern IGraphicsDriver *gfxDriver;
 extern AGSPlatformDriver *platform;
 
@@ -155,13 +155,14 @@ void* Screen_ScreenToRoomPoint(int scrx, int scry)
     VpPoint vpt = play.ScreenToRoom(scrx, scry);
     if (vpt.second < 0)
         return nullptr;
-    return ScriptStructHelpers::CreatePoint(vpt.first.X, vpt.first.Y);
+
+    return ScriptStructHelpers::CreatePoint(vpt.first.X, vpt.first.Y).second;
 }
 
 void *Screen_RoomToScreenPoint(int roomx, int roomy)
 {
     Point pt = play.RoomToScreen(roomx, roomy);
-    return ScriptStructHelpers::CreatePoint(pt.X, pt.Y);
+    return ScriptStructHelpers::CreatePoint(pt.X, pt.Y).second;
 }
 
 /// GENERATED CODE

@@ -20,6 +20,7 @@
 
 #include <utility>
 #include "core/types.h"
+#include "script/runtimescriptvalue.h"
 
 // Forward declaration
 namespace AGS { namespace Common { class Stream; } }

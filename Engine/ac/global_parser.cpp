@@ -18,7 +18,7 @@
 #include "ac/gamestate.h"
 #include "ac/string.h"
 
-extern GameState &play;
+extern GameState play;
 
 // CLNUP this file can be removed
 

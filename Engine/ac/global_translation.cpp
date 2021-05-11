@@ -28,7 +28,7 @@
 
 using namespace AGS::Common::Memory;
 
-extern GameState &play;
+extern GameState play;
 extern AGSPlatformDriver *platform;
 
 const char *get_translation (const char *text) {

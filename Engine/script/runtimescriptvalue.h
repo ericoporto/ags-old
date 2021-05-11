@@ -19,11 +19,10 @@
 #define __AGS_EE_SCRIPT__RUNTIMESCRIPTVALUE_H
 
 #include "script/script_api.h"
-#include "util/memory.h"
-#include "ac/dynobj/cc_dynamicobject.h"
 
 struct ICCStaticObject;
 struct StaticArray;
+struct ICCDynamicObject;
 
 enum ScriptValueType
 {

@@ -433,7 +433,7 @@ HError InitAndRegisterGameEntities(const LoadedGameEntities &ents)
 
     setup_player_character(game.playercharacter);
 
-    ccAddExternalStaticObject("player", &_sc_PlayerCharPtr, &GlobalStaticManager);
+    ccAddExternalStaticObject("player", &_sc_PlayerCharHandlePtr, &GlobalStaticManager);
 
     return HError::None();
 }

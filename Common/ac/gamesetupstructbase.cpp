@@ -76,8 +76,8 @@ void GameSetupStructBase::Free()
     dict = nullptr;
     delete globalscript;
     globalscript = nullptr;
-    delete compiled_script;
-    compiled_script = nullptr;
+    delete CompiledScript;
+    CompiledScript = nullptr;
     // delete[] chars;
     tiny_free(chars);
     chars = nullptr;

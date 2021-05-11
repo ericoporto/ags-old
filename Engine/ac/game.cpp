@@ -107,7 +107,7 @@ GameState *ConstructGameState() {
 }
 
 GameState *play_ptr = ConstructGameState();
-GameState &play = *play_ptr;
+GameState play = *play_ptr;
 GameSetup usetup;
 GameSetupStruct game;
 RoomStatus troom;    // used for non-saveable rooms, eg. intro
@@ -2123,4 +2123,3 @@ void RegisterStaticObjects()
 	ccAddExternalStaticObject("system",&scsystem, &GlobalStaticManager);
 	ccAddExternalStaticObject("savegameindex",&play.filenumbers[0], &GlobalStaticManager);
 }
-#endif

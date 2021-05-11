@@ -16,6 +16,7 @@
 
 #include <stdint.h>
 #include <list>
+#include <stdexcept>
 // #include <string.h>
 // #include "ac/common.h"
 #include "ac/dynobj/cc_dynamicarray.h"
@@ -767,7 +768,7 @@ inline uint32_t MachineValueFromRuntimeScriptValue(const RuntimeScriptValue &val
 
 
 // stack_values assumed to be in reverse parameter order
-int ccExecutor::CallScriptFunctionDirect(uint32_t vaddr, int32_t num_values, const uint32_t *stack_values)
+int ccExecutor::CallScriptFunctionDirect(uint32_t vaddr, int32_t num_values, std::vector<uint32_t> stack_values)
 {
     ccError = 0;
 
@@ -814,7 +815,7 @@ int ccExecutor::CallScriptFunctionDirect(uint32_t vaddr, int32_t num_values, con
 
 
 // Call an exported function in the script
-int ccExecutor::CallScriptFunction(ccInstance *sci_, const char *funcname, int32_t num_params, const RuntimeScriptValue *params) 
+int ccExecutor::CallScriptFunction(ccInstance *sci_, const char *funcname, const int32_t num_params, const RuntimeScriptValue *params)
 { 
     auto sci = (ccInstanceExperiment *)sci_;
 
@@ -850,7 +851,8 @@ int ccExecutor::CallScriptFunction(ccInstance *sci_, const char *funcname, int32
     }
 
     // reverse order
-    uint32_t stack_values[num_params];
+    std::vector<uint32_t> stack_values(num_params);
+
     for (int i = 0; i < num_params; i++) {
         stack_values[i] = MachineValueFromRuntimeScriptValue(params[num_params - i - 1]);
     }
@@ -2578,7 +2580,7 @@ int ccExecutor::Run()
                 auto array_header = (int32_t *)ToRealMemoryAddressFromHeap(registers[SREG_MAR]) - 2;
                 auto numElements = array_header[0] & (~ARRAY_MANAGED_TYPE_FLAG);
                 auto sizeInBytes = array_header[1];
-                assert(registers[arg1_reg] >= 0 && registers[arg1_reg] < sizeInBytes);
+                assert(registers[arg1_reg] >= 0 && registers[arg1_reg] < (unsigned int) sizeInBytes);
                 break;
             }
 
@@ -2626,7 +2628,7 @@ uint32_t ccExecutor::CallExternalFunction(const ScriptImport *sysimp)
         func_args_count = stackframe.callstack.size();
     }
 
-    RuntimeScriptValue callparams[func_args_count];
+    std::vector<RuntimeScriptValue> callparams(func_args_count);
 
     // reverse call stack into correct order
     auto cit = stackframe.callstack.rbegin();

@@ -177,7 +177,7 @@ private:
     std::vector<ccStackFrame> stackframes;
 
     // int CallScriptFunctionDirect(uint32_t vaddr, int32_t num_params, const RuntimeScriptValue *params);
-    int CallScriptFunctionDirect(uint32_t vaddr, int32_t num_params, const uint32_t *machparams);
+    int CallScriptFunctionDirect(uint32_t vaddr, int32_t num_params, std::vector<uint32_t> machparams);
 
     int Run();
     void DisassembleInstruction();

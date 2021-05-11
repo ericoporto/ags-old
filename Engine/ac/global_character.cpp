@@ -44,7 +44,7 @@ extern GameSetupStruct game;
 extern ViewStruct*views;
 extern RoomObject*objs;
 extern RoomStruct thisroom;
-extern GameState &play;
+extern GameState play;
 extern ScriptObject *scrObj;
 extern ScriptInvItem *scrInv;
 

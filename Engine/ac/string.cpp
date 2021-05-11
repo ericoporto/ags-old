@@ -29,7 +29,7 @@
 using namespace AGS::Common;
 
 extern GameSetupStruct game;
-extern GameState &play;
+extern GameState play;
 extern int longestline;
 extern ScriptString myScriptStringImpl;
 

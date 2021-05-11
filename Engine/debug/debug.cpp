@@ -327,6 +327,7 @@ void debug_script_print(const String &msg, MessageType mt)
     }
 
     Debug::Printf(kDbgGroup_Game, mt, "(room:%d)%s %s", displayed_room, script_ref.GetCStr(), msg.GetCStr());
+#endif
 }
 
 void debug_script_warn(const char *msg, ...)

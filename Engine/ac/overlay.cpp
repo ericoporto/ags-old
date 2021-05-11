@@ -210,7 +210,16 @@ ScriptOverlay* create_scriptobj_for_overlay(ScreenOverlay &over)
 {
     ScriptOverlay *scover = new ScriptOverlay();
     scover->overlayId = over.type;
-    int handl = ccRegisterManagedObject(scover, scover);
+
+    ManagedObjectInfo objinfo;
+    objinfo.obj_type = kScValDynamicObject;
+    objinfo.object_manager = scover;
+    objinfo.address = scover;
+    objinfo.buffer = nullptr;
+    objinfo.buffer_size = 0;
+    int handl =  ccRegisterManagedObject2(objinfo);   // NO DATA
+
+    //int handl = ccRegisterManagedObject(scover, scover);
     over.associatedOverlayHandle = handl;
     return scover;
 }

@@ -28,8 +28,8 @@
 struct RuntimeScriptValue;
 
 // TODO: replace void* with base object class when possible; also put array class for parameters
-typedef RuntimeScriptValue ScriptAPIFunction(const RuntimeScriptValue *params, int32_t param_count);
-typedef RuntimeScriptValue ScriptAPIObjectFunction(void *self, const RuntimeScriptValue *params, int32_t param_count);
+typedef RuntimeScriptValue ScriptAPIFunction(std::vector<RuntimeScriptValue> params, int32_t param_count);
+typedef RuntimeScriptValue ScriptAPIObjectFunction(void *self, std::vector<RuntimeScriptValue> params, int32_t param_count);
 
 // Sprintf that takes either script values or common argument list from plugin.
 // Uses EITHER sc_args/sc_argc or varg_ptr as parameter list, whichever is not
