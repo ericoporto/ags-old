@@ -4,8 +4,8 @@ FROM cirrusci/windowsservercore:2019
 # if no temp folder exists by default, create it
 RUN IF exist %TEMP%\nul ( echo %TEMP% ) ELSE ( mkdir %TEMP% )
 
-ARG VISUALCPP_BUILD_TOOLS_VERSION=14.0.25420.1
-RUN cinst visualcpp-build-tools --version %VISUALCPP_BUILD_TOOLS_VERSION% -y && \
+ARG VISUALCPP_BUILD_TOOLS_VERSION=16.9.4.0
+RUN cinst visualstudio2019buildtools --version %VISUALCPP_BUILD_TOOLS_VERSION% --package-parameters "--add Microsoft.VisualStudio.Workload.MSBuildTools --add Microsoft.VisualStudio.Component.VC.140 --add Microsoft.VisualStudio.Workload.VCTools" -y  && \
   mkdir empty && \
   robocopy empty %TEMP% /MIR > nul & \
   rd /s /q empty
