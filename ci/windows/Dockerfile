@@ -5,7 +5,7 @@ FROM cirrusci/windowsservercore:visualstudio2019
 RUN IF exist %TEMP%\nul ( echo %TEMP% ) ELSE ( mkdir %TEMP% )
 
 ARG VISUALCPP_BUILD_TOOLS_VERSION=16.9.4.0
-RUN cinst visualstudio2019buildtools --version %VISUALCPP_BUILD_TOOLS_VERSION% -y --package-parameters "--add Microsoft.VisualStudio.Workload.MSBuildTools --add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Component.Windows81SDK --add Microsoft.VisualStudio.Component.VC.140 --add Microsoft.Component.VC.Runtime.UCRTSDK" && \
+RUN cinst visualstudio2019buildtools --version %VISUALCPP_BUILD_TOOLS_VERSION% -y --package-parameters "--add Microsoft.VisualStudio.Workload.MSBuildTools --add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Component.VC.140" && \
   mkdir empty && \
   robocopy empty %TEMP% /MIR > nul & \
   rd /s /q empty
