@@ -4,8 +4,13 @@ FROM cirrusci/windowsservercore:2019
 # if no temp folder exists by default, create it
 RUN IF exist %TEMP%\nul ( echo %TEMP% ) ELSE ( mkdir %TEMP% )
 
-ARG VISUALCPP_BUILD_TOOLS_VERSION=14.0.25420.1
-RUN cinst visualcpp-build-tools --version %VISUALCPP_BUILD_TOOLS_VERSION% -y && \
+RUN pushd %TEMP% && \
+  mkdir buildtools && \
+  curl -fLO https://archive.org/download/visualbuildtools2015/visualbuildtools2015.zip && \
+  tar -f visualbuildtools2015.zip -xvzC buildtools\ --strip-components 1  && \
+  pushd buildtools && \
+  VisualCppBuildTools_Full.exe  /NoRestart /Quiet /Full && \
+  popd && \
   mkdir empty && \
   robocopy empty %TEMP% /MIR > nul & \
   rd /s /q empty
