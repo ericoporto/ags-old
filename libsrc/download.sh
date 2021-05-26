@@ -30,9 +30,9 @@ get https://s3-ap-southeast-2.amazonaws.com/ags-shared/libtheora-20160525-g50df9
 #new work in svn
 #svn co http://svn.xiph.org/trunk/Tremor/
 #git clone https://git.xiph.org/tremor.git
-get https://s3-ap-southeast-2.amazonaws.com/ags-shared/libtremor-20150108-r19427.tar.bz2
+# get https://s3-ap-southeast-2.amazonaws.com/ags-shared/libtremor-20150108-r19427.tar.bz2
 
-get https://s3-ap-southeast-2.amazonaws.com/ags-shared/lua-5.1.5.tar.gz
-get http://www.lua.org/ftp/lua-5.1.5.tar.gz
+# get https://s3-ap-southeast-2.amazonaws.com/ags-shared/lua-5.1.5.tar.gz
+# get http://www.lua.org/ftp/lua-5.1.5.tar.gz
 
 shasum --check sha1sums
