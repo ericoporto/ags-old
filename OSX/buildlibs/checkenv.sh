@@ -17,4 +17,6 @@ for bin in curl pkg-config autoconf automake aclocal glibtoolize cmake xcodebuil
  fi
 done
 
+echo "all good!"
+
 exit 0
