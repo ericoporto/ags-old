@@ -28,6 +28,9 @@ LIBTHEORA_VERSION=1.1.1
 get https://github.com/xiph/theora/archive/refs/tags/v${LIBTHEORA_VERSION}.tar.gz libtheora-${LIBTHEORA_VERSION}.tar.gz
 # get https://downloads.xiph.org/releases/theora/libtheora-${LIBTHEORA_VERSION}.tar.bz2 libtheora-${LIBTHEORA_VERSION}.tar.bz2
 
+FREETYPE_VERSION=2-10-4
+get https://gitlab.freedesktop.org/freetype/freetype/-/archive/VER-${FREETYPE_VERSION}/freetype-${FREETYPE_VERSION}.tar.gz freetype-${FREETYPE_VERSION}.tar.gz
+
 #new work in svn
 #svn co http://svn.xiph.org/trunk/Tremor/
 #git clone https://git.xiph.org/tremor.git

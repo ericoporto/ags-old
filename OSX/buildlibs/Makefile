@@ -6,7 +6,7 @@ PREFIX:=$(shell pwd)/opt
 BUILD:=$(shell pwd)/build
 PKG_CONFIG_PATH:=${PREFIX}/lib/pkgconfig
 export PKG_CONFIG_PATH
-PLAT_FLAGS:=-mmacosx-version-min=10.7 -arch i386 -arch x86_64
+PLAT_FLAGS:=-mmacosx-version-min=10.14 -arch x86_64
 	
 .PHONY: libs prepare freetype ogg vorbis theora install
 
@@ -25,45 +25,46 @@ prepare:
 	mkdir -p $(PREFIX)
 	mkdir -p $(BUILD)
 
-# lua: prepare
-#	tar xf $(LIBSRCDIR)/lua-5.1.5.tar.gz -C $(BUILD)
-#	cd $(BUILD)/lua-5.1.5 && \
-#		patch -p1 < $(PATCHESDIR)/lua-5.1.5.patch && \
-#		make macosx INSTALL_TOP="$(PREFIX)" PLAT_LDFLAGS="$(PLAT_FLAGS)" PLAT_CFLAGS="$(PLAT_FLAGS)" && \
-#		make install INSTALL_TOP="$(PREFIX)"
+lua: prepare
+	tar xf $(LIBSRCDIR)/lua-5.1.5.tar.gz -C $(BUILD)
+	cd $(BUILD)/lua-5.1.5 && \
+		patch -p1 < $(PATCHESDIR)/lua-5.1.5.patch && \
+		make macosx INSTALL_TOP="$(PREFIX)" PLAT_LDFLAGS="$(PLAT_FLAGS)" PLAT_CFLAGS="$(PLAT_FLAGS)" && \
+		make install INSTALL_TOP="$(PREFIX)"
 
 freetype: prepare
-	tar xf $(LIBSRCDIR)/freetype-2.4.12.tar.bz2 -C $(BUILD)
-	cd $(BUILD)/freetype-2.4.12 && \
-		./configure CFLAGS="$(PLAT_FLAGS)" LDFLAGS="$(PLAT_FLAGS)" \
+	tar xf $(LIBSRCDIR)/freetype-2-10-4.tar.gz -C $(BUILD)
+	mv $(BUILD)/freetype-VER-2-10-4-6a2b3e4007e794bfc6c91030d0ed987f925164a8 $(BUILD)/freetype-2-10-4
+	cd $(BUILD)/freetype-2-10-4 && \
+		./autogen.sh CFLAGS="$(PLAT_FLAGS)" LDFLAGS="$(PLAT_FLAGS)" \
 		    --prefix=$(PREFIX) \
 		    --enable-static --disable-shared \
 		    --enable-biarch-config && \
 		make && \
-		make install 
+		make install
 
 ogg: prepare
-	tar xf $(LIBSRCDIR)/libogg-1.3.2.tar.gz -C $(BUILD)
-	cd $(BUILD)/libogg-1.3.2 && \
+	tar xf $(LIBSRCDIR)/libogg-1.3.4.tar.gz -C $(BUILD)
+	cd $(BUILD)/libogg-1.3.4 && \
 		./configure CFLAGS="$(PLAT_FLAGS)" LDFLAGS="$(PLAT_FLAGS)" \
 		    --prefix=$(PREFIX) \
 		    --enable-static --disable-shared && \
 		make && \
-		make install 
+		make install
 
 vorbis: prepare ogg
-	tar xf $(LIBSRCDIR)/libvorbis-1.3.5.tar.gz -C $(BUILD)
-	cd $(BUILD)/libvorbis-1.3.5 && \
+	tar xf $(LIBSRCDIR)/libvorbis-1.3.7.tar.gz -C $(BUILD)
+	cd $(BUILD)/libvorbis-1.3.7 && \
 		./configure CFLAGS="$(PLAT_FLAGS)" LDFLAGS="$(PLAT_FLAGS)" \
 		    --prefix=$(PREFIX) \
 		    --enable-static --disable-shared \
 		    --disable-docs --disable-examples --disable-oggtest && \
 		make && \
-		make install 
+		make install
 
 theora: prepare ogg vorbis
-	tar xf $(LIBSRCDIR)/libtheora-20160525-g50df933.tar.bz2 -C $(BUILD)
-	cd $(BUILD)/libtheora-20160525-g50df933 && \
+	tar xf $(LIBSRCDIR)/libtheora-1.1.1.tar.gz -C $(BUILD)
+	cd $(BUILD)/libtheora-1.1.1 && \
 		./autogen.sh CFLAGS="$(PLAT_FLAGS)" LDFLAGS="$(PLAT_FLAGS)"  \
 		    --prefix=$(PREFIX) \
 		    --enable-static --disable-shared \
