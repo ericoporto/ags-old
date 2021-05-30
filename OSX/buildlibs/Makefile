@@ -64,7 +64,7 @@ vorbis: prepare ogg
 
 theora: prepare ogg vorbis
 	tar xf $(LIBSRCDIR)/libtheora-1.1.1.tar.gz -C $(BUILD)
-	cd $(BUILD)/libtheora-1.1.1 && \
+	cd $(BUILD)/theora-1.1.1 && \
 		./autogen.sh CFLAGS="$(PLAT_FLAGS)" LDFLAGS="$(PLAT_FLAGS)"  \
 		    --prefix=$(PREFIX) \
 		    --enable-static --disable-shared \
