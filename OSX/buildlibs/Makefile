@@ -34,8 +34,7 @@ lua: prepare
 
 freetype: prepare
 	tar xf $(LIBSRCDIR)/freetype-2-10-4.tar.gz -C $(BUILD)
-	mv $(BUILD)/freetype-VER-2-10-4-6a2b3e4007e794bfc6c91030d0ed987f925164a8 $(BUILD)/freetype-2-10-4
-	cd $(BUILD)/freetype-2-10-4 && \
+	cd $(BUILD)/freetype-VER-2-10-4-6a2b3e4007e794bfc6c91030d0ed987f925164a8 && \
 		./autogen.sh CFLAGS="$(PLAT_FLAGS)" LDFLAGS="$(PLAT_FLAGS)" \
 		    --prefix=$(PREFIX) \
 		    --enable-static --disable-shared \
@@ -46,6 +45,7 @@ freetype: prepare
 ogg: prepare
 	tar xf $(LIBSRCDIR)/libogg-1.3.4.tar.gz -C $(BUILD)
 	cd $(BUILD)/libogg-1.3.4 && \
+		patch -p1 < $(PATCHESDIR)/libogg-1.3.4.patch && \
 		./configure CFLAGS="$(PLAT_FLAGS)" LDFLAGS="$(PLAT_FLAGS)" \
 		    --prefix=$(PREFIX) \
 		    --enable-static --disable-shared && \
