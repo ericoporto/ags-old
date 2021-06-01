@@ -4,6 +4,7 @@
 using namespace AGS::Common;
 
 TEST(String, Internal) {
+#if AGS_PLATFORM_DEBUG
     String s1 = "abcdefghijklmnop";
     String s2 = s1;
     String s3 = s1;
@@ -31,6 +32,7 @@ TEST(String, Internal) {
     ASSERT_TRUE(40 == s3.GetCapacity());
     s3.Append("1234567890123");
     ASSERT_TRUE(60 == s3.GetCapacity());
+#endif // AGS_PLATFORM_DEBUG
 
     String s4 = "12345678901234567890";
     const char *cstr = s4.GetCStr();
@@ -488,9 +490,14 @@ TEST(String, Wrap) {
     String str2 = str1;
     ASSERT_TRUE(str1.GetCStr() == cstr);
     ASSERT_TRUE(str2.GetCStr() == cstr);
+#if AGS_PLATFORM_DEBUG
     ASSERT_TRUE(str1.GetRefCount() == 0);
     ASSERT_TRUE(str2.GetRefCount() == 0);
+#endif // AGS_PLATFORM_DEBUG
+
     str2.SetAt(0, 'A');
     ASSERT_TRUE(str2.GetCStr() != cstr);
+#if AGS_PLATFORM_DEBUG
     ASSERT_TRUE(str2.GetRefCount() == 1);
+#endif // AGS_PLATFORM_DEBUG
 }
