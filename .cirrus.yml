@@ -25,6 +25,7 @@ build_windows_task:
     del /s *.pdb *.map *.ilk *.iobj *.ipdb
   binaries_artifacts:
     path: Solutions/.build/*/*
+  run_tests_script: Solutions\.test\%BUILD_CONFIG%\Common.Lib.Test.exe
 
 build_linux_cmake_task:
   only_if: $CIRRUS_RELEASE == ''
