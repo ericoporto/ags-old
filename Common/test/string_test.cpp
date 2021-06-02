@@ -1,4 +1,5 @@
 #include "gtest/gtest.h"
+#define AGS_TEST 1
 #include "util/string.h"
 
 using namespace AGS::Common;
