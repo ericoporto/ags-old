@@ -129,7 +129,7 @@ TEST(String, ToInt) {
     int i3 = s3.ToInt();
     int i4 = s4.ToInt();
     ASSERT_TRUE(i1 == 0);
-    ASSERT_TRUE(i2 == 100);
+    ASSERT_TRUE(i2 == 101);
     ASSERT_TRUE(i3 == 202);
     ASSERT_TRUE(i4 == 0);
 }
