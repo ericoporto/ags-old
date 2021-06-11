@@ -123,7 +123,7 @@ bool engine_init_backend()
     }
     
     // Initialize stripped allegro library
-    set_uformat(U_ASCII);
+    set_uformat(U_UTF8);
     if (install_allegro(SYSTEM_NONE, &errno, atexit))
     {
         platform->DisplayAlert("Internal error: unable to initialize stripped Allegro 4 library.");
