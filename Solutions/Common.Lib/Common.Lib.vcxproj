@@ -142,8 +142,8 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\Common;..\..\Common\libinclude;..\..\Common\libsrc\alfont-2.0.9;..\..\Common\libsrc\freetype-2.1.3\include;..\..\libsrc\allegro\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_WINDOWS;_CRT_SECURE_NO_WARNINGS;ALLEGRO_STATICLINK;ALLEGRO_NO_COMPATIBILITY;ALLEGRO_NO_FIX_ALIASES;ALLEGRO_NO_FIX_CLASS;WINDOWS_VERSION;DISABLE_MPEG_AUDIO;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\Common;..\..\Common\libinclude;..\..\Common\libsrc\alfont-2.0.9;..\..\Common\libsrc\freetype-2.10.4\include;..\..\libsrc\allegro\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_WINDOWS;_CRT_SECURE_NO_WARNINGS;ALLEGRO_STATICLINK;ALLEGRO_NO_COMPATIBILITY;ALLEGRO_NO_FIX_ALIASES;ALLEGRO_NO_FIX_CLASS;WINDOWS_VERSION;DISABLE_MPEG_AUDIO;FT2_BUILD_LIBRARY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -162,8 +162,8 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_XP|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\Common;..\..\Common\libinclude;..\..\Common\libsrc\alfont-2.0.9;..\..\Common\libsrc\freetype-2.1.3\include;..\..\libsrc\allegro\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_WINDOWS;_CRT_SECURE_NO_WARNINGS;ALLEGRO_STATICLINK;ALLEGRO_NO_COMPATIBILITY;ALLEGRO_NO_FIX_ALIASES;ALLEGRO_NO_FIX_CLASS;WINDOWS_VERSION;DISABLE_MPEG_AUDIO;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\Common;..\..\Common\libinclude;..\..\Common\libsrc\alfont-2.0.9;..\..\Common\libsrc\freetype-2.10.4\include;..\..\libsrc\allegro\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_WINDOWS;_CRT_SECURE_NO_WARNINGS;ALLEGRO_STATICLINK;ALLEGRO_NO_COMPATIBILITY;ALLEGRO_NO_FIX_ALIASES;ALLEGRO_NO_FIX_CLASS;WINDOWS_VERSION;DISABLE_MPEG_AUDIO;FT2_BUILD_LIBRARY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -184,8 +184,8 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>..\..\Common;..\..\Common\libinclude;..\..\Common\libsrc\alfont-2.0.9;..\..\Common\libsrc\freetype-2.1.3\include;..\..\libsrc\allegro\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_WINDOWS;_CRT_SECURE_NO_WARNINGS;ALLEGRO_STATICLINK;ALLEGRO_NO_COMPATIBILITY;ALLEGRO_NO_FIX_ALIASES;ALLEGRO_NO_FIX_CLASS;WINDOWS_VERSION;DISABLE_MPEG_AUDIO;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\Common;..\..\Common\libinclude;..\..\Common\libsrc\alfont-2.0.9;..\..\Common\libsrc\freetype-2.10.4\include;..\..\libsrc\allegro\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_WINDOWS;_CRT_SECURE_NO_WARNINGS;ALLEGRO_STATICLINK;ALLEGRO_NO_COMPATIBILITY;ALLEGRO_NO_FIX_ALIASES;ALLEGRO_NO_FIX_CLASS;WINDOWS_VERSION;DISABLE_MPEG_AUDIO;FT2_BUILD_LIBRARY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader />
@@ -204,8 +204,8 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>..\..\Common;..\..\Common\libinclude;..\..\Common\libsrc\alfont-2.0.9;..\..\Common\libsrc\freetype-2.1.3\include;..\..\libsrc\allegro\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_WINDOWS;_CRT_SECURE_NO_WARNINGS;ALLEGRO_STATICLINK;ALLEGRO_NO_COMPATIBILITY;ALLEGRO_NO_FIX_ALIASES;ALLEGRO_NO_FIX_CLASS;WINDOWS_VERSION;DISABLE_MPEG_AUDIO;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\Common;..\..\Common\libinclude;..\..\Common\libsrc\alfont-2.0.9;..\..\Common\libsrc\freetype-2.10.4\include;..\..\libsrc\allegro\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_WINDOWS;_CRT_SECURE_NO_WARNINGS;ALLEGRO_STATICLINK;ALLEGRO_NO_COMPATIBILITY;ALLEGRO_NO_FIX_ALIASES;ALLEGRO_NO_FIX_CLASS;WINDOWS_VERSION;DISABLE_MPEG_AUDIO;FT2_BUILD_LIBRARY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>
@@ -225,8 +225,8 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>..\..\Common;..\..\Common\libinclude;..\..\Common\libsrc\alfont-2.0.9;..\..\Common\libsrc\freetype-2.1.3\include;..\..\libsrc\allegro\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_WINDOWS;_CRT_SECURE_NO_WARNINGS;ALLEGRO_STATICLINK;ALLEGRO_NO_COMPATIBILITY;ALLEGRO_NO_FIX_ALIASES;ALLEGRO_NO_FIX_CLASS;WINDOWS_VERSION;DISABLE_MPEG_AUDIO;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\Common;..\..\Common\libinclude;..\..\Common\libsrc\alfont-2.0.9;..\..\Common\libsrc\freetype-2.10.4\include;..\..\libsrc\allegro\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_WINDOWS;_CRT_SECURE_NO_WARNINGS;ALLEGRO_STATICLINK;ALLEGRO_NO_COMPATIBILITY;ALLEGRO_NO_FIX_ALIASES;ALLEGRO_NO_FIX_CLASS;WINDOWS_VERSION;DISABLE_MPEG_AUDIO;FT2_BUILD_LIBRARY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader />
@@ -244,8 +244,8 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_MD|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\Common;..\..\Common\libinclude;..\..\Common\libsrc\alfont-2.0.9;..\..\Common\libsrc\freetype-2.1.3\include;..\..\libsrc\allegro\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_WINDOWS;_CRT_SECURE_NO_WARNINGS;ALLEGRO_STATICLINK;ALLEGRO_NO_COMPATIBILITY;ALLEGRO_NO_FIX_ALIASES;ALLEGRO_NO_FIX_CLASS;WINDOWS_VERSION;DISABLE_MPEG_AUDIO;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\Common;..\..\Common\libinclude;..\..\Common\libsrc\alfont-2.0.9;..\..\Common\libsrc\freetype-2.10.4\include;..\..\libsrc\allegro\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_WINDOWS;_CRT_SECURE_NO_WARNINGS;ALLEGRO_STATICLINK;ALLEGRO_NO_COMPATIBILITY;ALLEGRO_NO_FIX_ALIASES;ALLEGRO_NO_FIX_CLASS;WINDOWS_VERSION;DISABLE_MPEG_AUDIO;FT2_BUILD_LIBRARY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -304,30 +304,45 @@
     <ClCompile Include="..\..\Common\libsrc\aastr-0.1.1\aastr.c" />
     <ClCompile Include="..\..\Common\libsrc\aastr-0.1.1\aautil.c" />
     <ClCompile Include="..\..\Common\libsrc\alfont-2.0.9\alfont.c" />
-    <ClCompile Include="..\..\Common\libsrc\freetype-2.1.3\src\autohint\autohint.c" />
-    <ClCompile Include="..\..\Common\libsrc\freetype-2.1.3\src\base\ftbase.c" />
-    <ClCompile Include="..\..\Common\libsrc\freetype-2.1.3\src\base\ftdebug.c" />
-    <ClCompile Include="..\..\Common\libsrc\freetype-2.1.3\src\base\ftglyph.c" />
-    <ClCompile Include="..\..\Common\libsrc\freetype-2.1.3\src\base\ftinit.c" />
-    <ClCompile Include="..\..\Common\libsrc\freetype-2.1.3\src\base\ftmm.c" />
-    <ClCompile Include="..\..\Common\libsrc\freetype-2.1.3\src\base\ftsystem.c" />
-    <ClCompile Include="..\..\Common\libsrc\freetype-2.1.3\src\bdf\bdf.c" />
-    <ClCompile Include="..\..\Common\libsrc\freetype-2.1.3\src\cache\ftcache.c" />
-    <ClCompile Include="..\..\Common\libsrc\freetype-2.1.3\src\cff\cff.c" />
-    <ClCompile Include="..\..\Common\libsrc\freetype-2.1.3\src\cid\type1cid.c" />
-    <ClCompile Include="..\..\Common\libsrc\freetype-2.1.3\src\gzip\ftgzip.c" />
-    <ClCompile Include="..\..\Common\libsrc\freetype-2.1.3\src\pcf\pcf.c" />
-    <ClCompile Include="..\..\Common\libsrc\freetype-2.1.3\src\pfr\pfr.c" />
-    <ClCompile Include="..\..\Common\libsrc\freetype-2.1.3\src\psaux\psaux.c" />
-    <ClCompile Include="..\..\Common\libsrc\freetype-2.1.3\src\pshinter\pshinter.c" />
-    <ClCompile Include="..\..\Common\libsrc\freetype-2.1.3\src\psnames\psmodule.c" />
-    <ClCompile Include="..\..\Common\libsrc\freetype-2.1.3\src\raster\raster.c" />
-    <ClCompile Include="..\..\Common\libsrc\freetype-2.1.3\src\sfnt\sfnt.c" />
-    <ClCompile Include="..\..\Common\libsrc\freetype-2.1.3\src\smooth\smooth.c" />
-    <ClCompile Include="..\..\Common\libsrc\freetype-2.1.3\src\truetype\truetype.c" />
-    <ClCompile Include="..\..\Common\libsrc\freetype-2.1.3\src\type1\type1.c" />
-    <ClCompile Include="..\..\Common\libsrc\freetype-2.1.3\src\type42\type42.c" />
-    <ClCompile Include="..\..\Common\libsrc\freetype-2.1.3\src\winfonts\winfnt.c" />
+    <ClCompile Include="..\..\Common\libsrc\freetype-2.10.4\src\autofit\autofit.c" />
+    <ClCompile Include="..\..\Common\libsrc\freetype-2.10.4\src\bdf\bdf.c" />
+    <ClCompile Include="..\..\Common\libsrc\freetype-2.10.4\src\cff\cff.c" />
+    <ClCompile Include="..\..\Common\libsrc\freetype-2.10.4\src\base\ftbase.c" />
+    <ClCompile Include="..\..\Common\libsrc\freetype-2.10.4\src\base\ftbitmap.c" />
+    <ClCompile Include="..\..\Common\libsrc\freetype-2.10.4\src\cache\ftcache.c" />
+    <ClCompile Include="..\..\Common\libsrc\freetype-2.10.4\builds\windows\ftdebug.c" />
+    <ClCompile Include="..\..\Common\libsrc\freetype-2.10.4\src\base\ftfstype.c" />
+    <ClCompile Include="..\..\Common\libsrc\freetype-2.10.4\src\base\ftgasp.c" />
+    <ClCompile Include="..\..\Common\libsrc\freetype-2.10.4\src\base\ftglyph.c" />
+    <ClCompile Include="..\..\Common\libsrc\freetype-2.10.4\src\gzip\ftgzip.c" />
+    <ClCompile Include="..\..\Common\libsrc\freetype-2.10.4\src\base\ftinit.c" />
+    <ClCompile Include="..\..\Common\libsrc\freetype-2.10.4\src\lzw\ftlzw.c" />
+    <ClCompile Include="..\..\Common\libsrc\freetype-2.10.4\src\base\ftstroke.c" />
+    <ClCompile Include="..\..\Common\libsrc\freetype-2.10.4\src\base\ftsystem.c" />
+    <ClCompile Include="..\..\Common\libsrc\freetype-2.10.4\src\smooth\smooth.c" />
+    <ClCompile Include="..\..\Common\libsrc\freetype-2.10.4\src\base\ftbbox.c" />
+    <ClCompile Include="..\..\Common\libsrc\freetype-2.10.4\src\base\ftbdf.c" />
+    <ClCompile Include="..\..\Common\libsrc\freetype-2.10.4\src\base\ftcid.c" />
+    <ClCompile Include="..\..\Common\libsrc\freetype-2.10.4\src\base\ftgxval.c" />
+    <ClCompile Include="..\..\Common\libsrc\freetype-2.10.4\src\base\ftmm.c" />
+    <ClCompile Include="..\..\Common\libsrc\freetype-2.10.4\src\base\ftotval.c" />
+    <ClCompile Include="..\..\Common\libsrc\freetype-2.10.4\src\base\ftpatent.c" />
+    <ClCompile Include="..\..\Common\libsrc\freetype-2.10.4\src\base\ftpfr.c" />
+    <ClCompile Include="..\..\Common\libsrc\freetype-2.10.4\src\base\ftsynth.c" />
+    <ClCompile Include="..\..\Common\libsrc\freetype-2.10.4\src\base\fttype1.c" />
+    <ClCompile Include="..\..\Common\libsrc\freetype-2.10.4\src\base\ftwinfnt.c" />
+    <ClCompile Include="..\..\Common\libsrc\freetype-2.10.4\src\pcf\pcf.c" />
+    <ClCompile Include="..\..\Common\libsrc\freetype-2.10.4\src\pfr\pfr.c" />
+    <ClCompile Include="..\..\Common\libsrc\freetype-2.10.4\src\psaux\psaux.c" />
+    <ClCompile Include="..\..\Common\libsrc\freetype-2.10.4\src\pshinter\pshinter.c" />
+    <ClCompile Include="..\..\Common\libsrc\freetype-2.10.4\src\psnames\psmodule.c" />
+    <ClCompile Include="..\..\Common\libsrc\freetype-2.10.4\src\raster\raster.c" />
+    <ClCompile Include="..\..\Common\libsrc\freetype-2.10.4\src\sfnt\sfnt.c" />
+    <ClCompile Include="..\..\Common\libsrc\freetype-2.10.4\src\truetype\truetype.c" />
+    <ClCompile Include="..\..\Common\libsrc\freetype-2.10.4\src\type1\type1.c" />
+    <ClCompile Include="..\..\Common\libsrc\freetype-2.10.4\src\cid\type1cid.c" />
+    <ClCompile Include="..\..\Common\libsrc\freetype-2.10.4\src\type42\type42.c" />
+    <ClCompile Include="..\..\Common\libsrc\freetype-2.10.4\src\winfonts\winfnt.c" />
     <ClCompile Include="..\..\Common\script\cc_error.cpp" />
     <ClCompile Include="..\..\Common\script\cc_options.cpp" />
     <ClCompile Include="..\..\Common\script\cc_script.cpp" />

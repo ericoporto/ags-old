@@ -1,5 +1,4 @@
 FREETYPE_SRCS := \
-	builds/unix/ftsystem.c \
     src/autofit/autofit.c \
     src/base/ftbase.c \
     src/base/ftbbox.c \
@@ -47,6 +46,6 @@ FREETYPE_OBJS := $(FREETYPE:.c=.o)
 FREETYPE_INC := $(FREETYPE_SRCDIR)/include
 $(FREETYPE_SRCDIR)%.o: CFLAGS += -I $(FREETYPE_INC) -I $(FREETYPE_SRCDIR)/builds/unix
 
-FT_CFLAGS := -I $(FREETYPE_INC)
+FT_CFLAGS := -I $(FREETYPE_INC) -DFT2_BUILD_LIBRARY
 FT_LDFLAGS :=
 
