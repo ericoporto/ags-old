@@ -168,12 +168,12 @@ include(FindLocalAllegro)
 include(FetchOgg)
 include(FetchVorbis)
 include(FetchTheora)
+include(PrepareFreetype)
 
 add_subdirectory(libsrc/glm                     EXCLUDE_FROM_ALL)
 
 add_subdirectory(Common/libsrc/aastr-0.1.1      EXCLUDE_FROM_ALL)
 add_subdirectory(Common/libsrc/alfont-2.0.9     EXCLUDE_FROM_ALL)
-add_subdirectory(Common/libsrc/freetype-2.1.3   EXCLUDE_FROM_ALL)
 add_subdirectory(Common                         EXCLUDE_FROM_ALL)
 
 add_subdirectory(Engine/libsrc/apeg-1.2.1       EXCLUDE_FROM_ALL)
