@@ -12,8 +12,11 @@
 //
 //=============================================================================
 
-#include <alfont.h>
+#include <SDL_ttf.h>
+#include <debug/out.h>
+#include "allegro/gfx.h"
 #include "core/platform.h"
+#include "gfx/bitmap.h"
 
 #define AGS_OUTLINE_FONT_FIX (!AGS_PLATFORM_OS_WINDOWS)
 
@@ -27,6 +30,87 @@
 #endif
 
 using namespace AGS::Common;
+
+#define algetr32(c) getr32(c)
+#define algetg32(c) getg32(c)
+#define algetb32(c) getb32(c)
+#define algeta32(c) geta32(c)
+
+/*
+   JJS: These functions replace the standard Allegro blender.
+   Code is reverse-engineered from the alfont MSVC library.
+   The blender functions are based on the originals with small modifications
+   that enable correct drawing of anti-aliased fonts.
+*/
+
+/* original: _blender_trans15 in colblend.c */
+unsigned long __skiptranspixels_blender_trans15(unsigned long x, unsigned long y, unsigned long n)
+{
+    unsigned long result;
+
+    if ((y & 0xFFFF) == 0x7C1F)
+        return x;
+
+    if (n)
+        n = (n + 1) / 8;
+
+    x = ((x & 0xFFFF) | (x << 16)) & 0x3E07C1F;
+    y = ((y & 0xFFFF) | (y << 16)) & 0x3E07C1F;
+
+    result = ((x - y) * n / 32 + y) & 0x3E07C1F;
+
+    return ((result & 0xFFFF) | (result >> 16));
+}
+
+/* original: _blender_trans16 in colblend.c */
+unsigned long __skiptranspixels_blender_trans16(unsigned long x, unsigned long y, unsigned long n)
+{
+    unsigned long result;
+
+    if ((y & 0xFFFF) == 0xF81F)
+        return x;
+
+    if (n)
+        n = (n + 1) / 8;
+
+    x = ((x & 0xFFFF) | (x << 16)) & 0x7E0F81F;
+    y = ((y & 0xFFFF) | (y << 16)) & 0x7E0F81F;
+
+    result = ((x - y) * n / 32 + y) & 0x7E0F81F;
+
+    return ((result & 0xFFFF) | (result >> 16));
+}
+
+/* original: _blender_trans24 in colblend.c */
+unsigned long __preservedalpha_blender_trans24(unsigned long x, unsigned long y, unsigned long n)
+{
+    unsigned long res, g, alpha;
+
+    alpha = (y & 0xFF000000);
+
+    if ((y & 0xFFFFFF) == 0xFF00FF)
+        return ((x & 0xFFFFFF) | (n << 24));
+
+    if (n)
+        n++;
+
+    res = ((x & 0xFF00FF) - (y & 0xFF00FF)) * n / 256 + y;
+    y &= 0xFF00;
+    x &= 0xFF00;
+    g = (x - y) * n / 256 + y;
+
+    res &= 0xFF00FF;
+    g &= 0xFF00;
+
+    return res | g | alpha;
+}
+
+/* replaces set_trans_blender() */
+void set_preservedalpha_trans_blender(int r, int g, int b, int a)
+{
+    set_blender_mode(__skiptranspixels_blender_trans15, __skiptranspixels_blender_trans16, __preservedalpha_blender_trans24, r, g, b, a);
+}
+
 
 // project-specific implementation
 extern bool ShouldAntiAliasText();
@@ -50,24 +134,56 @@ void TTFFontRenderer::EnsureTextValidForFont(char *text, int fontNumber)
 
 int TTFFontRenderer::GetTextWidth(const char *text, int fontNumber)
 {
-  return alfont_text_length(_fontData[fontNumber].AlFont, text);
+    int w;
+    TTF_SizeText(_fontData[fontNumber].Font , text, &w, nullptr);
+    return w;
 }
 
 int TTFFontRenderer::GetTextHeight(const char *text, int fontNumber)
 {
-  return alfont_text_height(_fontData[fontNumber].AlFont);
+    int h;
+    TTF_SizeText(_fontData[fontNumber].Font , text, nullptr, &h);
+    return h;
 }
 
 void TTFFontRenderer::RenderText(const char *text, int fontNumber, BITMAP *destination, int x, int y, int colour)
 {
-  if (y > destination->cb)  // optimisation
-    return;
+    if (y > destination->cb)  // optimisation
+        return;
 
-  // Y - 1 because it seems to get drawn down a bit
-  if ((ShouldAntiAliasText()) && (bitmap_color_depth(destination) > 8))
-    alfont_textout_aa(destination, _fontData[fontNumber].AlFont, text, x, y - 1, colour);
-  else
-    alfont_textout(destination, _fontData[fontNumber].AlFont, text, x, y - 1, colour);
+    SDL_Surface* glyph;
+    SDL_Color sdlColor = {(Uint8) algetr32(colour),
+                          (Uint8) algetg32(colour),
+                          (Uint8) algetb32(colour),
+                          (Uint8) algeta32(colour)};
+
+    // Y - 1 because it seems to get drawn down a bit
+    //x, y - 1, colour
+    TTF_Font* font = _fontData[fontNumber].Font;
+    if ((ShouldAntiAliasText()) && (bitmap_color_depth(destination) > 8))
+        glyph = TTF_RenderText_Blended(font, text, sdlColor);
+    else
+        glyph = TTF_RenderText_Solid(font, text, sdlColor);
+
+    if(!glyph) {
+        const char *errormsg = TTF_GetError();
+        printf("Error : %s", errormsg);
+        return;
+    }
+
+    SDL_Surface * surface = SDL_CreateRGBSurfaceWithFormat(0, glyph->w,glyph->h, 32, SDL_PIXELFORMAT_RGBA8888);
+    SDL_BlitSurface(glyph, nullptr, surface, nullptr);
+
+    Bitmap *dest = BitmapHelper::CreateRawBitmapWrapper(destination);
+
+    BITMAP *sourcebmp = wrap_bitmap_sdl_surface(surface);
+    Bitmap *source = BitmapHelper::CreateRawBitmapWrapper(sourcebmp);
+
+    set_preservedalpha_trans_blender(0,0,0,255);
+    dest->TransBlendBlt(source, x, y);
+
+    SDL_FreeSurface(glyph);
+    SDL_FreeSurface(surface);
 }
 
 bool TTFFontRenderer::LoadFromDisk(int fontNumber, int fontSize)
@@ -94,14 +210,28 @@ bool TTFFontRenderer::LoadFromDiskEx(int fontNumber, int fontSize, const FontRen
   reader->ReadArray(membuffer, lenof, 1);
   delete reader;
 
-  ALFONT_FONT *alfptr = alfont_load_font_from_mem(membuffer, lenof);
-  free(membuffer);
+    // TTF_Font *alfptr = alfont_load_font_from_mem(membuffer, lenof);
+    // Load the font data into a memory buffer
+    SDL_RWops* pFontMem = SDL_RWFromConstMem(membuffer, lenof);
+    if(!pFontMem)
+    {
+        printf("Error when reading font from memory");
+        // Some error occurred while trying to read the data, act accordingly to that
+    }
 
-  if (alfptr == nullptr)
+    // Load the font from the memory buffer
+    TTF_Font* pFont = TTF_OpenFontRW(pFontMem, 1, fontSize);
+    if(!pFont) {
+        printf("Error when loading font TTF_OpenFontRW");
+    }
+
+ // free(membuffer);
+
+  if (pFont == nullptr)
     return false;
 
   // TODO: move this somewhere, should not be right here
-#if AGS_OUTLINE_FONT_FIX
+#if 0 // AGS_OUTLINE_FONT_FIX
   // FIXME: (!!!) this fix should be done differently:
   // 1. Find out which OUTLINE font was causing troubles;
   // 2. Replace outline method ONLY if that troublesome font is used as outline.
@@ -115,20 +245,21 @@ bool TTFFontRenderer::LoadFromDiskEx(int fontNumber, int fontSize, const FontRen
       strcmp(alfont_get_name(alfptr), "LucasFan-Font") == 0)
       set_font_outline(fontNumber, FONT_OUTLINE_AUTO);
 #endif
+  /*
   if (fontSize == 0)
       fontSize = 8; // compatibility fix
   if (params && params->SizeMultiplier > 1)
       fontSize *= params->SizeMultiplier;
   if (fontSize > 0)
-    alfont_set_font_size(alfptr, fontSize);
-
-  _fontData[fontNumber].AlFont = alfptr;
+      TTF_SetFontSize(pFont, fontSize);
+*/
+  _fontData[fontNumber].Font = pFont;
   _fontData[fontNumber].Params = params ? *params : FontRenderParams();
   return true;
 }
 
 void TTFFontRenderer::FreeMemory(int fontNumber)
 {
-  alfont_destroy_font(_fontData[fontNumber].AlFont);
+   // TTF_CloseFont(_fontData[fontNumber].TTF_Font);
   _fontData.erase(fontNumber);
 }
