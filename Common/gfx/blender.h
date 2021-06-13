@@ -54,6 +54,8 @@ unsigned long _rgb2argb_blender(unsigned long src_col, unsigned long dst_col, un
 // Sets the alpha channel to opaque. Used when drawing a non-alpha sprite onto an alpha-sprite.
 unsigned long _opaque_alpha_blender(unsigned long src_col, unsigned long dst_col, unsigned long src_alpha);
 
+void set_argb2argb_blender(int alpha);
+
 // Additive alpha blender plain copies src over, applying a summ of src and
 // dst alpha values.
 void set_additive_alpha_blender();

@@ -12,8 +12,12 @@
 //
 //=============================================================================
 
-#include <alfont.h>
+#include <SDL_ttf.h>
+#include <debug/out.h>
+#include <gfx/blender.h>
+#include "allegro/gfx.h"
 #include "core/platform.h"
+#include "gfx/bitmap.h"
 
 #define AGS_OUTLINE_FONT_FIX (!AGS_PLATFORM_OS_WINDOWS)
 
@@ -28,9 +32,13 @@
 
 using namespace AGS::Common;
 
+#define algetr32(c) getr32(c)
+#define algetg32(c) getg32(c)
+#define algetb32(c) getb32(c)
+#define algeta32(c) geta32(c)
+
 // project-specific implementation
 extern bool ShouldAntiAliasText();
-
 
 // ***** TTF RENDERER *****
 void TTFFontRenderer::AdjustYCoordinateForFont(int *ycoord, int fontNumber)
@@ -50,24 +58,55 @@ void TTFFontRenderer::EnsureTextValidForFont(char *text, int fontNumber)
 
 int TTFFontRenderer::GetTextWidth(const char *text, int fontNumber)
 {
-  return alfont_text_length(_fontData[fontNumber].AlFont, text);
+    int w;
+    TTF_SizeText(_fontData[fontNumber].Font , text, &w, nullptr);
+    return w;
 }
 
 int TTFFontRenderer::GetTextHeight(const char *text, int fontNumber)
 {
-  return alfont_text_height(_fontData[fontNumber].AlFont);
+    int h;
+    TTF_SizeText(_fontData[fontNumber].Font , text, nullptr, &h);
+    return h;
 }
 
 void TTFFontRenderer::RenderText(const char *text, int fontNumber, BITMAP *destination, int x, int y, int colour)
 {
-  if (y > destination->cb)  // optimisation
-    return;
+    if (y > destination->cb)  // optimisation
+        return;
 
-  // Y - 1 because it seems to get drawn down a bit
-  if ((ShouldAntiAliasText()) && (bitmap_color_depth(destination) > 8))
-    alfont_textout_aa(destination, _fontData[fontNumber].AlFont, text, x, y - 1, colour);
-  else
-    alfont_textout(destination, _fontData[fontNumber].AlFont, text, x, y - 1, colour);
+    const int dest_depth = bitmap_color_depth(destination);
+    SDL_Surface* glyph;
+    SDL_Color sdlColor = {(Uint8) algetr32(colour),
+                          (Uint8) algetg32(colour),
+                          (Uint8) algetb32(colour),
+                          (Uint8) algeta32(colour)};
+
+    TTF_Font* font = _fontData[fontNumber].Font;
+    if ((ShouldAntiAliasText()) && (dest_depth > 8))
+        glyph = TTF_RenderText_Blended(font, text, sdlColor);
+    else
+        glyph = TTF_RenderText_Solid(font, text, sdlColor);
+
+    if(!glyph) {
+        const char *errormsg = TTF_GetError();
+        printf("Error : %s", errormsg);
+        return;
+    }
+
+    SDL_PixelFormatEnum pixelFormat = dest_depth == 32 ? SDL_PIXELFORMAT_ARGB8888 : SDL_PIXELFORMAT_INDEX8;
+    SDL_Surface * surface = SDL_CreateRGBSurfaceWithFormat(0, glyph->w,glyph->h, dest_depth, pixelFormat);
+    SDL_BlitSurface(glyph, nullptr, surface, nullptr);
+
+    BITMAP *sourcebmp = wrap_bitmap_sdl_surface(surface, dest_depth);
+
+    set_argb2argb_blender(255); // don't know what to do with 8bit yet
+
+    // Y - 1 because it seems to get drawn down a bit, need to check if still the case
+    draw_trans_sprite(destination, sourcebmp, x, y-1);
+
+    SDL_FreeSurface(glyph);
+    SDL_FreeSurface(surface);
 }
 
 bool TTFFontRenderer::LoadFromDisk(int fontNumber, int fontSize)
@@ -94,10 +133,23 @@ bool TTFFontRenderer::LoadFromDiskEx(int fontNumber, int fontSize, const FontRen
   reader->ReadArray(membuffer, lenof, 1);
   delete reader;
 
-  ALFONT_FONT *alfptr = alfont_load_font_from_mem(membuffer, lenof);
-  free(membuffer);
+    // Load the font data into a memory buffer
+    SDL_RWops* pFontMem = SDL_RWFromConstMem(membuffer, lenof);
+    if(!pFontMem)
+    {
+        printf("Error when reading font from memory");
+        // Some error occurred while trying to read the data, act accordingly to that
+    }
 
-  if (alfptr == nullptr)
+    // Load the font from the memory buffer
+    TTF_Font* pFont = TTF_OpenFontRW(pFontMem, 1, fontSize);
+    if(!pFont) {
+        printf("Error when loading font TTF_OpenFontRW");
+    }
+
+ // free(membuffer);
+
+  if (pFont == nullptr)
     return false;
 
   // TODO: move this somewhere, should not be right here
@@ -120,15 +172,15 @@ bool TTFFontRenderer::LoadFromDiskEx(int fontNumber, int fontSize, const FontRen
   if (params && params->SizeMultiplier > 1)
       fontSize *= params->SizeMultiplier;
   if (fontSize > 0)
-    alfont_set_font_size(alfptr, fontSize);
+      TTF_SetFontSize(pFont, fontSize);
 
-  _fontData[fontNumber].AlFont = alfptr;
+  _fontData[fontNumber].Font = pFont;
   _fontData[fontNumber].Params = params ? *params : FontRenderParams();
   return true;
 }
 
 void TTFFontRenderer::FreeMemory(int fontNumber)
 {
-  alfont_destroy_font(_fontData[fontNumber].AlFont);
+   TTF_CloseFont(_fontData[fontNumber].Font);
   _fontData.erase(fontNumber);
 }

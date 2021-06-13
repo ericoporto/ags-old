@@ -160,7 +160,10 @@ if (LINUX)
     find_package(X11)
 endif()
 
-include(FetchFreetype)
+# SDL_ttf has freetype when building for Android
+if(NOT ANDROID)
+    include(FetchFreetype)
+endif()
 include(FetchSDL2)
 include(FetchSDL_Sound)
 include(FetchSDL_ttf)
