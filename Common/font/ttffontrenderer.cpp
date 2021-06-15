@@ -84,13 +84,13 @@ void TTFFontRenderer::RenderText(const char *text, int fontNumber, BITMAP *desti
 
     TTF_Font* font = _fontData[fontNumber].Font;
     if ((ShouldAntiAliasText()) && (dest_depth > 8))
-        glyph = TTF_RenderText_Blended(font, text, sdlColor); //SDL_PIXELFORMAT_ARGB8888
+        glyph = TTF_RenderUTF8_Blended(font, text, sdlColor); //SDL_PIXELFORMAT_ARGB8888
     else if (dest_depth > 8){
-        SDL_Surface * surface = TTF_RenderText_Solid(font, text, sdlColor);
+        SDL_Surface * surface = TTF_RenderUTF8_Solid(font, text, sdlColor);
         glyph = SDL_ConvertSurfaceFormat(surface, SDL_PIXELFORMAT_ARGB8888, 0);
         SDL_FreeSurface(surface);
     } else {
-        glyph = TTF_RenderText_Solid(font, text, sdlColor);
+        glyph = TTF_RenderUTF8_Solid(font, text, sdlColor);
     }
 
     if(!glyph) {
