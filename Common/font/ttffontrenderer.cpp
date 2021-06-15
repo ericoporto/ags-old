@@ -85,8 +85,13 @@ void TTFFontRenderer::RenderText(const char *text, int fontNumber, BITMAP *desti
     TTF_Font* font = _fontData[fontNumber].Font;
     if ((ShouldAntiAliasText()) && (dest_depth > 8))
         glyph = TTF_RenderText_Blended(font, text, sdlColor); //SDL_PIXELFORMAT_ARGB8888
-    else
+    else if (dest_depth > 8){
+        SDL_Surface * surface = TTF_RenderText_Solid(font, text, sdlColor);
+        glyph = SDL_ConvertSurfaceFormat(surface, SDL_PIXELFORMAT_ARGB8888, 0);
+        SDL_FreeSurface(surface);
+    } else {
         glyph = TTF_RenderText_Solid(font, text, sdlColor);
+    }
 
     if(!glyph) {
         const char *errormsg = TTF_GetError();
@@ -96,9 +101,13 @@ void TTFFontRenderer::RenderText(const char *text, int fontNumber, BITMAP *desti
 
     BITMAP *sourcebmp = wrap_bitmap_sdl_surface(glyph, dest_depth);
 
-    set_argb2argb_blender(255); // don't know what to do with 8bit yet
-
-    draw_trans_sprite(destination, sourcebmp, x, y);
+    if(glyph->format->format == SDL_PIXELFORMAT_ARGB8888) {
+        set_argb2argb_blender(255);
+        draw_trans_sprite(destination, sourcebmp, x, y);
+    } else if(glyph->format->palette != nullptr) {
+        set_additive_alpha_blender();
+        draw_trans_sprite(destination, sourcebmp, x, y);
+    }
 
     SDL_FreeSurface(glyph);
     delete sourcebmp;

@@ -362,13 +362,7 @@ BITMAP *wrap_bitmap_sdl_surface(void* surface, int col_depth)
     if (!bitmap)
         return NULL;
 
-    /* This avoids a crash for assembler code accessing the last pixel, as it
-     * read 4 bytes instead of 3.
-     */
-    padding = (color_depth == 24) ? 1 : 0;
-
     bitmap->dat = surf->pixels;
-
 
     bitmap->w = bitmap->cr = width;
     bitmap->h = bitmap->cb = height;
