@@ -29,6 +29,7 @@ if(NOT freetype_content)
     add_library(FreeType::FreeType ALIAS freetype)
     add_library(Freetype::Freetype ALIAS freetype)
 
+    set(FREETYPE_LIBRARY freetype)
     set(FREETYPE_LIBRARIES FreeType::FreeType)
     set(FREETYPE_INCLUDE_DIRS ${freetype_content_SOURCE_DIR}/include/)
 

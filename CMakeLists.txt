@@ -163,6 +163,7 @@ endif()
 # SDL_ttf has freetype when building for Android
 if(NOT ANDROID)
     include(FetchFreetype)
+    include(FetchHarfbuzz)
 endif()
 include(FetchSDL2)
 include(FetchSDL_Sound)

@@ -13,6 +13,7 @@ if(NOT sdlttf_content)
 
     message("Including SDL_ttf ...")
 
+    add_definitions("-DTTF_USE_HARFBUZZ=1")
     add_subdirectory(${sdlttf_content_SOURCE_DIR} ${sdlttf_content_BINARY_DIR} EXCLUDE_FROM_ALL)
     include_directories(${sdlttf_content_SOURCE_DIR}/)
     set(BUILD_SHARED_LIBS "${SAVED_BUILD_SHARED_LIBS}")
@@ -20,4 +21,5 @@ if(NOT sdlttf_content)
     add_library(SDL2_ttf-interface INTERFACE)
     target_link_libraries(SDL2_ttf-interface INTERFACE SDL2_ttf)
     add_library(SDL2_ttf::SDL2_ttf ALIAS SDL2_ttf-interface)
+    target_link_libraries(SDL2_ttf Freetype::Freetype Harfbuzz::Harfbuzz)
 endif()
