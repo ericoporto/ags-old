@@ -101,6 +101,7 @@ void TTFFontRenderer::RenderText(const char *text, int fontNumber, BITMAP *desti
     draw_trans_sprite(destination, sourcebmp, x, y);
 
     SDL_FreeSurface(glyph);
+    delete sourcebmp;
 }
 
 bool TTFFontRenderer::LoadFromDisk(int fontNumber, int fontSize)
