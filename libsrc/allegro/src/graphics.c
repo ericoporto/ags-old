@@ -341,10 +341,11 @@ BITMAP *wrap_bitmap_sdl_surface(void* surface, int col_depth)
     int nr_pointers;
     int padding;
     int i;
+    SDL_Surface* surf = (SDL_Surface*) surface;
 
     int color_depth = col_depth;
-    int width = ((SDL_Surface*) surface)->w;
-    int height = ((SDL_Surface*) surface)->h;
+    int width = surf->w;
+    int height = surf->h;
     ASSERT(width >= 0);
     ASSERT(height > 0);
 
@@ -366,7 +367,7 @@ BITMAP *wrap_bitmap_sdl_surface(void* surface, int col_depth)
      */
     padding = (color_depth == 24) ? 1 : 0;
 
-    bitmap->dat = ((SDL_Surface*) surface)->pixels;
+    bitmap->dat = surf->pixels;
 
 
     bitmap->w = bitmap->cr = width;
@@ -384,7 +385,7 @@ BITMAP *wrap_bitmap_sdl_surface(void* surface, int col_depth)
     if (height > 0) {
         bitmap->line[0] = bitmap->dat;
         for (i=1; i<height; i++)
-            bitmap->line[i] = bitmap->line[i-1] + width * BYTES_PER_PIXEL(color_depth);
+            bitmap->line[i] = bitmap->line[i-1] + surf->pitch; // width * BYTES_PER_PIXEL(color_depth);
     }
 
     return bitmap;

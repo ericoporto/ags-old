@@ -84,7 +84,7 @@ void TTFFontRenderer::RenderText(const char *text, int fontNumber, BITMAP *desti
 
     TTF_Font* font = _fontData[fontNumber].Font;
     if ((ShouldAntiAliasText()) && (dest_depth > 8))
-        glyph = TTF_RenderText_Blended(font, text, sdlColor);
+        glyph = TTF_RenderText_Blended(font, text, sdlColor); //SDL_PIXELFORMAT_ARGB8888
     else
         glyph = TTF_RenderText_Solid(font, text, sdlColor);
 
@@ -94,19 +94,13 @@ void TTFFontRenderer::RenderText(const char *text, int fontNumber, BITMAP *desti
         return;
     }
 
-    SDL_PixelFormatEnum pixelFormat = dest_depth == 32 ? SDL_PIXELFORMAT_ARGB8888 : SDL_PIXELFORMAT_INDEX8;
-    SDL_Surface * surface = SDL_CreateRGBSurfaceWithFormat(0, glyph->w,glyph->h, dest_depth, pixelFormat);
-    SDL_BlitSurface(glyph, nullptr, surface, nullptr);
-
-    BITMAP *sourcebmp = wrap_bitmap_sdl_surface(surface, dest_depth);
+    BITMAP *sourcebmp = wrap_bitmap_sdl_surface(glyph, dest_depth);
 
     set_argb2argb_blender(255); // don't know what to do with 8bit yet
 
-    // Y - 1 because it seems to get drawn down a bit, need to check if still the case
-    draw_trans_sprite(destination, sourcebmp, x, y-1);
+    draw_trans_sprite(destination, sourcebmp, x, y);
 
     SDL_FreeSurface(glyph);
-    SDL_FreeSurface(surface);
 }
 
 bool TTFFontRenderer::LoadFromDisk(int fontNumber, int fontSize)
@@ -138,19 +132,22 @@ bool TTFFontRenderer::LoadFromDiskEx(int fontNumber, int fontSize, const FontRen
     if(!pFontMem)
     {
         printf("Error when reading font from memory");
-        // Some error occurred while trying to read the data, act accordingly to that
     }
+
+    if (fontSize == 0)
+        fontSize = 8; // compatibility fix
+    if (params && params->SizeMultiplier > 1)
+        fontSize *= params->SizeMultiplier;
 
     // Load the font from the memory buffer
     TTF_Font* pFont = TTF_OpenFontRW(pFontMem, 1, fontSize);
-    if(!pFont) {
+
+    // free(membuffer);
+
+    if(pFont == nullptr) {
         printf("Error when loading font TTF_OpenFontRW");
+        return false;
     }
-
- // free(membuffer);
-
-  if (pFont == nullptr)
-    return false;
 
   // TODO: move this somewhere, should not be right here
 #if AGS_OUTLINE_FONT_FIX
@@ -167,12 +164,6 @@ bool TTFFontRenderer::LoadFromDiskEx(int fontNumber, int fontSize, const FontRen
       strcmp(alfont_get_name(alfptr), "LucasFan-Font") == 0)
       set_font_outline(fontNumber, FONT_OUTLINE_AUTO);
 #endif
-  if (fontSize == 0)
-      fontSize = 8; // compatibility fix
-  if (params && params->SizeMultiplier > 1)
-      fontSize *= params->SizeMultiplier;
-  if (fontSize > 0)
-      TTF_SetFontSize(pFont, fontSize);
 
   _fontData[fontNumber].Font = pFont;
   _fontData[fontNumber].Params = params ? *params : FontRenderParams();
