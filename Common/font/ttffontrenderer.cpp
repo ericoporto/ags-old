@@ -59,14 +59,14 @@ void TTFFontRenderer::EnsureTextValidForFont(char *text, int fontNumber)
 int TTFFontRenderer::GetTextWidth(const char *text, int fontNumber)
 {
     int w;
-    TTF_SizeText(_fontData[fontNumber].Font , text, &w, nullptr);
+    TTF_SizeUTF8(_fontData[fontNumber].Font , text, &w, nullptr);
     return w;
 }
 
 int TTFFontRenderer::GetTextHeight(const char *text, int fontNumber)
 {
     int h;
-    TTF_SizeText(_fontData[fontNumber].Font , text, nullptr, &h);
+    TTF_SizeUTF8(_fontData[fontNumber].Font , text, nullptr, &h);
     return h;
 }
 
