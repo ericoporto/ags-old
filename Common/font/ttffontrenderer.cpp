@@ -15,7 +15,7 @@
 #include <SDL_ttf.h>
 #include <debug/out.h>
 #include <gfx/blender.h>
-// #include <hb.h> // needed for HB related codes
+#include <hb.h> // needed for HB related codes
 #include "allegro/gfx.h"
 #include "core/platform.h"
 #include "gfx/bitmap.h"
@@ -60,6 +60,7 @@ void TTFFontRenderer::EnsureTextValidForFont(char *text, int fontNumber)
 int TTFFontRenderer::GetTextWidth(const char *text, int fontNumber)
 {
     int w;
+    TTF_SetScript(HB_SCRIPT_ARABIC);
     TTF_SizeUTF8(_fontData[fontNumber].Font , text, &w, nullptr);
     return w;
 }
@@ -67,6 +68,7 @@ int TTFFontRenderer::GetTextWidth(const char *text, int fontNumber)
 int TTFFontRenderer::GetTextHeight(const char *text, int fontNumber)
 {
     int h;
+    TTF_SetScript(HB_SCRIPT_ARABIC);
     TTF_SizeUTF8(_fontData[fontNumber].Font , text, nullptr, &h);
     return h;
 }
@@ -76,7 +78,7 @@ void TTFFontRenderer::RenderText(const char *text, int fontNumber, BITMAP *desti
     if (y > destination->cb)  // optimisation
         return;
 
-    //TTF_SetScript(HB_SCRIPT_ARABIC);
+    TTF_SetScript(HB_SCRIPT_ARABIC);
     //TTF_SetDirection(HB_DIRECTION_RTL);
     const int dest_depth = bitmap_color_depth(destination);
     SDL_Surface* glyph;
