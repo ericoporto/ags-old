@@ -48,9 +48,10 @@ public:
 #if AGS_PLATFORM_OS_WINDOWS
 #include "library_windows.h"
 
-#elif AGS_PLATFORM_OS_LINUX \
-   || AGS_PLATFORM_OS_MACOS \
-   || AGS_PLATFORM_OS_ANDROID
+#elif AGS_PLATFORM_OS_LINUX   \
+   || AGS_PLATFORM_OS_MACOS   \
+   || AGS_PLATFORM_OS_ANDROID \
+   || AGS_PLATFORM_OS_GENERIC_UNIX
 #include "library_posix.h"
 
 #elif AGS_PLATFORM_OS_IOS

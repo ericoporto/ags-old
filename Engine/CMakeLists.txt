@@ -478,6 +478,7 @@ target_sources(engine
 
     platform/ios/acplios.cpp
 
+    platform/generic_unix/acplgunix.cpp
 
     platform/windows/win_ex_handling.cpp
     platform/windows/win_ex_handling.h
@@ -611,7 +612,7 @@ else ()
     add_library(ags SHARED)
 endif (NOT ANDROID)
 
-if (LINUX)
+if (LINUX OR FREEBSD)
     install(TARGETS ags RUNTIME DESTINATION bin)
 endif ()
 

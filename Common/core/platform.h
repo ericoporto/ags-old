@@ -5,20 +5,22 @@
 
 // check Android first because sometimes it can get confused with host OS
 #if defined(__ANDROID__) || defined(ANDROID)
-    #define AGS_PLATFORM_OS_WINDOWS (0)
-    #define AGS_PLATFORM_OS_LINUX   (0)
-    #define AGS_PLATFORM_OS_MACOS   (0)
-    #define AGS_PLATFORM_OS_ANDROID (1)
-    #define AGS_PLATFORM_OS_IOS     (0)
-    #define AGS_PLATFORM_OS_PSP     (0)
+    #define AGS_PLATFORM_OS_WINDOWS    (0)
+    #define AGS_PLATFORM_OS_LINUX      (0)
+    #define AGS_PLATFORM_OS_MACOS      (0)
+    #define AGS_PLATFORM_OS_ANDROID    (1)
+    #define AGS_PLATFORM_OS_IOS        (0)
+    #define AGS_PLATFORM_OS_PSP        (0)
+    #define AGS_PLATFORM_OS_FREEBSD    (0)
 #elif defined(_WIN32)
     //define something for Windows (32-bit and 64-bit)
-    #define AGS_PLATFORM_OS_WINDOWS (1)
-    #define AGS_PLATFORM_OS_LINUX   (0)
-    #define AGS_PLATFORM_OS_MACOS   (0)
-    #define AGS_PLATFORM_OS_ANDROID (0)
-    #define AGS_PLATFORM_OS_IOS     (0)
-    #define AGS_PLATFORM_OS_PSP     (0)
+    #define AGS_PLATFORM_OS_WINDOWS    (1)
+    #define AGS_PLATFORM_OS_LINUX      (0)
+    #define AGS_PLATFORM_OS_MACOS      (0)
+    #define AGS_PLATFORM_OS_ANDROID    (0)
+    #define AGS_PLATFORM_OS_IOS        (0)
+    #define AGS_PLATFORM_OS_PSP        (0)
+    #define AGS_PLATFORM_OS_FREEBSD    (0)
 #elif defined(__APPLE__)
     #include "TargetConditionals.h"
     #ifndef TARGET_OS_SIMULATOR
@@ -32,36 +34,48 @@
     #endif
 
     #if TARGET_OS_SIMULATOR || TARGET_IPHONE_SIMULATOR
-        #define AGS_PLATFORM_OS_WINDOWS (0)
-        #define AGS_PLATFORM_OS_LINUX   (0)
-        #define AGS_PLATFORM_OS_MACOS   (0)
-        #define AGS_PLATFORM_OS_ANDROID (0)
-        #define AGS_PLATFORM_OS_IOS     (1)
-        #define AGS_PLATFORM_OS_PSP     (0)
+        #define AGS_PLATFORM_OS_WINDOWS    (0)
+        #define AGS_PLATFORM_OS_LINUX      (0)
+        #define AGS_PLATFORM_OS_MACOS      (0)
+        #define AGS_PLATFORM_OS_ANDROID    (0)
+        #define AGS_PLATFORM_OS_IOS        (1)
+        #define AGS_PLATFORM_OS_PSP        (0)
+        #define AGS_PLATFORM_OS_FREEBSD    (0)
     #elif TARGET_OS_IOS || TARGET_OS_IPHONE
-        #define AGS_PLATFORM_OS_WINDOWS (0)
-        #define AGS_PLATFORM_OS_LINUX   (0)
-        #define AGS_PLATFORM_OS_MACOS   (0)
-        #define AGS_PLATFORM_OS_ANDROID (0)
-        #define AGS_PLATFORM_OS_IOS     (1)
-        #define AGS_PLATFORM_OS_PSP     (0)
+        #define AGS_PLATFORM_OS_WINDOWS    (0)
+        #define AGS_PLATFORM_OS_LINUX      (0)
+        #define AGS_PLATFORM_OS_MACOS      (0)
+        #define AGS_PLATFORM_OS_ANDROID    (0)
+        #define AGS_PLATFORM_OS_IOS        (1)
+        #define AGS_PLATFORM_OS_PSP        (0)
+        #define AGS_PLATFORM_OS_FREEBSD    (0)
     #elif TARGET_OS_OSX || TARGET_OS_MAC
-        #define AGS_PLATFORM_OS_WINDOWS (0)
-        #define AGS_PLATFORM_OS_LINUX   (0)
-        #define AGS_PLATFORM_OS_MACOS   (1)
-        #define AGS_PLATFORM_OS_ANDROID (0)
-        #define AGS_PLATFORM_OS_IOS     (0)
-        #define AGS_PLATFORM_OS_PSP     (0)
+        #define AGS_PLATFORM_OS_WINDOWS    (0)
+        #define AGS_PLATFORM_OS_LINUX      (0)
+        #define AGS_PLATFORM_OS_MACOS      (1)
+        #define AGS_PLATFORM_OS_ANDROID    (0)
+        #define AGS_PLATFORM_OS_IOS        (0)
+        #define AGS_PLATFORM_OS_PSP        (0)
+        #define AGS_PLATFORM_OS_FREEBSD    (0)
     #else
         #error "Unknown Apple platform"
     #endif
 #elif defined(__linux__)
-    #define AGS_PLATFORM_OS_WINDOWS (0)
-    #define AGS_PLATFORM_OS_LINUX   (1)
-    #define AGS_PLATFORM_OS_MACOS   (0)
-    #define AGS_PLATFORM_OS_ANDROID (0)
-    #define AGS_PLATFORM_OS_IOS     (0)
-    #define AGS_PLATFORM_OS_PSP     (0)
+    #define AGS_PLATFORM_OS_WINDOWS    (0)
+    #define AGS_PLATFORM_OS_LINUX      (1)
+    #define AGS_PLATFORM_OS_MACOS      (0)
+    #define AGS_PLATFORM_OS_ANDROID    (0)
+    #define AGS_PLATFORM_OS_IOS        (0)
+    #define AGS_PLATFORM_OS_PSP        (0)
+    #define AGS_PLATFORM_OS_FREEBSD    (0)
+#elif defined(__FreeBSD__)
+    #define AGS_PLATFORM_OS_WINDOWS    (0)
+    #define AGS_PLATFORM_OS_LINUX      (0)
+    #define AGS_PLATFORM_OS_MACOS      (0)
+    #define AGS_PLATFORM_OS_ANDROID    (0)
+    #define AGS_PLATFORM_OS_IOS        (0)
+    #define AGS_PLATFORM_OS_PSP        (0)
+    #define AGS_PLATFORM_OS_FREEBSD    (1)
 #else
     #error "Unknown platform"
 #endif
@@ -107,13 +121,21 @@
     #define AGS_PLATFORM_TEST (AGS_PLATFORM_DEBUG)
 #endif
 
+#define AGS_PLATFORM_OS_GENERIC_UNIX (AGS_PLATFORM_OS_FREEBSD)
 #define AGS_HAS_DIRECT3D (AGS_PLATFORM_OS_WINDOWS)
-#define AGS_HAS_OPENGL (AGS_PLATFORM_OS_WINDOWS || AGS_PLATFORM_OS_ANDROID || AGS_PLATFORM_OS_IOS || AGS_PLATFORM_OS_LINUX)
+#define AGS_HAS_OPENGL (AGS_PLATFORM_OS_WINDOWS || \
+                        AGS_PLATFORM_OS_ANDROID || \
+                        AGS_PLATFORM_OS_IOS ||     \
+                        AGS_PLATFORM_OS_LINUX ||   \
+                        AGS_PLATFORM_OS_GENERIC_UNIX)
 #define AGS_OPENGL_ES2 (AGS_PLATFORM_OS_ANDROID)
 
 // Only allow searching around for game data on desktop systems;
 // otherwise use explicit argument either from program wrapper, command-line
 // or read from default config.
-#define AGS_SEARCH_FOR_GAME_ON_LAUNCH (AGS_PLATFORM_OS_WINDOWS || AGS_PLATFORM_OS_LINUX || AGS_PLATFORM_OS_MACOS)
+#define AGS_SEARCH_FOR_GAME_ON_LAUNCH (AGS_PLATFORM_OS_WINDOWS || \
+                                       AGS_PLATFORM_OS_LINUX ||   \
+                                       AGS_PLATFORM_OS_MACOS ||   \
+                                       AGS_PLATFORM_OS_GENERIC_UNIX)
 
 #endif // __AC_PLATFORM_H
