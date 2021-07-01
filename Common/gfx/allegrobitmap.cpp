@@ -14,6 +14,7 @@
 
 #include <aastr.h>
 #include "gfx/allegrobitmap.h"
+#include "pixman.h"
 #include <string.h> // memcpy
 #include "debug/assert.h"
 

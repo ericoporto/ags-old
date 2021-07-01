@@ -173,7 +173,14 @@ target_sources(common
     util/string_compat.h
 )
 
-target_link_libraries(common PUBLIC SDL2::SDL2 Allegro::Allegro AlFont::AlFont AAStr::AAStr)
+find_package(Pixman REQUIRED)
+if(PIXMAN_FOUND)
+    include_directories(${PIXMAN_INCLUDE_DIRS})
+else()
+    include(FetchPixman)
+endif()
+
+target_link_libraries(common PUBLIC SDL2::SDL2 Allegro::Allegro AlFont::AlFont AAStr::AAStr ${PIXMAN_LIBRARIES})
 
 # NOTE: You can optionally create case sensitive filesystems on Macos and Windows now.
 if (LINUX)
