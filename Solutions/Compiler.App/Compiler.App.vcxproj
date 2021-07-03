@@ -203,7 +203,7 @@
     <ClCompile Include="..\..\Common\util\textstreamreader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Compiler\agscc.cpp" />
+    <ClCompile Include="..\..\Compiler\main.cpp" />
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>
