@@ -214,6 +214,8 @@ public:
     static String FromStream(Stream *in, size_t max_chars = 5 * 1024 * 1024, bool stop_at_limit = false);
     // Reads up to N chars from stream
     static String FromStreamCount(Stream *in, size_t count);
+    // Creates a new string with the contents of two string together.
+    static String Concatenate(const String& str_a, const String& str_b);
 
     // Creates a lowercased copy of the string
     String  Lower() const;
@@ -359,6 +361,12 @@ public:
     String &operator=(String &&str);
     // Assign C-string by copying contents
     String &operator=(const char *cstr);
+
+    // Concatenation operators
+    String operator+(String &str) const;
+    String operator+(const String &str) const;
+    String operator+(const char *cstr) const;
+
     inline char operator[](size_t index) const
     {
         assert(index < _len);

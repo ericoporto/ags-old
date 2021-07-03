@@ -498,6 +498,14 @@ void String::Append(const String &str)
     }
 }
 
+String String::Concatenate(const String& str_a, const String& str_b) {
+    String concat;
+    concat.Create(str_a._len + str_b._len);
+    concat.Append(str_a);
+    concat.Append(str_b);
+    return concat;
+}
+
 void String::AppendChar(char c)
 {
     if (c)
@@ -1057,6 +1065,21 @@ String &String::operator=(const char *cstr)
 {
     SetString(cstr);
     return *this;
+}
+
+String String::operator+(String &str) const
+{
+    return String::Concatenate(*this, str);
+}
+
+String String::operator+(const String &str) const
+{
+    return String::Concatenate(*this, str);
+}
+
+String String::operator+(const char * str) const
+{
+    return String::Concatenate(*this, str);
 }
 
 void String::Create(size_t max_length)
