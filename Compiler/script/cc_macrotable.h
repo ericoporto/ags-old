@@ -10,8 +10,11 @@ struct MacroTable {
     void init();
     void shutdown();
     int  find_name(const char*);
+    bool contains(const char *);
+    char* get_macro(const char *);
     void add(const char*,const char*);
     void remove(int index);
+    void remove_name(const char *);
     void merge(MacroTable *);
 
     MacroTable() {
