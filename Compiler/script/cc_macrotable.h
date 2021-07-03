@@ -9,8 +9,8 @@ struct MacroTable {
     char*macro[MAXDEFINES];
     void init();
     void shutdown();
-    int  find_name(char*);
-    void add(char*,char*);
+    int  find_name(const char*);
+    void add(const char*,const char*);
     void remove(int index);
     void merge(MacroTable *);
 

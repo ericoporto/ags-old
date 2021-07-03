@@ -26,14 +26,14 @@ void MacroTable::merge(MacroTable *others) {
     }
 
 }
-int MacroTable::find_name(char* namm) {
+int MacroTable::find_name(const char* namm) {
     int ss;
     for (ss=0;ss<num;ss++) {
         if (strcmp(namm,name[ss])==0) return ss;
     }
     return -1;
 }
-void MacroTable::add(char*namm,char*mac) {
+void MacroTable::add(const char*namm, const char*mac) {
     if (find_name(namm) >= 0) {
         cc_error("macro '%s' already defined",namm);
         return;

@@ -42,7 +42,10 @@ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} PREFIX "Source Files" FILES ${COMM
 
 add_library(AGS::Compiler ALIAS compiler)
 
-add_executable(agscc main.cpp)
+add_executable(agscc
+        main.cpp
+        preproc/preprocessor.cpp
+        preproc/preprocessor.h)
 set_target_properties(agscc PROPERTIES
         CXX_STANDARD 11
         CXX_EXTENSIONS NO
