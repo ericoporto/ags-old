@@ -38,11 +38,14 @@ namespace Preprocessor {
 
         static String GetNextWord(String &text, bool trimText = true, bool includeDots = false);
 
+        String RemoveComments(String text);
+
         String PreProcessDirective(String &line);
 
         String PreProcessLine(const String& lineToProcess);
 
     public:
+        void MergeMacros(MacroTable &macros);
         void DefineMacro(const String &name, const String &value);
 
         String Preprocess(const String &script, const String &scriptName);

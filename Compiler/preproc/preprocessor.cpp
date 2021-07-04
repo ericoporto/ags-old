@@ -10,7 +10,8 @@ using namespace AGS::Common;
 
 extern int currentline; // in script/script_common
 
-namespace AGS::Preprocessor {
+namespace AGS {
+namespace Preprocessor {
 
 #if AGS_PLATFORM_OS_WINDOWS
     static const char * li_end = "\r\n";
@@ -168,6 +169,62 @@ namespace AGS::Preprocessor {
             text.Trim();
         }
         return word;
+    }
+
+    String Preprocessor::RemoveComments(String text)
+    {
+        if (_inMultiLineComment)
+        {
+            size_t commentEnd = text.FindString("*/");
+            if (commentEnd < 0)
+            {
+                return String("");
+            }
+            text = text.Mid(commentEnd + 2, text.GetLength() - (commentEnd + 2));
+            _inMultiLineComment = false;
+        }
+
+        StringBuilder output = StringBuilder(text.GetLength());
+        for (int i = 0; i < text.GetLength(); i++)
+        {
+            if (!_inMultiLineComment)
+            {
+                if ((text[i] == '"') || (text[i] == '\''))
+                {
+                    size_t endOfString = text.FindChar(text[i],i);
+                    if (endOfString < 0)
+                    {
+                        break;
+                    }
+                    endOfString++;
+                    output.WriteString(text.Mid(i, endOfString - i));
+                    text = text.Mid(endOfString, text.GetLength() - endOfString);
+                    i = -1;
+                }
+                else if ((i < text.GetLength() - 1) && (text[i] == '/') && (text[i + 1] == '/'))
+                {
+                    break;
+                }
+                else if ((i < text.GetLength() - 1) && (text[i] == '/') && (text[i + 1] == '*'))
+                {
+                    _inMultiLineComment = true;
+                    i++;
+                }
+                else
+                {
+                    output.WriteChar(text[i]);
+                }
+            }
+            else if ((i < text.GetLength() - 1) && (text[i] == '*') && (text[i + 1] == '/'))
+            {
+                _inMultiLineComment = false;
+                i++;
+            }
+        }
+
+        String out = output.GetString();
+        out.Trim();
+        return out;
     }
 
     String Preprocessor::PreProcessDirective(String &line)
@@ -337,10 +394,11 @@ namespace AGS::Preprocessor {
         StringReader reader = StringReader(script);
         String thisLine;
         _scriptName = scriptName;
-        _lineNumber = 0;
+        currentline = _lineNumber = 0;
         while ((thisLine = reader.ReadLine()) != nullptr)
         {
-            _lineNumber++;
+            currentline = ++_lineNumber;
+            thisLine = RemoveComments(thisLine);
             if (thisLine.GetLength() > 0)
             {
                 if (thisLine[0] != '#')
@@ -367,5 +425,13 @@ namespace AGS::Preprocessor {
         {
             LogError(ErrorCode::IfWithoutEndIf);
         }
+
+        return output.GetString();
     }
-}
+
+    void Preprocessor::MergeMacros(MacroTable &macros) {
+        _macros.merge(&macros);
+    }
+
+} // Preprocessor
+} // AGS
