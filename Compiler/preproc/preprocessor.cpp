@@ -175,8 +175,8 @@ namespace Preprocessor {
     {
         if (_inMultiLineComment)
         {
-            size_t commentEnd = text.FindString("*/");
-            if (commentEnd < 0)
+            size_t commentEnd = text.FindString("*/",0);
+            if (commentEnd == -1)
             {
                 return String("");
             }
@@ -192,7 +192,7 @@ namespace Preprocessor {
                 if ((text[i] == '"') || (text[i] == '\''))
                 {
                     size_t endOfString = text.FindChar(text[i],i);
-                    if (endOfString < 0)
+                    if (endOfString == -1) //size_t is unsigned but it's alright
                     {
                         break;
                     }
@@ -334,7 +334,7 @@ namespace Preprocessor {
                 if ((line[i] == '"') || (line[i] == '\''))
                 {
                     i = line.FindChar(line[i],i);
-                    if (i < 0)
+                    if (i == -1)
                     {
                         i = line.GetLength();
                         break;
