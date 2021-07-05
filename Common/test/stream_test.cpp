@@ -116,6 +116,7 @@ TEST(Stream, AlignedStream) {
         tricky_data_out.i64d = 37;
         tricky_data_out.final = 38;
 #if defined (TEST_BIGENDIAN)
+        printf("\n------\IT'S BIGENDIAN\n---------\n")
         TTrickyAlignedData bigend_data = tricky_data_out;
         bigend_data.b = BBOp::SwapBytesInt32(bigend_data.b);
         bigend_data.c = BBOp::SwapBytesInt32(bigend_data.c);
