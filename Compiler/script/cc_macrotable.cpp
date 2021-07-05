@@ -26,7 +26,7 @@ void MacroTable::merge(MacroTable *others) {
     }
 
 }
-int MacroTable::find_name(char* namm) {
+int MacroTable::find_name(const char* namm) {
     int ss;
     for (ss=0;ss<num;ss++) {
         if (strcmp(namm,name[ss])==0) return ss;
