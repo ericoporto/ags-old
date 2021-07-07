@@ -33,6 +33,9 @@ target_sources(compiler
         script/cs_parser_common.h
         script/cs_prepro.cpp
         script/cs_prepro.h
+
+        preproc/preprocessor.cpp
+        preproc/preprocessor.h
         )
 
 target_link_libraries(compiler PUBLIC AGS::Common)
@@ -59,6 +62,7 @@ if(AGS_TESTS)
             test/cc_symboltable_test.cpp
             test/cc_treemap_test.cpp
             test/cs_parser_test.cpp
+            test/preprocessor_test.cpp
     )
     set_target_properties(compiler_test PROPERTIES
             CXX_STANDARD 11
