@@ -175,7 +175,7 @@ target_sources(common
     util/string_compat.h
 )
 
-target_link_libraries(common PUBLIC SDL2::SDL2 glm::glm Allegro::Allegro AlFont::AlFont AAStr::AAStr ${PIXMAN_LIBRARIES})
+target_link_libraries(common PUBLIC ${SDL2_LIBRARY} glm::glm Allegro::Allegro AlFont::AlFont AAStr::AAStr ${PIXMAN_LIBRARIES})
 
 # NOTE: You can optionally create case sensitive filesystems on Macos and Windows now.
 if (LINUX)
