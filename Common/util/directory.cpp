@@ -53,7 +53,7 @@ bool CreateAllDirectories(const String &parent, const String &path)
 
 String SetCurrentDirectory(const String &path)
 {
-    chdir(path.GetCStr());
+    if(chdir(path.GetCStr())  != 0) return nullptr;
     return GetCurrentDirectory();
 }
 
