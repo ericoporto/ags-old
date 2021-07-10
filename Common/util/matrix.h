@@ -19,7 +19,7 @@
 #define __AGS_CN_UTIL__MATRIX_H
 
 #include <algorithm>
-#include <glm/ext/matrix_transform.hpp>
+#include "glm/ext/matrix_transform.hpp"
 #include "util/geometry.h"
 
 namespace AGS

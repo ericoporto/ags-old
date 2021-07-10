@@ -67,7 +67,6 @@ using namespace AGS::Common::Directory;
 //
 
 #if !defined (AGS_CASE_SENSITIVE_FILESYSTEM)
-#include <string.h>
 /* File Name Concatenator basically on Windows / DOS */
 String ci_find_file(const String& dir_name, const String& file_name)
 {
@@ -76,7 +75,7 @@ String ci_find_file(const String& dir_name, const String& file_name)
   if (dir_name.IsNullOrSpace() && file_name.IsNullOrSpace())
       return nullptr;
 
-  if (dir_name.IsNullOrSpace()r) {
+  if (dir_name.IsNullOrSpace()) {
     diamond = file_name;
   } else {
     diamond = ConcatPaths(dir_name,file_name);
