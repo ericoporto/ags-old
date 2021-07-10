@@ -166,6 +166,8 @@ if(AGS_TESTS)
     enable_testing()
 endif()
 
+include(FetchPixman)
+
 include(FetchSDL2)
 include(FetchSDL_Sound)
 

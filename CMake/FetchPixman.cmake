@@ -10,7 +10,18 @@ if(NOT pixman_content_POPULATED)
 
     set(PIXMAN_BUILD_STATIC ON)
     set(PIXMAN_BUILD_SHARED OFF)
-    add_subdirectory("${pixman_content_SOURCE_DIR}/libsrc/pixman" ${pixman_content_BINARY_DIR} EXCLUDE_FROM_ALL)
+
+    file(MAKE_DIRECTORY ${pixman_content_SOURCE_DIR}/cmake)
+    file(COPY CMake/Extra/Pixman/CMakeLists.txt DESTINATION ${pixman_content_SOURCE_DIR})
+    file(COPY CMake/Extra/Pixman/pixman/CMakeLists.txt DESTINATION ${pixman_content_SOURCE_DIR}/pixman/)
+    file(COPY CMake/Extra/Pixman/cmake/arch_configure.cmake DESTINATION ${pixman_content_SOURCE_DIR}/cmake/)
+    file(COPY CMake/Extra/Pixman/cmake/arch_detect.cmake DESTINATION ${pixman_content_SOURCE_DIR}/cmake/)
+    file(COPY CMake/Extra/Pixman/cmake/cmake_package.cmake DESTINATION ${pixman_content_SOURCE_DIR}/cmake/)
+    file(COPY CMake/Extra/Pixman/cmake/config_configure.cmake DESTINATION ${pixman_content_SOURCE_DIR}/cmake/)
+    file(COPY CMake/Extra/Pixman/cmake/config_source.cmake DESTINATION ${pixman_content_SOURCE_DIR}/cmake/)
+    file(COPY CMake/Extra/Pixman/cmake/PixmanConfig.cmake DESTINATION ${pixman_content_SOURCE_DIR}/cmake/)
+
+    add_subdirectory("${pixman_content_SOURCE_DIR}/" ${pixman_content_BINARY_DIR} EXCLUDE_FROM_ALL)
 
     add_library(pixman-interface INTERFACE)
     target_link_libraries(pixman-interface INTERFACE pixman-1_static)
