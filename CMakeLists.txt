@@ -233,6 +233,7 @@ include(FetchHarfbuzzFreetype)
 include(FetchPixman)
 include(FetchExpat)
 include(FetchFontconfig)
+include(FetchCairo)
 
 if(NOT EMSCRIPTEN)
     include(FetchSDL2)

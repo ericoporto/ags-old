@@ -19,6 +19,8 @@ if(NOT libpng_content_POPULATED)
     add_library(Libpng::Libpng ALIAS png_static)
     add_library(libpng ALIAS png_static)
     set(LIBPNG_LIBRARY libpng)
+    set(PNG_LIBRARY Libpng::Libpng)
+    set(PNG_INCLUDE_DIR ${libpng_content_SOURCE_DIR})
     set(LIBPNG_INCLUDE_DIR ${libpng_content_SOURCE_DIR})
 endif()
 

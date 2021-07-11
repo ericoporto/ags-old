@@ -39,6 +39,8 @@ if(NOT pixman_content_POPULATED)
             "${PROJECT_BINARY_DIR}/libsrc"
             "${PROJECT_BINARY_DIR}/libsrc/pixman/pixman"
             "${PROJECT_SOURCE_DIR}/libsrc/pixman/pixman")
+
+    set(PIXMAN_INCLUDE_DIR ${PIXMAN_INCLUDE_DIRS})
     set(PIXMAN_LIBRARY Pixman::Pixman)
     set(PIXMAN_LIBRARIES Pixman::Pixman)
 endif()
