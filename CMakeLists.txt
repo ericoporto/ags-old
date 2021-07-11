@@ -229,6 +229,7 @@ endif()
 
 include(FetchZlib)
 include(FetchLibpng)
+include(FindLocalBzip2)
 include(FetchHarfbuzzFreetype)
 include(FetchPixman)
 include(FetchExpat)

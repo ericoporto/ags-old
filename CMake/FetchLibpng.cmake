@@ -16,12 +16,29 @@ if(NOT libpng_content_POPULATED)
     set(PNG_BUILD_ZLIB ON CACHE BOOL "" FORCE)
     add_subdirectory(${libpng_content_SOURCE_DIR} ${libpng_content_BINARY_DIR})
 
+    file(GLOB PNGLIB_INCLUDE_FILES ${libpng_content_SOURCE_DIR}/*.h)
+    file(GLOB PNGLIB_BIN_INCLUDE_FILES ${libpng_content_BINARY_DIR}/*.h)
+    foreach(_FNAME ${PNGLIB_BIN_INCLUDE_FILES})
+        get_filename_component(_INCNAME ${_FNAME} NAME)
+        list(REMOVE_ITEM PNGLIB_INCLUDE_FILES ${libpng_content_SOURCE_DIR}/${_INCNAME})
+    endforeach()
+    list(APPEND PNGLIB_INCLUDE_FILES ${PNGLIB_BIN_INCLUDE_FILES})
+
+    if(NOT EXISTS "${libpng_content_BINARY_DIR}/include")
+        file(MAKE_DIRECTORY "${libpng_content_BINARY_DIR}/include")
+        file(COPY ${PNGLIB_INCLUDE_FILES}  DESTINATION "${libpng_content_BINARY_DIR}/include/")
+    endif()
+
+
     add_library(Libpng::Libpng ALIAS png_static)
     add_library(libpng ALIAS png_static)
     set(LIBPNG_LIBRARY libpng)
     set(PNG_LIBRARY Libpng::Libpng)
-    set(PNG_INCLUDE_DIR ${libpng_content_SOURCE_DIR})
-    set(LIBPNG_INCLUDE_DIR ${libpng_content_SOURCE_DIR})
+    set(PNG_LIBRARIES Libpng::Libpng)
+    set(PNG_INCLUDE_DIR "${libpng_content_BINARY_DIR}/include/")
+    set(PNG_INCLUDE_DIRS ${PNG_INCLUDE_DIR})
+    set(PNG_PNG_INCLUDE_DIR ${PNG_INCLUDE_DIR})
+    set(LIBPNG_INCLUDE_DIR ${PNG_INCLUDE_DIR})
 endif()
 
 

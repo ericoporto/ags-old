@@ -16,6 +16,10 @@ if(NOT harfbuzz_content AND NOT freetype_content)
     FetchContent_Populate(harfbuzz_content)
     FetchContent_Populate(freetype_content)
 
+
+    set(SAVED_SKIP_INSTALL_ALL "${SKIP_INSTALL_ALL}")
+    set(SKIP_INSTALL_ALL ON)
+
     file(COPY CMake/Extra/Harfbuzz/CMakeLists.txt DESTINATION "${harfbuzz_content_SOURCE_DIR}")
 
     set(FREETYPE_LIBRARY freetype)
@@ -59,6 +63,7 @@ if(NOT harfbuzz_content AND NOT freetype_content)
     set(CMAKE_DISABLE_FIND_PACKAGE_BZip2 "${SAVED_CMAKE_DISABLE_FIND_PACKAGE_BZip2_LIBS}")
     #  set(CMAKE_DISABLE_FIND_PACKAGE_PNG "${SAVED_CMAKE_DISABLE_FIND_PACKAGE_PNG_LIBS}")
     set(CMAKE_DISABLE_FIND_PACKAGE_BrotliDec "${SAVED_CMAKE_DISABLE_FIND_PACKAGE_BrotliDec}")
+    set(SKIP_INSTALL_ALL "${SAVED_SKIP_INSTALL_ALL}")
 
     add_library(Harfbuzz::Harfbuzz ALIAS harfbuzz)
     add_library(HarfBuzz::HarfBuzz ALIAS harfbuzz)
