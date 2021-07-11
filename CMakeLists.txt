@@ -227,6 +227,7 @@ if(AGS_TESTS)
     enable_testing()
 endif()
 
+include(FetchZlib)
 include(FetchHarfbuzzFreetype)
 include(FetchPixman)
 include(FetchExpat)
