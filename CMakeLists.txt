@@ -227,6 +227,7 @@ if(AGS_TESTS)
     enable_testing()
 endif()
 
+include(FetchHarfbuzzFreetype)
 include(FetchPixman)
 
 if(NOT EMSCRIPTEN)
@@ -251,10 +252,6 @@ include(FetchTheora)
 add_subdirectory(libsrc/glm                     EXCLUDE_FROM_ALL)
 
 add_subdirectory(Common/libsrc/aastr-0.1.1      EXCLUDE_FROM_ALL)
-if(NOT EMSCRIPTEN)
-    add_subdirectory(Common/libsrc/freetype-2.1.3   EXCLUDE_FROM_ALL)
-    set(FREETYPE_LIBRARIES FreeType::FreeType)
-endif()
 add_subdirectory(Common/libsrc/alfont-2.0.9     EXCLUDE_FROM_ALL)
 add_subdirectory(Common)
 
