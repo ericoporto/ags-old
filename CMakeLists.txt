@@ -229,6 +229,8 @@ endif()
 
 include(FetchHarfbuzzFreetype)
 include(FetchPixman)
+include(FetchExpat)
+include(FetchFontconfig)
 
 if(NOT EMSCRIPTEN)
     include(FetchSDL2)
