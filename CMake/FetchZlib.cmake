@@ -10,7 +10,10 @@ if(NOT zlib_content_POPULATED)
 
     add_subdirectory(${zlib_content_SOURCE_DIR} ${zlib_content_BINARY_DIR} EXCLUDE_FROM_ALL)
 
-    set(ZLIB_LIBRARY zlib)
+    add_library(Zlib::Zlib ALIAS zlibstatic)
+    set(ZLIB_LIBRARY Zlib::Zlib)
+    set(ZLIB_LIBRARIES Zlib::Zlib)
+    set(ZLIB_INCLUDE_DIRS ${zlib_content_SOURCE_DIR})
     set(ZLIB_INCLUDE_DIR ${zlib_content_SOURCE_DIR})
 endif()
 

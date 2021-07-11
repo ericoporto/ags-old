@@ -228,6 +228,7 @@ if(AGS_TESTS)
 endif()
 
 include(FetchZlib)
+include(FetchLibpng)
 include(FetchHarfbuzzFreetype)
 include(FetchPixman)
 include(FetchExpat)
